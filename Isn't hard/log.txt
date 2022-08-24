@@ -1,0 +1,19 @@
+Physics was paused
+Loading 
+Loading was succesfully finished 
+click_button_menu 
+achievements menu
+	Level building -2...
+Options are being saved 
+Options are saved
+Map_Basic has been loaded
+Movables has been loaded
+Map_floor has been loaded
+	The level was built 
+	The game start!
+Music reset 
+Physics continue
+Physics was paused
+click_button_menu 
+Options are being saved 
+Options are saved
