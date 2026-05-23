@@ -7,7 +7,7 @@ public:
 	Sprite _box; Text _text; Texture _t;
 	bool is_picked = false, click = false;
 	int W, H;
-	void init(int w, int h) {
+	void init(int w, int h, int i) {
 		W = w, H = h;
 		helper_string = to_string(w) + " : " + to_string(h);
 		_text.setString(helper_string);
@@ -115,6 +115,7 @@ public:
 	}
 	void cycle() {
 		is_clicked = false;
+		float helper_s[2];
 		if (cursor.getGlobalBounds().intersects(button_.getGlobalBounds())) {
 			button_.setTextureRect(IntRect(0, 128, 512, 128));
 			if (!onclick) {
@@ -184,26 +185,6 @@ public:
 	Sprite lower, middle, more;
 	Text value;
 
-	/*void init() {
-		lower.setPosition(x, y);
-		lower.setTexture(thbtexture_);
-		lower.setTextureRect(IntRect(0, 0, 128, 128));
-		lower.setScale(UI_scale, UI_scale);
-		middle.setPosition(x + 128 * UI_scale, y);
-		middle.setTexture(thbtexture_);
-		middle.setTextureRect(IntRect(128, 0, 128, 128));
-		middle.setScale(UI_scale, UI_scale);
-		more.setPosition(x + 256 * UI_scale, y);
-		more.setTexture(thbtexture_);
-		more.setTextureRect(IntRect(256, 0, 128, 128));
-		more.setScale(UI_scale, UI_scale);
-		thbtexture_.loadFromFile("Textures/Opt.png");
-		value.setPosition(x + 168 * UI_scale, y + UI_scale * 38);
-		value.setFont(font);
-		value.setCharacterSize(40 * UI_scale);
-		value.setFillColor(Color::Black);
-
-	}*/
 	void cycle() {
 		if (lower.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
 			lower.setColor(Color(200, 200, 200, 255));
@@ -319,6 +300,7 @@ public:
 	}
 };
 
+int btnCLICK_KOSTIL = -1;
 class Button : public UI {
 public:
 	void cycle() {
@@ -327,7 +309,7 @@ public:
 				if (!onclick) {
 					onclick = true;
 					click_button_menu = true;
-					helper_s2 = id;
+					btnCLICK_KOSTIL = id;
 				}
 			}
 		}
@@ -397,7 +379,7 @@ Button2 E_B, E_E, E_Gr, E_Gy, E_L, E_L2, E_M, E_Mech, E_next, E_prev, E_play, E_
 Button2 E_multichoose, E_fill;
 //Editor_buttons
 
-class Button3 : public UI {
+class ButtonInAchievementMenu : public UI {
 
 public:
 
@@ -408,7 +390,7 @@ public:
 	bool unlocked = false, finished = false;
 	bool wisdom = false;
 
-	void update(int _lvl, int _n) {
+	void update(int _lvl, int _n) { // TODO: избавиться от N 
 
 		lvl = _lvl; n = _n; wisdom = false;
 
@@ -426,8 +408,10 @@ public:
 		ifstream ach;
 		ach.open("Achievements/" + to_string(_lvl) + " " + to_string(_n) + ".txt");
 
-		ach >> helper;
-		if (helper > 0) {
+		int saveState;
+		ach >> saveState;
+
+		if (saveState > 0) {
 			unlocked = true;
 			box.setTextureRect(IntRect(128, 0, 128, 128));
 		}
@@ -436,9 +420,9 @@ public:
 			unlocked = false;
 		}
 
-		ach >> helper;
+		ach >> saveState;
 
-		if (helper > 0) {
+		if (saveState > 0) {
 			finished = true;
 			box2.setTextureRect(IntRect(128, 0, 128, 128));
 			ach.close();
@@ -448,7 +432,7 @@ public:
 			finished = false;
 			ach.close();
 		}
-
+		// TODO: массив соответствий
 		switch (id) {
 		case 0: txt.setString("Get achievements to unlock bonus levels!"); break;
 		case 1: txt.setString("Welcome to the hard zone"); break;
@@ -604,7 +588,7 @@ public:
 	}
 
 };
-Button3 ach_but[43];
+ButtonInAchievementMenu ach_but[43];
 //Buttons in achievements' menu
 
 class Button4 : public UI {

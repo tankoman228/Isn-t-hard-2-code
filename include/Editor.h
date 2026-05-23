@@ -93,7 +93,9 @@ void test_editor() {
 	vector <Electric*> s_electric[5];
 	vector <Block*> s_triggers[5];
 
-	helper = 1; text.setCharacterSize(50 * scale);
+	int helper = 1; 
+	
+	text.setCharacterSize(50 * scale);
 	E_grid.is_checked = true;
 
 	logg << "Editor_start" << endl;
@@ -127,19 +129,6 @@ void test_editor() {
 		if (!music.getStatus()) {
 			reset_music();
 		}
-
-		/*if ((Keyboard::isKeyPressed(Keyboard::Tab))) {
-			for (i = 0; i < wid; i++) {
-				for (j = 0; j < hei; j++) {
-					for (helper = 0; helper < 2; helper++) {
-						for (int oo = 0; oo < 3; oo++) {
-							level[i][j][helper][oo] = 0;
-						}
-					}
-				}
-			}
-			helper = 0;
-		}*/
 
 		//zoom
 		if (Mouse::isButtonPressed(Mouse::Middle)) {
@@ -224,8 +213,8 @@ void test_editor() {
 
 		helper = 0;
 
-		for (i = 0; i < 17.0 / scale; i++) {
-			for (j = 0; j < 11.0 / scale; j++) {
+		for (int i = 0; i < 17.0 / scale; i++) {
+			for (int j = 0; j < 11.0 / scale; j++) {
 
 				block.setPosition((i * 128 - scrollx % 128 - 128) * scale, (j * 128 - scrolly % 128 - 128) * scale);
 
@@ -245,14 +234,14 @@ void test_editor() {
 
 						if (editor_layer == 0) {
 							if (editor_block < 100) {
-								for (k = 0; k < map_basic.size(); k++) {
+								for (int k = 0; k < map_basic.size(); k++) {
 									map_basic[k]->box.scale(0.9, 0.9);
 									if (map_basic[k]->box.getGlobalBounds().intersects(block.getGlobalBounds())) {
 										map_basic.erase(map_basic.begin() + k);
 										chosen = map_basic[0];
 									}
 								}
-								for (k = 0; k < movables.size(); k++) {
+								for (int k = 0; k < movables.size(); k++) {
 									movables[k]->box.scale(0.9, 0.9);
 									if (movables[k]->box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
 										movables.erase(movables.begin() + k);
@@ -262,14 +251,14 @@ void test_editor() {
 							}
 						}
 						if (editor_layer == 1) {
-							for (k = 0; k < map_floor.size(); k++) {
+							for (int k = 0; k < map_floor.size(); k++) {
 								map_floor[k]->box.scale(0.9, 0.9);
 								if (map_floor[k]->box.getGlobalBounds().intersects(block.getGlobalBounds())) {
 									map_floor.erase(map_floor.begin() + k);
 									chosen = map_floor[0];
 								}
 							}
-							for (k = 0; k < electric.size(); k++) {
+							for (int k = 0; k < electric.size(); k++) {
 								electric[k]->box.scale(0.9, 0.9);
 								if (electric[k]->box.getGlobalBounds().intersects(block.getGlobalBounds())) {
 									electric.erase(electric.begin() + k);
@@ -296,7 +285,7 @@ void test_editor() {
 
 				helper = -4;
 
-				for (i = 0; i < triggers.size(); i++) {
+				for (int i = 0; i < triggers.size(); i++) {
 					if (triggers[i]->box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
 						triggers.erase(triggers.begin() + i); helper = 309;
 						while (Mouse::isButtonPressed(Mouse::Right)) {}
@@ -305,12 +294,12 @@ void test_editor() {
 
 				if (helper < 0) {
 
-					for (i = 0; i < map_basic.size(); i++) {
+					for (int i = 0; i < map_basic.size(); i++) {
 						if (map_basic[i]->box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
 							map_basic.erase(map_basic.begin() + i); helper = 0;
 						}
 					}
-					for (i = 0; i < movables.size(); i++) {
+					for (int i = 0; i < movables.size(); i++) {
 						if (movables[i]->box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
 							movables.erase(movables.begin() + i); helper = 0;
 						}
@@ -318,12 +307,12 @@ void test_editor() {
 				}
 			}
 			if (editor_layer == 1) {
-				for (i = 0; i < map_floor.size(); i++) {
+				for (int i = 0; i < map_floor.size(); i++) {
 					if (map_floor[i]->box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
 						map_floor.erase(map_floor.begin() + i); helper = 0;
 					}
 				}
-				for (i = 0; i < electric.size(); i++) {
+				for (int i = 0; i < electric.size(); i++) {
 					if (electric[i]->box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
 						electric.erase(electric.begin() + i); helper = 0;
 					}
@@ -338,24 +327,19 @@ void test_editor() {
 
 		if (!onclick && editor_mode == 2 && Mouse::isButtonPressed(Mouse::Left)) {
 			if (editor_layer == 0) {
-				for (i = 0; i < map_basic.size(); i++) {
+				for (int i = 0; i < map_basic.size(); i++) {
 					if (map_basic[i]->box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
 						map_basic[i]->rotate(90); onclick = true; continue;
 					}
 				}
-				//for (i = 0; i < movables.size(); i++) {
-				//	if (movables[i]->box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
-				//		movables[i]->rotate(90); onclick = true; break;
-				//	}
-				//}
 			}
 			if (editor_layer == 1) {
-				for (i = 0; i < map_floor.size(); i++) {
+				for (int i = 0; i < map_floor.size(); i++) {
 					if (map_floor[i]->box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
 						map_floor[i]->rotate(90); onclick = true; continue;
 					}
 				}
-				for (i = 0; i < electric.size(); i++) {
+				for (int i = 0; i < electric.size(); i++) {
 					if (electric[i]->box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
 						electric[i]->rotate(90); onclick = true; continue;
 					}
@@ -486,38 +470,38 @@ void test_editor() {
 		}
 
 		//blocks
-		for (i = 0; i < triggers.size(); i++) {
+		for (int i = 0; i < triggers.size(); i++) {
 			if (!onclick && !button_overlapped && editor_mode == 4 && editor_layer == 0 && Mouse::isButtonPressed(Mouse::Left) && triggers[i]->box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
 				chosen = triggers[i]; onclick = true;
 			}
 		}
 
-		for (i = 0; i < map_floor.size(); i++) {
+		for (int i = 0; i < map_floor.size(); i++) {
 			map_floor[i]->editor_exist();			
 			if (!onclick && !button_overlapped && editor_mode == 4 && editor_layer == 1 && map_floor[i] != chosen && Mouse::isButtonPressed(Mouse::Left) && map_floor[i]->box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
 				chosen = map_floor[i]; onclick = true;
 			}
 		}
-		for (i = 0; i < electric.size(); i++) {
+		for (int i = 0; i < electric.size(); i++) {
 			electric[i]->editor_exist();
 			if (!onclick && !button_overlapped && editor_mode == 4 && editor_layer == 1 && electric[i] != chosen && Mouse::isButtonPressed(Mouse::Left) && electric[i]->box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
 				chosen = electric[i]; onclick = true;
 			}
 		}
-		for (i = 0; i < movables.size(); i++) {
+		for (int i = 0; i < movables.size(); i++) {
 			movables[i]->editor_behave();
 			if (!onclick && !button_overlapped && editor_mode == 4 && editor_layer == 0 && movables[i] != chosen && Mouse::isButtonPressed(Mouse::Left) && movables[i]->box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
 				chosen = movables[i]; onclick = true;
 			}
 		}
-		for (i = 0; i < map_basic.size(); i++) {
+		for (int i = 0; i < map_basic.size(); i++) {
 			map_basic[i]->editor_exist();
 			if (!onclick && !button_overlapped && editor_mode == 4 && editor_layer == 0 && map_basic[i] != chosen && Mouse::isButtonPressed(Mouse::Left) && map_basic[i]->box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
 				chosen = map_basic[i]; onclick = true;
 			}
 		}
 
-		for (i = 0; i < triggers.size(); i++) {
+		for (int i = 0; i < triggers.size(); i++) {
 			triggers[i]->editor_exist();
 		}
 		//!blocks
@@ -545,8 +529,8 @@ void test_editor() {
 		//UI
 		block.setOrigin(0, 0);
 		block.setTexture(grb);
-		for (i = 1; i < 50; i++) {
-			render_block_UI(screenh, get_ID(i));
+		for (int i = 1; i < 50; i++) {
+			render_block_UI(screenh, get_ID(i), i);
 		}
 		block.setScale(scale, scale);
 		block.setOrigin(64, 64);
@@ -614,9 +598,9 @@ void test_editor() {
 
 				choosed.clear();
 
-				m_x = 0; m_y = 0; k = 0;
+				m_x = 0; m_y = 0; int k = 0;
 
-				for (i = 0; i < map_floor.size(); i++) {
+				for (int i = 0; i < map_floor.size(); i++) {
 					map_floor[i]->choosen = false;
 					map_floor[i]->editor_exist();
 					if (map_floor[i]->box.getGlobalBounds().intersects(choose.getGlobalBounds())) {
@@ -627,7 +611,7 @@ void test_editor() {
 						k++;
 					}
 				}
-				for (i = 0; i < electric.size(); i++) {
+				for (int i = 0; i < electric.size(); i++) {
 					electric[i]->editor_exist();
 					electric[i]->choosen = false;
 					if (electric[i]->box.getGlobalBounds().intersects(choose.getGlobalBounds())) {
@@ -638,7 +622,7 @@ void test_editor() {
 						k++;
 					}
 				}
-				for (i = 0; i < movables.size(); i++) {
+				for (int i = 0; i < movables.size(); i++) {
 					movables[i]->editor_behave();
 					movables[i]->choosen = false;
 					if (movables[i]->box.getGlobalBounds().intersects(choose.getGlobalBounds())) {
@@ -649,7 +633,7 @@ void test_editor() {
 						k++;
 					}
 				}
-				for (i = 0; i < map_basic.size(); i++) {
+				for (int i = 0; i < map_basic.size(); i++) {
 					map_basic[i]->editor_exist();
 					map_basic[i]->choosen = false;
 					if (map_basic[i]->box.getGlobalBounds().intersects(choose.getGlobalBounds())) {
@@ -678,8 +662,8 @@ void test_editor() {
 
 					logg << "Filling with block: " << editor_block << endl;
 
-					for (i = 0; i < 17.0 / scale; i++) {
-						for (j = 0; j < 11.0 / scale; j++) {
+					for (int i = 0; i < 17.0 / scale; i++) {
+						for (int j = 0; j < 11.0 / scale; j++) {
 
 							if (cursor.getPosition().y < 128 * UI_scale || cursor.getPosition().y > screenh - 130 * UI_scale) {
 								continue;
@@ -695,14 +679,14 @@ void test_editor() {
 
 								if (editor_layer == 0) {
 									if (editor_block < 100) {
-										for (k = 0; k < map_basic.size(); k++) {
+										for (int k = 0; k < map_basic.size(); k++) {
 											map_basic[k]->box.scale(0.9, 0.9);
 											if (map_basic[k]->box.getGlobalBounds().intersects(block.getGlobalBounds())) {
 												map_basic.erase(map_basic.begin() + k);
 												chosen = map_basic[0];
 											}
 										}
-										for (k = 0; k < movables.size(); k++) {
+										for (int k = 0; k < movables.size(); k++) {
 											movables[k]->box.scale(0.9, 0.9);
 											if (movables[k]->box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
 												movables.erase(movables.begin() + k);
@@ -712,14 +696,14 @@ void test_editor() {
 									}
 								}
 								if (editor_layer == 1) {
-									for (k = 0; k < map_floor.size(); k++) {
+									for (int k = 0; k < map_floor.size(); k++) {
 										map_floor[k]->box.scale(0.9, 0.9);
 										if (map_floor[k]->box.getGlobalBounds().intersects(block.getGlobalBounds())) {
 											map_floor.erase(map_floor.begin() + k);
 											chosen = map_floor[0];
 										}
 									}
-									for (k = 0; k < electric.size(); k++) {
+									for (int k = 0; k < electric.size(); k++) {
 										electric[k]->box.scale(0.9, 0.9);
 										if (electric[k]->box.getGlobalBounds().intersects(block.getGlobalBounds())) {
 											electric.erase(electric.begin() + k);
@@ -743,13 +727,13 @@ void test_editor() {
 
 						if (helper < 0) {
 
-							for (i = 0; i < map_basic.size(); i++) {
+							for (int i = 0; i < map_basic.size(); i++) {
 								if (map_basic[i]->box.getGlobalBounds().intersects(choose.getGlobalBounds())) {
 									map_basic.erase(map_basic.begin() + i);
 									i = 0;
 								}
 							}
-							for (i = 0; i < movables.size(); i++) {
+							for (int i = 0; i < movables.size(); i++) {
 								if (movables[i]->box.getGlobalBounds().intersects(choose.getGlobalBounds())) {
 									movables.erase(movables.begin() + i);
 									i = 0;
@@ -758,13 +742,13 @@ void test_editor() {
 						}
 					}
 					if (editor_layer == 1) {
-						for (i = 0; i < map_floor.size(); i++) {
+						for (int i = 0; i < map_floor.size(); i++) {
 							if (map_floor[i]->box.getGlobalBounds().intersects(choose.getGlobalBounds())) {
 								map_floor.erase(map_floor.begin() + i);
 								i = 0;
 							}
 						}
-						for (i = 0; i < electric.size(); i++) {
+						for (int i = 0; i < electric.size(); i++) {
 							if (electric[i]->box.getGlobalBounds().intersects(choose.getGlobalBounds())) {
 								electric.erase(electric.begin() + i);
 								i = 0;
@@ -783,28 +767,28 @@ void test_editor() {
 			if (!on_keyboard_click) {
 
 				if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A)) {
-					for (i = 0; i < choosed.size(); i++) {
+					for (int i = 0; i < choosed.size(); i++) {
 						if (Keyboard::isKeyPressed(Keyboard::LShift)) { choosed[i]->move(-16, 0); }
 						else { choosed[i]->move(-128, 0); }
 					}
 
 				}
 				if (Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D)) {
-					for (i = 0; i < choosed.size(); i++) {
+					for (int i = 0; i < choosed.size(); i++) {
 						if (Keyboard::isKeyPressed(Keyboard::LShift)) { choosed[i]->move(16, 0); }
 						else { choosed[i]->move(128, 0); }
 					}
 
 				}
 				if (Keyboard::isKeyPressed(Keyboard::Up) || Keyboard::isKeyPressed(Keyboard::W)) {
-					for (i = 0; i < choosed.size(); i++) {
+					for (int i = 0; i < choosed.size(); i++) {
 						if (Keyboard::isKeyPressed(Keyboard::LShift)) { choosed[i]->move(0, -16); }
 						else { choosed[i]->move(0, -128); }
 					}
 
 				}
 				if (Keyboard::isKeyPressed(Keyboard::Down) || Keyboard::isKeyPressed(Keyboard::S)) {
-					for (i = 0; i < choosed.size(); i++) {
+					for (int i = 0; i < choosed.size(); i++) {
 						if (Keyboard::isKeyPressed(Keyboard::LShift)) { choosed[i]->move(0, 16); }
 						else { choosed[i]->move(0, 128); }
 					}
@@ -814,7 +798,7 @@ void test_editor() {
 				on_keyboard_click = !Keyboard::isKeyPressed(Keyboard::LControl);
 			}
 
-			for (i = 0; i < choosed.size(); i++) {
+			for (int i = 0; i < choosed.size(); i++) {
 				choosed[i]->do_some_magic();
 			}
 
@@ -823,7 +807,7 @@ void test_editor() {
 			if (editor_mode == 6) {
 
 				m_x = 0; m_y = 0;
-				for (i = 0; i < choosed.size(); i++) {
+				for (int i = 0; i < choosed.size(); i++) {
 					m_x += choosed[i]->x;
 					m_y += choosed[i]->y;
 				}
@@ -851,7 +835,7 @@ void test_editor() {
 
 				if (E_arrow[0].if_click()) {
 					if (!onclick) {
-						for (i = 0; i < choosed.size(); i++) {
+						for (int i = 0; i < choosed.size(); i++) {
 							if (Keyboard::isKeyPressed(Keyboard::LShift)) { choosed[i]->move(0, -16); }
 							else { choosed[i]->move(0, -128); }
 						}
@@ -860,7 +844,7 @@ void test_editor() {
 				}
 				if (E_arrow[1].if_click()) {
 					if (!onclick) {
-						for (i = 0; i < choosed.size(); i++) {
+						for (int i = 0; i < choosed.size(); i++) {
 							if (Keyboard::isKeyPressed(Keyboard::LShift)) { choosed[i]->move(16, 0); }
 							else { choosed[i]->move(128, 0); }
 						}
@@ -869,7 +853,7 @@ void test_editor() {
 				}
 				if (E_arrow[2].if_click()) {
 					if (!onclick) {
-						for (i = 0; i < choosed.size(); i++) {
+						for (int i = 0; i < choosed.size(); i++) {
 							if (Keyboard::isKeyPressed(Keyboard::LShift)) { choosed[i]->move(0, 16); }
 							else { choosed[i]->move(0, 128); }
 						}
@@ -878,7 +862,7 @@ void test_editor() {
 				}
 				if (E_arrow[3].if_click()) {
 					if (!onclick) {
-						for (i = 0; i < choosed.size(); i++) {
+						for (int i = 0; i < choosed.size(); i++) {
 							if (Keyboard::isKeyPressed(Keyboard::LShift)) { choosed[i]->move(-16, 0); }
 							else { choosed[i]->move(-128, 0); }
 						}
@@ -898,7 +882,7 @@ void test_editor() {
 
 						logg << "	Preparing finished;" << endl;
 
-						for (i = 0; i < g; i++) {
+						for (int i = 0; i < g; i++) {
 							if (map_basic[i]->choosen) {
 
 								map_basic[i]->choosen = false;
@@ -995,13 +979,13 @@ void test_editor() {
 
 							}
 						}
-						for (i = g; i < map_basic.size(); i++) {
+						for (int i = g; i < map_basic.size(); i++) {
 							choosed.push_back(map_basic[i]);
 						}
 
 						g = movables.size();
 
-						for (i = 0; i < g; i++) {
+						for (int i = 0; i < g; i++) {
 							if (movables[i]->choosen) {
 								Movable* copy = new Movable(*movables[i]);
 
@@ -1013,13 +997,13 @@ void test_editor() {
 								movables.push_back(copy);
 							}
 						}
-						for (i = g; i < movables.size(); i++) {
+						for (int i = g; i < movables.size(); i++) {
 							choosed.push_back(movables[i]);
 						}
 
 						g = map_floor.size();
 
-						for (i = 0; i < g; i++) {
+						for (int i = 0; i < g; i++) {
 							if (map_floor[i]->choosen) {
 
 								helper_string = getType(map_floor[i]->id, 1);
@@ -1080,13 +1064,13 @@ void test_editor() {
 
 							}
 						}
-						for (i = g; i < map_floor.size(); i++) {
+						for (int i = g; i < map_floor.size(); i++) {
 							choosed.push_back(map_floor[i]);
 						}
 
 						g = electric.size();
 
-						for (i = 0; i < g; i++) {
+						for (int i = 0; i < g; i++) {
 							if (electric[i]->choosen) {
 
 								helper_string = getType(electric[i]->id, 1);
@@ -1163,7 +1147,7 @@ void test_editor() {
 
 							}
 						}
-						for (i = g; i < electric.size(); i++) {
+						for (int i = g; i < electric.size(); i++) {
 							choosed.push_back(electric[i]);
 						}
 
@@ -1257,10 +1241,10 @@ void test_editor() {
 			E_L.is_checked = true;
 			E_L2.is_checked = false;
 
-			for (i = 0; i < map_basic.size(); i++) {
+			for (int i = 0; i < map_basic.size(); i++) {
 				map_basic[i]->setOpacity(255);
 			}
-			for (i = 0; i < movables.size(); i++) {
+			for (int i = 0; i < movables.size(); i++) {
 				movables[i]->box.setColor(Color(255,255,255,255));
 			}
 		}
@@ -1275,10 +1259,10 @@ void test_editor() {
 			E_L.is_checked = false;
 			E_L2.is_checked = true;
 
-			for (i = 0; i < map_basic.size(); i++) {
+			for (int i = 0; i < map_basic.size(); i++) {
 				map_basic[i]->setOpacity(75);
 			}
-			for (i = 0; i < movables.size(); i++) {
+			for (int i = 0; i < movables.size(); i++) {
 				movables[i]->box.setColor(Color(255, 255, 255, 129));
 			}
 		}
@@ -1419,8 +1403,8 @@ void test_editor() {
 
 		block.setOrigin(0, 0);
 		block.setTexture(grb);
-		for (i = 1; i < 50; i++) {
-			render_block_UI(screenh, get_ID(i));
+		for (int i = 1; i < 50; i++) {
+			render_block_UI(screenh, get_ID(i), i);
 			if (block.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
 				button_overlapped = true;
 				if (!onclick && Mouse::isButtonPressed(Mouse::Left)) {

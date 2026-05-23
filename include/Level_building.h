@@ -124,7 +124,7 @@ void save(string fname) {
 	save << lvl_name << endl;
 	save << "Map_basic" << endl;
 
-	for (i = 0; i < map_basic.size(); i++) {
+	for (int i = 0; i < map_basic.size(); i++) {
 
 		if (map_basic[i]->id > 0) {
 			map_basic[i]->save(save);
@@ -133,13 +133,13 @@ void save(string fname) {
 
 	save << "Movables" << endl;
 
-	for (i = 0; i < movables.size(); i++) {
+	for (int i = 0; i < movables.size(); i++) {
 		movables[i]->save(save);
 	}
 
 	save << "Map_floor" << endl;
 
-	for (i = 0; i < map_floor.size(); i++) {
+	for (int i = 0; i < map_floor.size(); i++) {
 
 		if (map_floor[i]->id > 0) {
 			map_floor[i]->save(save);
@@ -147,7 +147,7 @@ void save(string fname) {
 
 	}
 
-	for (i = 0; i < triggers.size(); i++) {
+	for (int i = 0; i < triggers.size(); i++) {
 
 		if (triggers[i]->id > 0) {
 			triggers[i]->save(save);
@@ -157,7 +157,7 @@ void save(string fname) {
 
 	save << "Electric" << endl;
 
-	for (i = 0; i < electric.size(); i++) {
+	for (int i = 0; i < electric.size(); i++) {
 		if (electric[i]->id > 0) {
 			electric[i]->save(save);
 		}
@@ -185,23 +185,23 @@ void checkpoint() {
 	save << lvl_name << endl;
 	save << "Map_basic" << endl;
 
-	for (i = 0; i < map_basic.size(); i++) {
+	for (int i = 0; i < map_basic.size(); i++) {
 		map_basic[i]->save(save);
 	}
 
 	save << "Movables" << endl;
 
-	for (i = 0; i < movables.size(); i++) {
+	for (int i = 0; i < movables.size(); i++) {
 		movables[i]->save(save);
 	}
 
 	save << "Map_floor" << endl;
 
-	for (i = 0; i < map_floor.size(); i++) {
+	for (int i = 0; i < map_floor.size(); i++) {
 		map_floor[i]->save(save);
 	}
 
-	for (i = 0; i < triggers.size(); i++) {
+	for (int i = 0; i < triggers.size(); i++) {
 
 		triggers[i]->save(save);
 
@@ -209,7 +209,7 @@ void checkpoint() {
 
 	save << "Electric" << endl;
 
-	for (i = 0; i < electric.size(); i++) {
+	for (int i = 0; i < electric.size(); i++) {
 		electric[i]->save(save);
 	}
 
@@ -217,7 +217,7 @@ void checkpoint() {
 	save << px << " ";
 	save << py << endl;
 
-	for (i = 0; i < 999; i++) {
+	for (int i = 0; i < 999; i++) {
 		save << int(dmode[i]) << ' ';
 		save << int(crystal[i]) << ' ';
 		save << int(lmode[i]) << ' ';
@@ -235,13 +235,12 @@ void load_checkpoint() {
 
 	logg << "	loading checkpoint \n";
 
-	stop_physics = true;
-
 	Sleep(100);
 
-	helper = 0;
+	int helper = 0;
 	coins_gathered = 0;
 	coins_required = 0;
+	float helper_s[2];
 	helper_s[0] = 0;
 	helper_s[1] = 0;
 	alpha = 255;
@@ -252,7 +251,7 @@ void load_checkpoint() {
 	electric.clear();
 	triggers.clear();
 
-	for (i = 0; i < 5; i++) {
+	for (int i = 0; i < 5; i++) {
 		tx[i] = -20000; ty[i] = -20000;
 		spiral[i].setPosition(-30000, -30000);
 	}
@@ -764,7 +763,7 @@ void load_checkpoint() {
 	save >> px;
 	save >> py;
 
-	for (i = 0; i < 999; i++) {
+	for (int i = 0; i < 999; i++) {
 		save >> (dmode[i]);
 		save >> (crystal[i]);
 		save >> (lmode[i]);
@@ -785,15 +784,11 @@ void load_checkpoint() {
 
 	logg << "	Success! \n";
 
-	stop_physics = false;
-
 	save.close();
-
 }
 
 void clear_lvl() {
 
-	stop_physics = true;
 	Sleep(150 + 150);
 
 	map_basic.clear();
@@ -801,26 +796,23 @@ void clear_lvl() {
 	movables.clear();
 	electric.clear();
 
-	stop_physics = false;
-
 	logg << "LEVEL CLEARED" << endl;
 }
 
 void build(int l) {
 
-	stop_physics = true;
-
-	Sleep(100);
-
 	logg << "	Level building " + to_string(l) << "...\n";
 
 	reload_textures();
 
-	helper = 0;
+	int helper = 0;
 	coins_gathered = 0;
 	coins_required = 0;
+
+	float helper_s[2];
 	helper_s[0] = 0;
 	helper_s[1] = 0;
+
 	player_scale = 1;
 	save_options();
 	alpha = 255;
@@ -830,7 +822,7 @@ void build(int l) {
 		end();
 	}
 
-	for (i = 0; i < 999; i++) {
+	for (int i = 0; i < 999; i++) {
 		dmode[i] = false;
 		crystal[i] = false;
 		lmode[i] = false;
@@ -843,7 +835,7 @@ void build(int l) {
 	electric.clear();
 	triggers.clear();
 
-	for (i = 0; i < 5; i++) {
+	for (int i = 0; i < 5; i++) {
 		tx[i] = -20000; ty[i] = -20000;
 		spiral[i].setPosition(-300, -300);
 	}
@@ -1378,7 +1370,7 @@ void build(int l) {
 
 	save.close();
 
-	for (i = 0; i < electric.size(); i++) {
+	for (int i = 0; i < electric.size(); i++) {
 
 		Sq a;
 		a.size = 40;
@@ -1395,7 +1387,7 @@ void build(int l) {
 
 		case 25:
 
-			for (j = 0; j < electric.size(); j++) {
+			for (int j = 0; j < electric.size(); j++) {
 				if (i == j) { continue; }
 				a.x = electric[i]->x; a.y = electric[i]->y;
 				switch (rotation) {
@@ -1449,7 +1441,7 @@ void build(int l) {
 
 		case 26:
 
-			for (j = 0; j < electric.size(); j++) {
+			for (int j = 0; j < electric.size(); j++) {
 				if (i == j) { continue; }
 				a.x = electric[i]->x; a.y = electric[i]->y;
 
@@ -1496,7 +1488,7 @@ void build(int l) {
 
 		case 27:
 
-			for (j = 0; j < electric.size(); j++) {
+			for (int j = 0; j < electric.size(); j++) {
 				if (i == j) { continue; }
 				a.x = electric[i]->x; a.y = electric[i]->y;
 
@@ -1580,7 +1572,7 @@ void build(int l) {
 
 		case 28:
 
-			for (j = 0; j < electric.size(); j++) {
+			for (int j = 0; j < electric.size(); j++) {
 				if (i == j) { continue; }
 				a.x = electric[i]->x; a.y = electric[i]->y;
 
@@ -1695,7 +1687,7 @@ void build(int l) {
 
 		case 29:
 
-			for (j = 0; j < electric.size(); j++) {
+			for (int j = 0; j < electric.size(); j++) {
 				if (i == j) { continue; }
 				a.x = electric[i]->x; a.y = electric[i]->y;
 
@@ -1733,7 +1725,7 @@ void build(int l) {
 
 		case 30:
 
-			for (j = 0; j < electric.size(); j++) {
+			for (int j = 0; j < electric.size(); j++) {
 				if (i == j) { continue; }
 				a.x = electric[i]->x; a.y = electric[i]->y;
 
@@ -1787,7 +1779,7 @@ void build(int l) {
 
 		case 31:
 
-			for (j = 0; j < electric.size(); j++) {
+			for (int j = 0; j < electric.size(); j++) {
 				if (i == j) { continue; }
 				a.x = electric[i]->x; a.y = electric[i]->y;
 
@@ -1843,7 +1835,7 @@ void build(int l) {
 
 		case 32:
 
-			for (j = 0; j < electric.size(); j++) {
+			for (int j = 0; j < electric.size(); j++) {
 				if (i == j) { continue; }
 				a.x = electric[i]->x; a.y = electric[i]->y;
 
@@ -1890,7 +1882,7 @@ void build(int l) {
 
 		case 33:
 
-			for (j = 0; j < electric.size(); j++) {
+			for (int j = 0; j < electric.size(); j++) {
 				if (i == j) { continue; }
 				a.x = electric[i]->x; a.y = electric[i]->y;
 
@@ -2005,7 +1997,7 @@ void build(int l) {
 
 		case 34:
 
-			for (j = 0; j < electric.size(); j++) {
+			for (int j = 0; j < electric.size(); j++) {
 				if (i == j) { continue; }
 				a.x = electric[i]->x; a.y = electric[i]->y;
 
@@ -2052,7 +2044,7 @@ void build(int l) {
 
 		case 35:
 
-			for (j = 0; j < electric.size(); j++) {
+			for (int j = 0; j < electric.size(); j++) {
 				if (i == j) { continue; }
 				a.x = electric[i]->x; a.y = electric[i]->y;
 
@@ -2099,7 +2091,7 @@ void build(int l) {
 
 		case 36:
 
-			for (j = 0; j < electric.size(); j++) {
+			for (int j = 0; j < electric.size(); j++) {
 				if (i == j) { continue; }
 				a.x = electric[i]->x; a.y = electric[i]->y;
 
@@ -2146,7 +2138,7 @@ void build(int l) {
 
 		case 37:
 
-			for (j = 0; j < electric.size(); j++) {
+			for (int j = 0; j < electric.size(); j++) {
 				if (i == j) { continue; }
 				a.x = electric[i]->x; a.y = electric[i]->y;
 				switch (rotation) {
@@ -2218,8 +2210,5 @@ void build(int l) {
 
 	if (lvlnum != -3) { lvlnum = l; }
 
-	stop_physics = (mode != "game");
-
 	logg << "	The level was built \n";
-
 }

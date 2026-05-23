@@ -9,6 +9,8 @@ void loading() {
 
 	//Screen	
 
+	float helper_s2;
+
 	ifstream options;
 	options.open("Options.txt");
 	options >> partnum;
@@ -35,7 +37,7 @@ void loading() {
 		cursor.setOrigin(8, 8);
 
 		spir.loadFromFile("Textures/Spiral.png");
-		for (i = 0; i < 5; i++) {
+		for (int i = 0; i < 5; i++) {
 			spiral[i].setTexture(spir);
 			spiral[i].setOrigin(128, 128);
 			spiral[i].setTextureRect(IntRect(0, 0, 256, 256));
@@ -210,11 +212,8 @@ void loading() {
 
 	screenmode.init(600 * UI_scale, 100 * UI_scale);
 
-	//"i" is gloabal, but not everywhere. I need to do this class better, but not now
-	i = 0;
-	res_but[0].init(1920, 1080);
-	i = 1;
-	res_but[1].init(1280, 720);
+	res_but[0].init(1920, 1080, 0);
+	res_but[1].init(1280, 720, 1);
 
 	res_but[int(helper_s2)].is_picked = true;
 
@@ -305,7 +304,7 @@ void loading() {
 
 		ach_but[0].init(achievement_button_t, 300, 150, "achievement :)", 0);
 
-		for (i = 0; i < 42; i++) {
+		for (int i = 0; i < 42; i++) {
 			ach_but[i + 1].init(achievement_button_t, 300, (200 * i) + 450, "achievement :)", i + 1);
 		}
 

@@ -163,7 +163,7 @@ void smoke_spawn(string type, int x, int y) {
 	logg << "Smoke spawn: " << type << " \n";;
 
 	srand((unsigned)time(NULL));
-	for (k = 0; k < 3; k++) {
+	for (int k = 0; k < 3; k++) {
 		if (!particle[k][0].enabled) {
 			for (int ws = 0; ws < partnum; ws++) {
 				particle[k][ws].x = x;
@@ -276,7 +276,7 @@ void smoke_spawn(string type, int x, int y, int look) {
 	logg << "Smoke spawn: " << type << " \n";;
 
 	srand((unsigned)time(NULL));
-	for (k = 0; k < 3; k++) {
+	for (int k = 0; k < 3; k++) {
 		if (!particle[k][0].enabled) {
 			for (int ws = 0; ws < partnum; ws++) {
 				particle[k][ws].x = x;

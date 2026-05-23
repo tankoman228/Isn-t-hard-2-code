@@ -39,7 +39,7 @@ void save_options() {
 	ofstream options;
 	options.open("Options.txt");
 	options << partnum << " " << levels_opened << " ";
-	for (i = 0; i < 2; i++) {
+	for (int i = 0; i < 2; i++) {
 		if (res_but[i].is_picked) {
 			options << i << " ";
 			break;
@@ -59,7 +59,7 @@ void check_saves() {
 	ofstream saves;
 	saves.open("saves.txt");
 
-	j = 0;
+	int j = 0;
 
 	/*
 	TODO:
@@ -87,7 +87,7 @@ void check_saves() {
 
 void achievement(int _lvl, int _n) {
 
-	helper = 0;
+	int helper = 0;
 
 	ifstream ach;
 	ach.open("Achievements/" + to_string(_lvl) + " " + to_string(_n) + ".txt");
@@ -108,6 +108,7 @@ void achievement(int _lvl, int _n) {
 	ach_text.setOutlineThickness(3 * UI_scale);
 	ach_text.setFont(font);
 
+	int s = 0;
 	for (s = 0; s < 43; s++) {
 		if (ach_but[s].lvl == _lvl && ach_but[s].n == _n) {
 			break;
@@ -521,7 +522,7 @@ int get_ID(int num) {
 	return 22;
 }
 
-void render_block_UI(int screenh, int ID) {
+void render_block_UI(int screenh, int ID, int i) {
 	block.setTexture(cur);
 	block.setPosition(128 * UI_scale * i + editor_scroll * UI_scale, screenh - 128 * UI_scale);
 	if (editor_layer == 0) {

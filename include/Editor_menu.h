@@ -80,13 +80,15 @@ void editor_menu_cycle() {
 	block.setRotation(0); block.setTexture(bg); block.setTextureRect(IntRect(0, 0, 256, 256)); block.setScale(1, 1);
 	block.setOrigin(128, 128);
 
+	int mouseHolding = 0;
+
 	while (mode == "editor_menu") {
 
 		if (onclick && !Mouse::isButtonPressed(Mouse::Left)) {
 			onclick = false;
 		}
 
-		if (helper_s2 > 0 && !Mouse::isButtonPressed(Mouse::Left)) { helper_s2 = 0; }
+		if (mouseHolding > 0 && !Mouse::isButtonPressed(Mouse::Left)) { mouseHolding = 0; }
 
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 8; j++) {
@@ -200,22 +202,22 @@ void editor_menu_cycle() {
 					std::remove(chr);
 				}
 
-				helper_s2 += 4;
+				mouseHolding += 4;
 				onclick = false;
 
-				cheese[i].deleter.box.setColor(Color(255 - helper_s2, 255 - helper_s2, 255 - helper_s2, 255));
+				cheese[i].deleter.box.setColor(Color(255 - mouseHolding, 255 - mouseHolding, 255 - mouseHolding, 255));
 				text.setPosition(cheese[i].deleter.box.getPosition());
 				text.setString("Hold to delete");
 				text.move(- 31 * UI_scale, - 35 * UI_scale);
 				text.setCharacterSize(UI_scale * 30);
 				window.draw(text);
 
-				if (helper_s2 > 255) {
+				if (mouseHolding > 255) {
 					helper_string = "Saves/" + cheese[i].filename;
 					const char* chr = helper_string.c_str();
 					logg << "Delete: " << chr << endl;
 					std::remove(chr);
-					helper_s2 = 0;
+					mouseHolding = 0;
 					return;
 				}
 			}

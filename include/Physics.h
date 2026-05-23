@@ -96,6 +96,8 @@ bool collide(Sq& a, Sq& b) {
 
 	if (a.bx < b.ax || a.ax > b.bx || a.ay > b.by || a.by < b.ay) { return false; }
 
+	float helper_s[2];
+
 	helper_s[0] = (a.x - b.x);
 	helper_s[1] = (a.y - b.y);
 

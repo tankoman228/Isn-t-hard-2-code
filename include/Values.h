@@ -11,8 +11,6 @@
 
 using namespace sf; using namespace std;
 
-/*const int wid = 60, hei = 30;*/ //Delete this later
-
 int screenw, screenh;
 
 float ex = 0, ey = 0; //eyes
@@ -30,7 +28,6 @@ bool barmode[999]; //doors and other things
 bool block_collision = false; //if any block of map_basic is being touched by player
 int colint = 0; //time of player-block collision
 
-bool stop_physics = true; //stops physics (after changing on false/true, must be Sleep(100);)
 bool scroll_pinned = false;
 
 class Block; vector <Block*> map_basic, map_floor; 
@@ -44,9 +41,6 @@ float UI_scale = 1;
 
 float teleport_frame;
 int tx[5], ty[5], teleport_to = -1; 
-
-float helper_s[2], helper_s2;
-int i, j, k, s, helper; //helper values. Use carefully
 
 int coins_gathered = 0, coins_required, lvlnum = 1, levels_opened = 1;
 

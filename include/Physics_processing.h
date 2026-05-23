@@ -6,18 +6,18 @@
 
 void physics_processing() {
 
-	// TODO: понять, где есть stop_physics и вырезать его нахер
-	if (context_menu) {
-		return; 
-	}
+	if (context_menu) return; 
 
 	player_processing();
 
-	for (i = 0; i < map_floor.size(); i++) {
+	#pragma omp parallel for
+	for (int i = 0; i < map_floor.size(); i++) {
 		map_floor[i]->cycle();
 
-		for (j = 0; j < movables.size(); j++) {
+		for (int j = 0; j < movables.size(); j++) {
 			if (intersection(*map_floor[i], *movables[j])) {
+
+				float helper_s[2];
 
 				helper_s[0] = map_floor[i]->x - movables[j]->x;
 				helper_s[1] = map_floor[i]->y - movables[j]->y;
@@ -44,17 +44,20 @@ void physics_processing() {
 
 	}
 
-	for (i = 0; i < electric.size(); i++) {
+	#pragma omp parallel for
+	for (int i = 0; i < electric.size(); i++) {
 		electric[i]->cycle();
 	}
 
-	for (i = 0; i < map_basic.size(); i++) {
+	#pragma omp parallel for
+	for (int i = 0; i < map_basic.size(); i++) {
 		map_basic[i]->cycle();
 	}
 
-	for (i = 0; i < movables.size(); i++) {
+	#pragma omp parallel for
+	for (int i = 0; i < movables.size(); i++) {
 
-		for (j = 0; j < map_basic.size(); j++) {
+		for (int j = 0; j < map_basic.size(); j++) {
 			if (collide(*movables[i], *map_basic[j])) {
 				/*movables[j]->sx /= 2; movables[j]->sy /= 2;*/
 
@@ -62,7 +65,7 @@ void physics_processing() {
 			}
 		}
 
-		for (j = 0; j < movables.size(); j++) {
+		for (int j = 0; j < movables.size(); j++) {
 			if (i != j) {
 				if (collide(*movables[j], *movables[i])) {
 					/*movables[i]->move(); movables[j]->move();*/

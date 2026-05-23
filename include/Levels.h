@@ -27,14 +27,14 @@ void levels_cycle() {
 		}
 
 		block.setTexture(el); block.setScale(2, 2);
-		for (i = 0; i < 10; i++) {
-			for (j = 0; j < 6; j++) {
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 6; j++) {
 				block.setPosition(i * 256 + level_scroll % 256 - 128, j * 256);
 				window.draw(block);
 			}
 		}
 
-		for (i = 0; i < 35; i++) {
+		for (int i = 0; i < 35; i++) {
 			text.setCharacterSize(UI_scale * 100);
 			lvl_but.setScale(UI_scale * 2, UI_scale * 2);
 			lvl_but.setPosition(level_scroll + (300 * (i + 1)) * UI_scale, screenh / 2);

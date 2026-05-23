@@ -58,8 +58,6 @@ void test_game() {
 	
 	logg << "	The game start!\n";
 
-	stop_physics = false;
-
 	player_processing(); render_player();
 
 	eyes.setScale(scale, scale);
@@ -84,12 +82,6 @@ void test_game() {
 			if (Keyboard::isKeyPressed(Keyboard::Tab) && !onclick) {
 
 				onclick = true;
-
-				stop_physics = true;
-				
-				sleep(milliseconds(100));
-				
-
 				build(lvlnum);
 
 				return;
@@ -100,8 +92,8 @@ void test_game() {
 			}
 
 			if (Keyboard::isKeyPressed(Keyboard::F5)) {
-				stop_physics = true; sleep(milliseconds(200));
-				checkpoint(); stop_physics = false;
+				sleep(milliseconds(200));
+				checkpoint();
 			}
 
 			break; //�� ���������, � ��� �����, ����� �������� ����� ����(
@@ -385,9 +377,6 @@ void test_game() {
 			if (alpha < 0) {
 				blend.setColor(Color(0, 0, 0, abs(alpha)));
 				if (alpha < -253) {
-
-					stop_physics = true; sleep(milliseconds((300)));
-
 					if (levels_opened == lvlnum) {
 						levels_opened++; lvlnum++;
 
@@ -398,23 +387,22 @@ void test_game() {
 						return;
 					}
 					if (lvlnum == -2) {
-						mode = "editor"; stop_physics = true; sleep(milliseconds((100))); lvlnum = -2; build(-2); return;
+						mode = "editor"; lvlnum = -2; build(-2); return;
 					}
 					if (lvlnum == -3) {
 
 						set_achievement_complete();
-						mode = "achievements"; stop_physics = true; sleep(milliseconds((100))); build(-2); 
+						mode = "achievements"; build(-2); 
 
 						return;
 
 					}
 					else {
-						if (lvlnum == -1) {
-							stop_physics = true; sleep(milliseconds((100)));
+						if (lvlnum == -1) {			
 							mode = "menu";
 							lvlnum = 1;
 						}
-						else { lvlnum++; build(lvlnum); stop_physics = true; sleep(milliseconds((100))); checkpoint(); return; }
+						else { lvlnum++; build(lvlnum); checkpoint(); return; }
 					}
 
 					build(lvlnum);

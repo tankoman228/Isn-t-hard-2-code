@@ -8,12 +8,10 @@ void game_context_menu() {
 
 	while (context_menu) {
 
-		stop_physics = false;
-
 		box_but.setScale(UI_scale, UI_scale * 0.75);
 		window.draw(box);
 		text.setFillColor(Color::Black); text.setCharacterSize(UI_scale * 50);
-		for (i = 0; i < 6; i++) {
+		for (int i = 0; i < 6; i++) {
 			box_but.setPosition(screenw / 2, 150 * UI_scale + 130 * i * UI_scale);
 			if (cursor.getGlobalBounds().intersects(box_but.getGlobalBounds())) {
 				box_but.setTextureRect(IntRect(0, 128, 512, 128));
@@ -25,8 +23,8 @@ void game_context_menu() {
 					case 1: checkpoint(); context_menu = false; break;
 					case 2: context_menu = false; load_checkpoint(); break;
 					case 3: build(lvlnum); context_menu = false; break;
-					case 4: checkpoint(); context_menu = false; stop_physics = true; Sleep(100); mode = "menu"; break;
-					case 5: context_menu = false; stop_physics = true; Sleep(100); mode = "menu"; break;
+					case 4: checkpoint(); context_menu = false; mode = "menu"; break;
+					case 5: context_menu = false; mode = "menu"; break;
 					}
 				}
 			}
@@ -63,7 +61,6 @@ void game_context_menu() {
 				mode = "menu";
 				save_options();
 				close = true; 
-				stop_physics = true;
 				window.close();
 				return;
 			}

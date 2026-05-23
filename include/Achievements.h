@@ -23,7 +23,7 @@ void achievements_cycle() {
 
 	ach_but[0].init(achievement_button_t, 300, 150, "achievement :)", 0);
 
-	for (i = 0; i < 42; i++) {
+	for (int i = 0; i < 42; i++) {
 		ach_but[i + 1].init(achievement_button_t, 300, (200 * i) + 450, "achievement :)", i + 1);
 	}
 
@@ -74,8 +74,8 @@ void achievements_cycle() {
 	do {
 
 		block.setTexture(gray2); block.setOrigin(64, 64); block.setTextureRect(IntRect(0, 0, 128, 128)); block.setScale(1, 1);
-		for (i = 0; i < 18; i++) {
-			for (j = 0; j < 16; j++) {
+		for (int i = 0; i < 18; i++) {
+			for (int j = 0; j < 16; j++) {
 				block.setColor(Color(200, 200, 200, 255));
 				switch ((i + j) % 4) {
 				case 0: block.setRotation(0); break;
@@ -88,7 +88,7 @@ void achievements_cycle() {
 			}
 		}
 
-		for (i = 0; i < 43; i++) {
+		for (int i = 0; i < 43; i++) {
 
 			ach_but[i].box.setPosition(ach_but[i].box.getPosition().x, ach_but[i].y * UI_scale - achievements_scroll);
 			ach_but[i].txt.setPosition(ach_but[i].box.getPosition().x + 70 * UI_scale, ach_but[i].y * UI_scale - achievements_scroll - 30 * UI_scale);
@@ -104,14 +104,14 @@ void achievements_cycle() {
 
 				string newf = ach_but[i].txt.getString();
 
-				for (j = 0; j < newf.size(); j++) {
+				for (int j = 0; j < newf.size(); j++) {
 					if (newf[j] == ' ') { newf[j] = '_'; }
 				}
 
-				for (j = 0; j < newf.size(); j++) {
+				for (int j = 0; j < newf.size(); j++) {
 					if (newf[j] == '?') { newf.erase(j); }
 				}
-				for (j = 0; j < newf.size(); j++) {
+				for (int j = 0; j < newf.size(); j++) {
 					if (newf[j] == '.') { newf.erase(j); }
 				}
 
@@ -139,7 +139,7 @@ void achievements_cycle() {
 		}
 
 		window.display();
-		//Sleep(1);
+		Sleep(1);
 		window.clear();
 
 		sf::Event event;

@@ -142,26 +142,20 @@ struct Block : public Sq {
 			p.sx = 0; p.sy = 0;
 
 			do {
-
+				// TODO: что-то мне не нравится эта физика
 				block_collision = true;
 
-				helper_s[0] = (px - x);
-				helper_s[1] = (py - y);
+				float dx = (px - x);
+				float dy = (py - y);
 
-				if (abs(helper_s[0]) > abs(helper_s[1])) {
-
-					px += 0.1 * sign(helper_s[0]);
-
+				if (abs(dx) > abs(dy)) {
+					px += 0.1 * sign(dx);
 				}
-
 				else {
-
-					py += 0.1 * sign(helper_s[1]);
-
+					py += 0.1 * sign(dy);
 				}
 
 				p.init_AABB();
-
 			}
 			while (intersection(p, *this));
 
@@ -169,7 +163,6 @@ struct Block : public Sq {
 		}
 
 		return false;
-
 	}
 
 	void rotate(int angle) {
@@ -590,7 +583,7 @@ struct Detector : public Block {
 		switch (int(box.getRotation())) {
 		case 0: 
 
-			for (k = 0; k < 3; k++) {
+			for (int k = 0; k < 3; k++) {
 				block.move(scale * 128, 0);
 				if (playerS.getGlobalBounds().intersects(block.getGlobalBounds())) {
 					target[group] = change; break;
@@ -601,7 +594,7 @@ struct Detector : public Block {
 
 		case 90:
 			
-			for (k = 0; k < 3; k++) {
+			for (int k = 0; k < 3; k++) {
 				block.move(0, scale * 128);
 				if (playerS.getGlobalBounds().intersects(block.getGlobalBounds())) {
 					target[group] = change; break;
@@ -612,7 +605,7 @@ struct Detector : public Block {
 
 		case 180:
 
-			for (k = 0; k < 3; k++) {
+			for (int k = 0; k < 3; k++) {
 				block.move(-scale * 128, 0);
 				if (playerS.getGlobalBounds().intersects(block.getGlobalBounds())) {
 					target[group] = change; break;
@@ -623,7 +616,7 @@ struct Detector : public Block {
 
 		case 270:
 
-			for (k = 0; k < 3; k++) {
+			for (int k = 0; k < 3; k++) {
 				block.move(0, -scale * 128);
 				if (playerS.getGlobalBounds().intersects(block.getGlobalBounds())) {
 					target[group] = change; break;
@@ -889,18 +882,17 @@ struct Questions : public Block {
 
 	void cycle() {
 
+		// TODO: что за хрень, которая ещё и дублируется?!
 		if (look == -1 && id == 29) {
 
-			helper_s[0] = (x - px);
-			//helper_s2 = helper_s[0] * helper_s[0];
-			helper_s[1] = (y - py);
-			//helper_s2 += helper_s[1] * helper_s[1];
+			float dx = (x - px);
+			float dy  = (y - py);
 
-			if (abs(helper_s[0]) > abs(helper_s[1])) {
-				p.sx -= sign(helper_s[0]) * 1;
+			if (abs(dx) > abs(dy)) {
+				p.sx -= sign(dx) * 1;
 			}
 			else {
-				p.sy -= sign(helper_s[1]) * 1;
+				p.sy -= sign(dy) * 1;
 			}
 
 			if (tick % 130 == 0) {
@@ -921,7 +913,7 @@ struct Questions : public Block {
 					open.play(); 
 					smoke_spawn("mech", x, y, look); 
 					
-					for (k = 0; k < 999; k++) {
+					for (int k = 0; k < 999; k++) {
 						dmode[k] = true;
 						barmode[k] = true;
 						lmode[k] = true;
@@ -933,7 +925,7 @@ struct Questions : public Block {
 					open.play();
 					smoke_spawn("mech", x, y, look);
 
-					for (k = 0; k < 999; k++) {
+					for (int k = 0; k < 999; k++) {
 						dmode[k] = false;
 						barmode[k] = false;
 						lmode[k] = false;
@@ -944,13 +936,13 @@ struct Questions : public Block {
 
 				case 29:
 
-					helper_s[0] = (x - px);
-					helper_s2 = helper_s[0] * helper_s[0];
-					helper_s[1] = (y - py);
-					helper_s2 += helper_s[1] * helper_s[1];
+					float dx = (x - px);
+					float dy = (y - py);
 
-					p.sx -= helper_s[0] / helper_s2 * 300;
-					p.sy -= helper_s[1] / helper_s2 * 300;
+					float s = dy * dy + dx * dx;
+
+					p.sx -= dx / s * 300;
+					p.sy -= dy / s * 300;
 
 					look = -1;
 
@@ -1048,6 +1040,8 @@ struct Special : public Block {
 	void render() {
 
 		update_scrolling();
+
+		float helper_s2, helper_s[2];
 
 		switch (id) {
 		case 16:
@@ -1457,7 +1451,7 @@ struct Speed_det : public Block {
 
 		update_scrolling();
 
-		helper = abs(p.sx) + abs(p.sy);
+		float helper = abs(p.sx) + abs(p.sy);
 		box.setTexture(speed_det);
 
 		if (helper > 0.85) { target[group] = true; }
@@ -1715,7 +1709,7 @@ struct Special_floor : public Block {
 
 		case 19:
 
-			for (j = 0; j < movables.size(); j++) {
+			for (int j = 0; j < movables.size(); j++) {
 				if (intersection(*movables[j],*this)) {
 					switch (int(box.getRotation())) {
 					case 0: movables[j]->x += 0.5; break;
@@ -1735,7 +1729,7 @@ struct Special_floor : public Block {
 				if (intersection(*this, p)) {
 
 					for (int k = 0; k < map_floor.size(); k++) {
-						if (i == k) { continue; }
+						if (map_floor[k] == this) { continue; }
 
 						if (map_floor[k]->id == 43 && map_floor[k]->mass == mass) {
 							px = map_floor[k]->x;
@@ -1777,7 +1771,7 @@ struct Special_floor : public Block {
 						if (intersection(*this, *movables[k])) {
 
 							for (int c = 0; c < map_floor.size(); c++) {
-								if (i == c) { continue; }
+								if (map_floor[c] == this) { continue; }
 								
 								if (map_floor[c]->id == 43 && map_floor[c]->mass == mass) {
 									movables[k]->x = map_floor[c]->x;
@@ -1867,6 +1861,8 @@ struct Special_floor : public Block {
 	void render() {
 
 		update_scrolling();
+		float helper_s2 = 0;
+		float helper_s[2];
 
 		switch (id) {
 
@@ -1884,7 +1880,6 @@ struct Special_floor : public Block {
 
 			box.setColor(Color(255, 255, 255, 255));
 
-			helper_s2 = 0;
 			helper_s[0] = x - px;
 			helper_s2 += helper_s[0] * helper_s[0];
 			helper_s[1] = y - py;
@@ -2226,7 +2221,7 @@ struct Floor_button : public Block {
 		}
 		else {
 
-			for (k = 0; k < movables.size(); k++) {
+			for (int k = 0; k < movables.size(); k++) {
 
 				if (bx < movables[k]->ax || ax > movables[k]->bx || ay > movables[k]->by || by < movables[k]->ay) { continue; }
 				if (abs(movables[k]->x - x) > 30 || abs(movables[k]->y - y) > 30) { continue; }
@@ -2504,7 +2499,7 @@ struct Door : public Block {
 				box.setTextureRect(IntRect(128, 0, 128, 128));
 				if_collide();
 
-				for (k = 0; k < movables.size(); k++) {
+				for (int k = 0; k < movables.size(); k++) {
 					if (collide(*this, *movables[k])) {
 						/*if (abs(movables[k]->x - x) < 3 || abs(movables[k]->y - y) < 3) {
 							smoke_spawn("smoke", x, y);
@@ -2522,7 +2517,7 @@ struct Door : public Block {
 				box.setTextureRect(IntRect(128, 0, 128, 128));
 				if_collide();
 
-				for (k = 0; k < movables.size(); k++) {
+				for (int k = 0; k < movables.size(); k++) {
 					if (collide(*this, *movables[k])) {
 						//if (abs(movables[k]->x - x) < 3 || abs(movables[k]->y - y) < 3) {
 						//	smoke_spawn("smoke", x, y);
@@ -4392,23 +4387,23 @@ struct Text_Block : public Block {
 
 		while (!Keyboard::isKeyPressed(Keyboard::Enter) && window.isOpen()) {
 
-			for (i = 0; i < map_floor.size(); i++) {
+			for (int i = 0; i < map_floor.size(); i++) {
 				map_floor[i]->render();
 			}
 
-			for (i = 0; i < ::electric.size(); i++) {
+			for (int i = 0; i < ::electric.size(); i++) {
 				::electric[i]->render();
 			}
 
-			for (i = 0; i < movables.size(); i++) {
+			for (int i = 0; i < movables.size(); i++) {
 				window.draw(movables[i]->box);
 			}
 
-			for (i = 0; i < map_basic.size(); i++) {
+			for (int i = 0; i < map_basic.size(); i++) {
 				map_basic[i]->render();
 			}
 
-			for (i = 0; i < triggers.size(); i++) {
+			for (int i = 0; i < triggers.size(); i++) {
 				if (triggers[i]->id == 104) { triggers[i]->render(); }
 			}
 
