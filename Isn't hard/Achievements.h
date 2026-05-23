@@ -3,7 +3,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <math.h>
-#include <windows.h>
 #include <SFML/Audio.hpp>
 #include <fstream>
 #include "Values.h"
@@ -14,7 +13,7 @@ using namespace sf; using namespace std;
 
 void achievements_cycle() {
 
-	Sleep(500);
+	sleep(sf::milliseconds(500));
 
 	/*ach_text = text;*/
 
@@ -77,7 +76,7 @@ void achievements_cycle() {
 		block.setTexture(gray2); block.setOrigin(64, 64); block.setTextureRect(IntRect(0, 0, 128, 128)); block.setScale(1, 1);
 		for (i = 0; i < 18; i++) {
 			for (j = 0; j < 16; j++) {
-				block.setColor(Color::Color(200, 200, 200, 255));
+				block.setColor(Color(200, 200, 200, 255));
 				switch ((i + j) % 4) {
 				case 0: block.setRotation(0); break;
 				case 1: block.setRotation(90); break;
@@ -85,7 +84,7 @@ void achievements_cycle() {
 				case 3: block.setRotation(270); break;
 				}
 				block.setPosition(i * 128 + 64, j * 128 + 64);
-				window.draw(block); block.setColor(Color::Color(255, 255, 255, 255));
+				window.draw(block); block.setColor(Color(255, 255, 255, 255));
 			}
 		}
 
@@ -120,7 +119,7 @@ void achievements_cycle() {
 					newf = "Horosie_pelmeny_eto_ochen-ochen_vcusno.Na_samom_dele_retsept_prostoy_mnogo_myasa_malo_testa";
 				}
 				
-				current_filename = "Levels\\Bonus levels\\" + newf;
+				current_filename = "Levels/Bonus levels/" + newf;
 
 				lvlnum = -3; mode = "game"; build(-2); return;
 
@@ -140,7 +139,7 @@ void achievements_cycle() {
 		}
 
 		window.display();
-		Sleep(1);
+		//Sleep(1);
 		window.clear();
 
 		sf::Event event;

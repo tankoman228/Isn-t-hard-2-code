@@ -2,7 +2,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <math.h>
-#include <windows.h>
 #include <SFML/Audio.hpp>
 #include <fstream>
 #include "Values.h"
@@ -18,17 +17,17 @@ using namespace sf; using namespace std;
 
 void reset_music() {
 	switch (rand() % 5) {
-	case 0: music.openFromFile("Sounds\\2.ogg"); music.setVolume(100); break;
-	case 1: music.openFromFile("Sounds\\3.ogg"); music.setVolume(100); break;
-	case 2: music.openFromFile("Sounds\\4.ogg"); music.setVolume(100); break;
-	case 3: music.openFromFile("Sounds\\5.ogg"); music.setVolume(100); break;
-	case 4: music.openFromFile("Sounds\\music1.ogg"); music.setVolume(30); break;
+	case 0: music.openFromFile("Sounds/2.ogg"); music.setVolume(100); break;
+	case 1: music.openFromFile("Sounds/3.ogg"); music.setVolume(100); break;
+	case 2: music.openFromFile("Sounds/4.ogg"); music.setVolume(100); break;
+	case 3: music.openFromFile("Sounds/5.ogg"); music.setVolume(100); break;
+	case 4: music.openFromFile("Sounds/music1.ogg"); music.setVolume(30); break;
 	}
 	if (lvlnum == 1 || lvlnum == 15 || lvlnum == 23 || lvlnum > 30 || ((lvlnum == -3) && tick%3 == 1)) {
 		switch (rand() % 3) {
-		case 0: music.openFromFile("Sounds\\Music of music.ogg"); music.setVolume(40); break;
-		case 1: music.openFromFile("Sounds\\1.ogg"); music.setVolume(100); break;
-		case 2: music.openFromFile("Sounds\\1.ogg"); music.setVolume(100); break;
+		case 0: music.openFromFile("Sounds/Music of music.ogg"); music.setVolume(40); break;
+		case 1: music.openFromFile("Sounds/1.ogg"); music.setVolume(100); break;
+		case 2: music.openFromFile("Sounds/1.ogg"); music.setVolume(100); break;
 		}
 	}
 	music.play();
@@ -62,9 +61,12 @@ void check_saves() {
 
 	j = 0;
 
+	/*
+	TODO:
+	
 	WIN32_FIND_DATA FindFileData;
 	HANDLE hf;
-	hf = FindFirstFile(TEXT("Saves\\*"), &FindFileData);
+	hf = FindFirstFile(TEXT("Saves/*"), &FindFileData);
 	if (hf != INVALID_HANDLE_VALUE)
 	{
 		while (FindNextFile(hf, &FindFileData) != 0)
@@ -77,7 +79,8 @@ void check_saves() {
 		} 
 		FindClose(hf);
 	}
-
+	
+	*/
 	saves.close();
 	logg << "Searching for levels complete \n";
 }
@@ -87,15 +90,15 @@ void achievement(int _lvl, int _n) {
 	helper = 0;
 
 	ifstream ach;
-	ach.open("Achievements\\" + to_string(_lvl) + " " + to_string(_n) + ".txt");
+	ach.open("Achievements/" + to_string(_lvl) + " " + to_string(_n) + ".txt");
 
 	ach >> helper;
 	if (helper > 0) { ach.close(); return; }
 	
 	ach.close();
 
-	//ach_t.loadFromFile("Achievements\\Textures\\" + to_string(_lvl) + " " + to_string(_n) + ".png");
-	ach_t.loadFromFile("Achievements\\Textures\\Achievement.png");
+	//ach_t.loadFromFile("Achievements/Textures/" + to_string(_lvl) + " " + to_string(_n) + ".png");
+	ach_t.loadFromFile("Achievements/Textures/Achievement.png");
 
 	ach_box.setTexture(ach_t);
 	//ach_text.setString(helper_string);
@@ -161,8 +164,8 @@ void achievement(int _lvl, int _n) {
 
 #undef txt
 	
-	ach_b.loadFromFile("Achievements\\Sounds\\" + to_string(_lvl) + " " + to_string(_n) + ".ogg");
-	ach_b.loadFromFile("Achievements\\Sounds\\-2 0.ogg");
+	ach_b.loadFromFile("Achievements/Sounds/" + to_string(_lvl) + " " + to_string(_n) + ".ogg");
+	ach_b.loadFromFile("Achievements/Sounds/-2 0.ogg");
 	ach_s.setBuffer(ach_b);
 
 	if (ach_text.getString().getSize() < 20) {
@@ -176,7 +179,7 @@ void achievement(int _lvl, int _n) {
 	}
 
 	ofstream achr;
-	achr.open("Achievements\\" + to_string(_lvl) + " " + to_string(_n) + ".txt");
+	achr.open("Achievements/" + to_string(_lvl) + " " + to_string(_n) + ".txt");
 
 	achr << 1;
 	achr << " ";
@@ -191,7 +194,7 @@ void achievement(int _lvl, int _n) {
 void set_achievement_complete() {
 
 	ofstream ach;
-	ach.open("Achievements\\" + to_string(achievement_file[0]) + " " + to_string(achievement_file[1]) + ".txt");
+	ach.open("Achievements/" + to_string(achievement_file[0]) + " " + to_string(achievement_file[1]) + ".txt");
 
 	ach << 1 << ' ' << 1;
 
@@ -201,88 +204,88 @@ void set_achievement_complete() {
 
 void reload_textures() {
 
-	blue.loadFromFile("Textures\\Blue.png");
-	el.loadFromFile("Textures\\Floor.png");
-	switch_t.loadFromFile("Textures\\switch.png");
-	door.loadFromFile("Textures\\Electric trap.png");
-	smth.loadFromFile("Textures\\Something.png");
-	smth2.loadFromFile("Textures\\Something2.png");
-	smth3.loadFromFile("Textures\\Something3.png");
-	str.loadFromFile("Textures\\Stripes.png");
-	corn.loadFromFile("Textures\\Corner.png");
-	movable.loadFromFile("Textures\\Box.png");
-	finon.loadFromFile("Textures\\Finish(ON).png");
-	finoff.loadFromFile("Textures\\Finish(OFF).png");
-	wall.loadFromFile("Textures\\Wall.png");
-	bg.loadFromFile("Textures\\BG.png");
-	port_in.loadFromFile("Textures\\Portal.png");
-	port_o.loadFromFile("Textures\\Portal_out.png");
-	gray.loadFromFile("Textures\\Gray.png");
-	gr.loadFromFile("Textures\\Gr.png");
-	grb.loadFromFile("Textures\\Grb.png");
-	strp.loadFromFile("Textures\\StripesP.png");
-	differ.loadFromFile("Textures\\Different.png");
-	rb.loadFromFile("Textures\\RB.png");
-	rose.loadFromFile("Textures\\Rose.png");
-	green.loadFromFile("Textures\\Green.png");
-	greenf.loadFromFile("Textures\\GreenFloor.png");
-	greenw.loadFromFile("Textures\\GreenWall.png");
-	roseb.loadFromFile("Textures\\RoseBricks.png");
-	greenf2.loadFromFile("Textures\\GreenFloor2.png");
-	fl.loadFromFile("Textures\\Flowers.png");
-	crys.loadFromFile("Textures\\Crystal.png");
-	act.loadFromFile("Textures\\GreenSwitch.png");
-	gravs.loadFromFile("Textures\\gravS.png");
-	grav.loadFromFile("Textures\\grav.png");
-	buttonblock.loadFromFile("Textures\\Button.png");
-	noth.loadFromFile("Textures\\Nothing.png");
-	glass.loadFromFile("Textures\\Glass.png");
-	_arrow.loadFromFile("Textures\\Arrow.png");
-	white.loadFromFile("Textures\\White.png");
-	rosebut.loadFromFile("Textures\\RoseBut.png");
-	whitewall.loadFromFile("Textures\\White_wall.png");
-	rose_door.loadFromFile("Textures\\Rose_door.png");
-	gray2.loadFromFile("Textures\\Gray2.png");
-	rosefloor2.loadFromFile("Textures\\Blue_floor2.png");
-	blue_floor2.loadFromFile("Textures\\Rosefloor2.png");
-	rosebricks.loadFromFile("Textures\\RoseBricks2.png");
-	lamp_blue.loadFromFile("Textures\\Lamp_blue.png");
-	lamp_green.loadFromFile("Textures\\Lamp_barrier.png");
-	speed_det.loadFromFile("Textures\\Speed_detector.png");
-	portal2.loadFromFile("Textures\\Portal2.png");
-	view_det.loadFromFile("Textures\\View_detector.png");
-	player_det.loadFromFile("Textures\\Player_detector.png");
-	player_det_inv.loadFromFile("Textures\\Player_detector_inv.png");
-	pusher.loadFromFile("Textures\\Pusher.png");
-	some_help.loadFromFile("Textures\\Some_help.png");
-	tp_p.loadFromFile("Textures\\tp.png");
-	position_detector.loadFromFile("Textures\\Position_detector.png");
-	textblock.loadFromFile("Textures\\text.png");
+	blue.loadFromFile("Textures/Blue.png");
+	el.loadFromFile("Textures/Floor.png");
+	switch_t.loadFromFile("Textures/switch.png");
+	door.loadFromFile("Textures/Electric trap.png");
+	smth.loadFromFile("Textures/Something.png");
+	smth2.loadFromFile("Textures/Something2.png");
+	smth3.loadFromFile("Textures/Something3.png");
+	str.loadFromFile("Textures/Stripes.png");
+	corn.loadFromFile("Textures/Corner.png");
+	movable.loadFromFile("Textures/Box.png");
+	finon.loadFromFile("Textures/Finish(ON).png");
+	finoff.loadFromFile("Textures/Finish(OFF).png");
+	wall.loadFromFile("Textures/Wall.png");
+	bg.loadFromFile("Textures/BG.png");
+	port_in.loadFromFile("Textures/Portal.png");
+	port_o.loadFromFile("Textures/Portal_out.png");
+	gray.loadFromFile("Textures/Gray.png");
+	gr.loadFromFile("Textures/Gr.png");
+	grb.loadFromFile("Textures/Grb.png");
+	strp.loadFromFile("Textures/StripesP.png");
+	differ.loadFromFile("Textures/Different.png");
+	rb.loadFromFile("Textures/RB.png");
+	rose.loadFromFile("Textures/Rose.png");
+	green.loadFromFile("Textures/Green.png");
+	greenf.loadFromFile("Textures/GreenFloor.png");
+	greenw.loadFromFile("Textures/GreenWall.png");
+	roseb.loadFromFile("Textures/RoseBricks.png");
+	greenf2.loadFromFile("Textures/GreenFloor2.png");
+	fl.loadFromFile("Textures/Flowers.png");
+	crys.loadFromFile("Textures/Crystal.png");
+	act.loadFromFile("Textures/GreenSwitch.png");
+	gravs.loadFromFile("Textures/gravS.png");
+	grav.loadFromFile("Textures/grav.png");
+	buttonblock.loadFromFile("Textures/Button.png");
+	noth.loadFromFile("Textures/Nothing.png");
+	glass.loadFromFile("Textures/Glass.png");
+	_arrow.loadFromFile("Textures/Arrow.png");
+	white.loadFromFile("Textures/White.png");
+	rosebut.loadFromFile("Textures/RoseBut.png");
+	whitewall.loadFromFile("Textures/White_wall.png");
+	rose_door.loadFromFile("Textures/Rose_door.png");
+	gray2.loadFromFile("Textures/Gray2.png");
+	rosefloor2.loadFromFile("Textures/Blue_floor2.png");
+	blue_floor2.loadFromFile("Textures/Rosefloor2.png");
+	rosebricks.loadFromFile("Textures/RoseBricks2.png");
+	lamp_blue.loadFromFile("Textures/Lamp_blue.png");
+	lamp_green.loadFromFile("Textures/Lamp_barrier.png");
+	speed_det.loadFromFile("Textures/Speed_detector.png");
+	portal2.loadFromFile("Textures/Portal2.png");
+	view_det.loadFromFile("Textures/View_detector.png");
+	player_det.loadFromFile("Textures/Player_detector.png");
+	player_det_inv.loadFromFile("Textures/Player_detector_inv.png");
+	pusher.loadFromFile("Textures/Pusher.png");
+	some_help.loadFromFile("Textures/Some_help.png");
+	tp_p.loadFromFile("Textures/tp.png");
+	position_detector.loadFromFile("Textures/Position_detector.png");
+	textblock.loadFromFile("Textures/text.png");
 
-	c_minus.loadFromFile("Textures\\Electricity\\-.png");
-	c_plus.loadFromFile("Textures\\Electricity\\+.png");
-	c_ac.loadFromFile("Textures\\Electricity\\Acc.png");
-	BGel.loadFromFile("Textures\\Electricity\\BG.png");
-	c_corner.loadFromFile("Textures\\Electricity\\C corner.png");
-	c_cross3.loadFromFile("Textures\\Electricity\\C cross 3.png");
-	c_cross4.loadFromFile("Textures\\Electricity\\C cross 4.png");
-	c_one.loadFromFile("Textures\\Electricity\\C 1.png");
-	c_line.loadFromFile("Textures\\Electricity\\C linear.png");
-	c_resist.loadFromFile("Textures\\Electricity\\Resistor.png");
-	c_sensor.loadFromFile("Textures\\Electricity\\Sensor_off.png");
-	c_sensor_on.loadFromFile("Textures\\Electricity\\Sensor_on.png");
-	c_switch.loadFromFile("Textures\\Electricity\\Switch_on.png");
-	c_switch_off.loadFromFile("Textures\\Electricity\\Switch_off.png");
-	c_switcher3.loadFromFile("Textures\\Electricity\\Switcher_main.png");
-	c_button.loadFromFile("Textures\\Electricity\\Button.png");
-	void_el.loadFromFile("Textures\\Electricity\\void.png");
+	c_minus.loadFromFile("Textures/Electricity/-.png");
+	c_plus.loadFromFile("Textures/Electricity/+.png");
+	c_ac.loadFromFile("Textures/Electricity/Acc.png");
+	BGel.loadFromFile("Textures/Electricity/BG.png");
+	c_corner.loadFromFile("Textures/Electricity/C corner.png");
+	c_cross3.loadFromFile("Textures/Electricity/C cross 3.png");
+	c_cross4.loadFromFile("Textures/Electricity/C cross 4.png");
+	c_one.loadFromFile("Textures/Electricity/C 1.png");
+	c_line.loadFromFile("Textures/Electricity/C linear.png");
+	c_resist.loadFromFile("Textures/Electricity/Resistor.png");
+	c_sensor.loadFromFile("Textures/Electricity/Sensor_off.png");
+	c_sensor_on.loadFromFile("Textures/Electricity/Sensor_on.png");
+	c_switch.loadFromFile("Textures/Electricity/Switch_on.png");
+	c_switch_off.loadFromFile("Textures/Electricity/Switch_off.png");
+	c_switcher3.loadFromFile("Textures/Electricity/Switcher_main.png");
+	c_button.loadFromFile("Textures/Electricity/Button.png");
+	void_el.loadFromFile("Textures/Electricity/void.png");
 
-	t_camera.loadFromFile("Textures\\Editor_UI\\T_camera.png");
-	block_choose.loadFromFile("Textures\\Editor_UI\\BlockChoose.png");
-	t_darkness.loadFromFile("Textures\\Editor_UI\\T_darkness.png");
-	t_portal.loadFromFile("Textures\\Editor_UI\\T_portal.png");
-	t_portal2.loadFromFile("Textures\\Editor_UI\\T_portal_2.png");
-	t_player_size.loadFromFile("Textures\\Editor_UI\\T_player.png");
+	t_camera.loadFromFile("Textures/Editor_UI/T_camera.png");
+	block_choose.loadFromFile("Textures/Editor_UI/BlockChoose.png");
+	t_darkness.loadFromFile("Textures/Editor_UI/T_darkness.png");
+	t_portal.loadFromFile("Textures/Editor_UI/T_portal.png");
+	t_portal2.loadFromFile("Textures/Editor_UI/T_portal_2.png");
+	t_player_size.loadFromFile("Textures/Editor_UI/T_player.png");
 
 }
 

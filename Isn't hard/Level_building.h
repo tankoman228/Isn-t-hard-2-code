@@ -850,12 +850,12 @@ void build(int l) {
 
 	helper_string = lvl_name;
 
-	if (l > 0) { helper_string = "Levels\\" + to_string(l); }
+	if (l > 0) { helper_string = "Levels/" + to_string(l); }
 	if (l == -2 || l == -3) {
 		helper_string = current_filename;
 	}
 	if (l == -1) {
-		helper_string = "Levels\\1";
+		helper_string = "Levels/1";
 	}
 	if (l == 2) { music.stop(); }
 

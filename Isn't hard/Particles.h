@@ -11,7 +11,7 @@ public:
 	void render() {
 		particle.setPosition(scale * (x - scrollx), scale * (y - scrolly));
 		x += speed_x; y += speed_y;
-		particle.setColor(Color::Color(255, 255, 255, alpha));
+		particle.setColor(Color(255, 255, 255, alpha));
 		alpha += alpha_speed;
 		particle.setScale(scale_ * scale, scale_ * scale);
 		scale_ *= scale_speed;
@@ -37,7 +37,7 @@ public:
 
 	BG_particles() {
 
-		blue1_.loadFromFile("Textures\\BG\\BG.png");
+		blue1_.loadFromFile("Textures/BG/BG.png");
 
 		box.setOrigin(64, 64);
 		blue1_.setSmooth(true);
@@ -51,7 +51,7 @@ public:
 
 		box.setPosition(x, y);
 		box.setScale(UI_scale * 15, UI_scale * 15);
-		box.setColor(Color::Color(255, 255, 255, 255));
+		box.setColor(Color(255, 255, 255, 255));
 
 		box.setTexture(blue1_);
 
@@ -61,9 +61,9 @@ public:
 
 	void respawn() {
 
-		c_cross3.loadFromFile("Textures\\Electricity\\C cross 3.png");
+		c_cross3.loadFromFile("Textures/Electricity/C cross 3.png");
 
-		blue1_.loadFromFile("Textures\\BG\\BG.png");
+		blue1_.loadFromFile("Textures/BG/BG.png");
 
 		x = -200 + rand() % (screenw + 400);
 		y = -300 + rand() % (screenh + 600);
@@ -111,7 +111,7 @@ public:
 		box.setPosition(x, y);
 		box.setOrigin(64,64);
 		box.setScale(UI_scale * 18, 18 * UI_scale);
-		box.setColor(Color::Color(255, 255, 255, 255));
+		box.setColor(Color(255, 255, 255, 255));
 		//box.setRotation(rand() % 360);
 
 		spawn_fade = 255;
@@ -128,7 +128,7 @@ public:
 		if (spawn_fade > 1) {
 			spawn_fade--;
 
-			box.setColor(Color::Color(color[0], color[1], color[2], 256 - spawn_fade));
+			box.setColor(Color(color[0], color[1], color[2], 256 - spawn_fade));
 
 			/*box.scale(0.9999, 0.9999);*/
 
@@ -140,7 +140,7 @@ public:
 		}
 		else {
 			if (timer < 255) {
-				box.setColor(Color::Color(color[0], color[1], color[2], timer));
+				box.setColor(Color(color[0], color[1], color[2], timer));
 			}
 			//else {
 			//	/*box.setColor(Color::Color(255, 255, 255, 255));*/

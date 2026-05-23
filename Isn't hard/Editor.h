@@ -2,7 +2,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <math.h>
-#include <windows.h>
 #include <SFML/Audio.hpp>
 #include <fstream>
 
@@ -585,18 +584,18 @@ void test_editor() {
 				choose.setOutlineThickness(3);
 
 				if (editor_mode == 6) {
-					choose.setFillColor(Color::Color(0, 255, 0, 99));
+					choose.setFillColor(Color(0, 255, 0, 99));
 					choose.setOutlineColor(sf::Color(0, 255, 80));
 					deleting = false;
 				}
 				else {
 					if (Mouse::isButtonPressed(Mouse::Left)) {
-						choose.setFillColor(Color::Color(0, 0, 255, 99));
+						choose.setFillColor(Color(0, 0, 255, 99));
 						choose.setOutlineColor(sf::Color(0, 80, 255));
 						deleting = false;
 					}
 					else {
-						choose.setFillColor(Color::Color(255, 0, 0, 99));
+						choose.setFillColor(Color(255, 0, 0, 99));
 						choose.setOutlineColor(sf::Color(255, 0, 0));
 						deleting = true;
 					}
@@ -889,7 +888,7 @@ void test_editor() {
 
 				if (E_copy.if_click()) {
 					if (!onclick) {
-						Sleep(150);
+						sleep(milliseconds(50));
 
 						logg << "copy! {" << endl;
 
@@ -1286,7 +1285,7 @@ void test_editor() {
 
 		if (E_save.if_click()) {
 			save(current_filename);
-			Sleep(300);
+			sleep(milliseconds(300));
 		}
 
 		if (E_load.if_click()) {
@@ -1414,7 +1413,7 @@ void test_editor() {
 				save(current_filename);
 				mode = "editor_menu";
 
-				Sleep(100);
+				sleep(milliseconds(100));
 			}
 		}
 
@@ -1449,13 +1448,13 @@ void test_editor() {
 
 		tick++;
 		window.display();
-		Sleep(1);
+		sleep(milliseconds(1));
 		window.clear();
 
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-			// "запрос закрытия" событие: мы закрываем окно
+			// "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 			if (event.type == sf::Event::Closed) {
 				save_options();
 				close = true; window.close(); mode = "menu";

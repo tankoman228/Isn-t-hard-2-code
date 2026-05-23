@@ -12,7 +12,7 @@ public:
 		helper_string = to_string(w) + " : " + to_string(h);
 		_text.setString(helper_string);
 		_box.setScale(UI_scale / 1.5, UI_scale);
-		_t.loadFromFile("Textures\\ResBut.png");
+		_t.loadFromFile("Textures/ResBut.png");
 		_box.setTexture(_t);
 		_box.setPosition(50 + i * 200, 750 * UI_scale);
 		_text.setPosition(50 + i * 200, 770 * UI_scale);
@@ -55,7 +55,7 @@ public:
 		text_.setCharacterSize(30);
 		text_.setFillColor(Color::Blue);
 		text_.setPosition(x, y);
-		texture_.loadFromFile("Textures\\Check_Box.png");
+		texture_.loadFromFile("Textures/Check_Box.png");
 		box_.setScale(UI_scale / 2, UI_scale / 2);
 		box_.setTexture(texture_);
 		box_.setPosition(x, y);
@@ -106,7 +106,7 @@ public:
 		txt_.setFont(font);
 		txt_.setString(text_);
 		button_.setScale(1 * UI_scale, 0.7 * UI_scale);
-		texture_.loadFromFile("Textures\\ContextMenuB.png");
+		texture_.loadFromFile("Textures/ContextMenuB.png");
 		button_.setTexture(texture_);
 		button_.setPosition((type) * 600 * UI_scale, 200 * UI_scale);
 		txt_.setPosition((type) * 600 * UI_scale + 10, 210 * UI_scale);
@@ -142,8 +142,12 @@ public:
 
 						if (true) {
 
-							helper_s[0] = GetSystemMetrics(0);
-							helper_s[1] = GetSystemMetrics(1);
+							// TODO: 
+							//helper_s[0] = GetSystemMetrics(0);
+							//helper_s[1] = GetSystemMetrics(1);
+
+							helper_s[0] = 1920;
+							helper_s[1] = 1080;
 
 							UI_scale = helper_s[0] / 1920.0;
 
@@ -193,7 +197,7 @@ public:
 		more.setTexture(thbtexture_);
 		more.setTextureRect(IntRect(256, 0, 128, 128));
 		more.setScale(UI_scale, UI_scale);
-		thbtexture_.loadFromFile("Textures\\Opt.png");
+		thbtexture_.loadFromFile("Textures/Opt.png");
 		value.setPosition(x + 168 * UI_scale, y + UI_scale * 38);
 		value.setFont(font);
 		value.setCharacterSize(40 * UI_scale);
@@ -202,7 +206,7 @@ public:
 	}*/
 	void cycle() {
 		if (lower.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
-			lower.setColor(Color::Color(200, 200, 200, 255));
+			lower.setColor(Color(200, 200, 200, 255));
 			if (!onclick) {
 				if (Mouse::isButtonPressed(Mouse::Left)) {
 					onclick = true;
@@ -220,11 +224,11 @@ public:
 		}
 		else
 		{
-			lower.setColor(Color::Color(255, 255, 255, 255));
+			lower.setColor(Color(255, 255, 255, 255));
 		}
 
 		if (more.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
-			more.setColor(Color::Color(200, 200, 200, 255));
+			more.setColor(Color(200, 200, 200, 255));
 			if (!onclick) {
 				if (Mouse::isButtonPressed(Mouse::Left)) {
 					onclick = true;
@@ -242,7 +246,7 @@ public:
 		}
 		else
 		{
-			more.setColor(Color::Color(255, 255, 255, 255));
+			more.setColor(Color(255, 255, 255, 255));
 		}
 
 		if (!Mouse::isButtonPressed(Mouse::Left)) { onclick = false; }
@@ -260,7 +264,7 @@ public:
 		minval = min; maxval = max; option = option_r;
 		x = x_; y = y_;
 
-		thbtexture_.loadFromFile("Textures\\Opt.png");
+		thbtexture_.loadFromFile("Textures/Opt.png");
 
 		lower.setPosition(x * UI_scale, y * UI_scale);
 		lower.setTexture(thbtexture_);
@@ -420,7 +424,7 @@ public:
 		box2.setTexture(ach_complete);
 
 		ifstream ach;
-		ach.open("Achievements\\" + to_string(_lvl) + " " + to_string(_n) + ".txt");
+		ach.open("Achievements/" + to_string(_lvl) + " " + to_string(_n) + ".txt");
 
 		ach >> helper;
 		if (helper > 0) {
@@ -634,7 +638,7 @@ public:
 
 		if (box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
 
-			box.setColor(Color::Color(128, 128, 128, 255));
+			box.setColor(Color(128, 128, 128, 255));
 
 			button_overlapped = true;
 
@@ -648,7 +652,7 @@ public:
 
 		}
 		else {
-			box.setColor(Color::Color(255, 255, 255, 255));
+			box.setColor(Color(255, 255, 255, 255));
 		}
 		if (id == 1) {
 			window.draw(bg_box);
@@ -705,16 +709,16 @@ public:
 			}
 
 			if (is_checked) {
-				box.setColor(Color::Color(255, 255, 255, 255));
+				box.setColor(Color(255, 255, 255, 255));
 			}
-			else { box.setColor(Color::Color(128, 128, 128, 255)); }
+			else { box.setColor(Color(128, 128, 128, 255)); }
 
 		}
 		else {
 			if (is_checked) {
-				box.setColor(Color::Color(128, 128, 128, 255));
+				box.setColor(Color(128, 128, 128, 255));
 			}
-			else { box.setColor(Color::Color(255, 255, 255, 255)); }
+			else { box.setColor(Color(255, 255, 255, 255)); }
 
 		}
 		window.draw(box);

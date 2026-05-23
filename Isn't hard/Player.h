@@ -19,7 +19,7 @@ float last_coordinates[6][2] = { 0,0,0,0,0,0,0,0,0,0,0,0 };
 
 void render_player() {
 
-	//повороты
+	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	switch (dir) {
 	case 1:
 		if (playerS.getRotation() != 270) {
@@ -224,5 +224,4 @@ void player_processing() {
 	#undef sy
 
 	p.move();
-
 }

@@ -1,0 +1,25 @@
+# --- Папки сборки/выходные данные ---
+build/
+
+# музыку для уровней качайте сами, а то мне АП прилетит
+levels/*.ogg
+levels/*.wav
+levels/*.flac
+
+# они слишком жирные, не влазят в репозиторий
+winlibs/*
+
+# Visual Studio
+.vs/*
+.vs
+x64/*
+x64
+
+.cache
+
+*.AppImage
+*.AppDir
+
+Screen.txt
+log.txt
+/Isn't hard/Saves

@@ -2,7 +2,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <math.h>
-#include <windows.h>
 #include <SFML/Audio.hpp>
 #include <fstream>
 #include "Values.h"
@@ -22,7 +21,7 @@ void levels_cycle() {
 
 		if (tick % 10 == 1) {
 			if (!music.getStatus()) {
-				music.openFromFile("Sounds\\menu.ogg");
+				music.openFromFile("Sounds/menu.ogg");
 				music.play();
 			}
 		}
@@ -58,7 +57,7 @@ void levels_cycle() {
 				}
 			}
 			else { lvl_but.setTextureRect(IntRect(128, 0, 128, 128)); }
-			text.setFillColor(Color::Color(50, 50, 20, 255));
+			text.setFillColor(Color(50, 50, 20, 255));
 			text.setPosition(lvl_but.getPosition().x - UI_scale * 72, lvl_but.getPosition().y - UI_scale * 70);
 			if (i < 9) { text.move(UI_scale * 42, 0); }
 			helper_string = to_string(i + 1);

@@ -2,7 +2,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <math.h>
-#include <windows.h>
 #include <SFML/Audio.hpp>
 #include <fstream>
 
@@ -71,7 +70,7 @@ void test_game() {
 
 	while (mode == "game") {
 
-		//управление
+		//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		while (true) {
 
 			//if (Keyboard::isKeyPressed(Keyboard::F5)) {
@@ -80,13 +79,15 @@ void test_game() {
 			//	Sleep(200);
 			//}
 
+			physics_processing();
+
 			if (Keyboard::isKeyPressed(Keyboard::Tab) && !onclick) {
 
 				onclick = true;
 
 				stop_physics = true;
 				
-				Sleep(100);
+				sleep(milliseconds(100));
 				
 
 				build(lvlnum);
@@ -99,11 +100,11 @@ void test_game() {
 			}
 
 			if (Keyboard::isKeyPressed(Keyboard::F5)) {
-				stop_physics = true; Sleep(200);
+				stop_physics = true; sleep(milliseconds(200));
 				checkpoint(); stop_physics = false;
 			}
 
-			break; //не ругайтесь, я так делаю, чтобы свернуть можно было(
+			break; //пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ(
 		}
 
 		for (i = 0; i < BG_particles_number; i++) {
@@ -358,13 +359,13 @@ void test_game() {
 		if (!on_teleport && (teleport_frame > 0)) {
 			teleport_frame -= 3; spiral[teleport_to].rotate(-4);
 
-			playerS.setColor(Color::Color(255, 255, 255, 260 - teleport_frame * 4));
-			eyes.setColor(Color::Color(255, 255, 255, 260 - teleport_frame * 4));
+			playerS.setColor(Color(255, 255, 255, 260 - teleport_frame * 4));
+			eyes.setColor(Color(255, 255, 255, 260 - teleport_frame * 4));
 
 			if (teleport_frame < 0) {
 				teleport_frame = 0;
-				playerS.setColor(Color::Color(255, 255, 255, 255));
-				eyes.setColor(Color::Color(255, 255, 255, 255));
+				playerS.setColor(Color(255, 255, 255, 255));
+				eyes.setColor(Color(255, 255, 255, 255));
 			}
 		}
 
@@ -379,41 +380,41 @@ void test_game() {
 		if (abs(alpha) > 0) {
 			alpha -= 5;
 			if (alpha > 0) {
-				blend.setColor(Color::Color(0, 0, 0, abs(alpha)));
+				blend.setColor(Color(0, 0, 0, abs(alpha)));
 			}
 			if (alpha < 0) {
-				blend.setColor(Color::Color(0, 0, 0, abs(alpha)));
+				blend.setColor(Color(0, 0, 0, abs(alpha)));
 				if (alpha < -253) {
 
-					stop_physics = true; Sleep(300);
+					stop_physics = true; sleep(milliseconds((300)));
 
 					if (levels_opened == lvlnum) {
 						levels_opened++; lvlnum++;
 
 						checkpoint();
-						Sleep(200);
+						sleep(milliseconds((200)));
 						build(lvlnum);
 
 						return;
 					}
 					if (lvlnum == -2) {
-						mode = "editor"; stop_physics = true; Sleep(100); lvlnum = -2; build(-2); return;
+						mode = "editor"; stop_physics = true; sleep(milliseconds((100))); lvlnum = -2; build(-2); return;
 					}
 					if (lvlnum == -3) {
 
 						set_achievement_complete();
-						mode = "achievements"; stop_physics = true; Sleep(100); build(-2); 
+						mode = "achievements"; stop_physics = true; sleep(milliseconds((100))); build(-2); 
 
 						return;
 
 					}
 					else {
 						if (lvlnum == -1) {
-							stop_physics = true; Sleep(100);
+							stop_physics = true; sleep(milliseconds((100)));
 							mode = "menu";
 							lvlnum = 1;
 						}
-						else { lvlnum++; build(lvlnum); stop_physics = true; Sleep(100); checkpoint(); return; }
+						else { lvlnum++; build(lvlnum); stop_physics = true; sleep(milliseconds((100))); checkpoint(); return; }
 					}
 
 					build(lvlnum);
@@ -444,8 +445,8 @@ void test_game() {
 		if (achieve_fade > 0) {
 
 			if (achieve_fade > 1145) {
-				ach_text.setFillColor(Color::Color(0, 0, 0, 1400 - achieve_fade));					/*ach_box.setPosition(screenw - (1512 - achieve_fade) * UI_scale, 0);*/
-				ach_BG.setColor(Color::Color(255, 255, 255, 1400 - achieve_fade));
+				ach_text.setFillColor(Color(0, 0, 0, 1400 - achieve_fade));					/*ach_box.setPosition(screenw - (1512 - achieve_fade) * UI_scale, 0);*/
+				ach_BG.setColor(Color(255, 255, 255, 1400 - achieve_fade));
 				ach_text.setOutlineColor(Color(255, 255, 255, 1400 - achieve_fade));
 				ach_BG.setPosition(screenw, 0);
 				ach_text.setPosition(38 * UI_scale, 20 * UI_scale);
@@ -454,8 +455,8 @@ void test_game() {
 
 			if (achieve_fade < 128) {
 				/*ach_box.setColor(Color::Color(255, 255, 255, achieve_fade * 2));*/
-				ach_BG.setColor(Color::Color(255, 255, 255, achieve_fade * 2));
-				ach_text.setFillColor(Color::Color(0, 0, 0, achieve_fade * 2));
+				ach_BG.setColor(Color(255, 255, 255, achieve_fade * 2));
+				ach_text.setFillColor(Color(0, 0, 0, achieve_fade * 2));
 				ach_text.setOutlineColor(Color(255, 255, 255, achieve_fade * 2));
 			}
 
@@ -483,7 +484,7 @@ void test_game() {
 
 		tick++;
 		window.display();
-		Sleep(1);
+		sleep(milliseconds((1)));
 		window.clear();
 	}
 }

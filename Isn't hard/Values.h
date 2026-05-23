@@ -4,7 +4,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <math.h>
-#include <windows.h>
 #include <SFML/Audio.hpp>
 #include <fstream>
 #include <vector>
@@ -97,3 +96,8 @@ Sound tp1, tp2, push2, open; SoundBuffer tp1_buf, tp2_buf, push2_buf, open_buf;
 Music music;
 
 RenderWindow window; ofstream logg;
+
+// TODO: удалить
+void Sleep(int time) {
+    sleep(milliseconds(time));
+}

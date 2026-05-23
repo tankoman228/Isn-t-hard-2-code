@@ -21,11 +21,15 @@ using namespace sf; //Release x86. Install SFML to this project if doesn't work
 
 int main() {
 
+	/*
+	TODO:
+
 	HWND Stealth;
 	AllocConsole();
 	Stealth = FindWindowA("ConsoleWindowClass", NULL);
 	ShowWindow(Stealth, 0);
 	//Destroy console
+	*/
 
 	logg.open("log.txt");
 
@@ -58,8 +62,12 @@ int main() {
 		//Auto screen
 		window.create(sf::VideoMode(1200, 720), "Isn't hard 2");
 
-		helper_s[0] = GetSystemMetrics(0);
-		helper_s[1] = GetSystemMetrics(1);
+		// TODO: 
+		//helper_s[0] = GetSystemMetrics(0);
+		//helper_s[1] = GetSystemMetrics(1);
+
+		helper_s[0] = 1920;
+		helper_s[1] = 1080;
 
 		UI_scale = helper_s[0] / 1920.0;
 
@@ -86,12 +94,6 @@ int main() {
 	window.setVerticalSyncEnabled(true);
 	window.setMouseCursorVisible(false);
 
-	std::thread physics(physics_processing);
-
-	physics.detach();
-
-	Sleep(100);
-
 	loading(); logg << "Loading was succesfully finished \n";
 
 	while (window.isOpen())
@@ -101,7 +103,9 @@ int main() {
 
 		if (mode == "game") {
 			//game_cycle();
+			
 			test_game();
+			
 		}
 
 		if (mode == "editor_menu") {
@@ -121,7 +125,7 @@ int main() {
 
 			if (tick % 10 == 1) {
 				if (!music.getStatus()) {
-					music.openFromFile("Sounds\\menu.ogg");
+					music.openFromFile("Sounds/menu.ogg");
 					music.play();
 				}
 			}
@@ -142,14 +146,14 @@ int main() {
 
 			text.setPosition(screenw / 2 - (352 * UI_scale), screenh / 20);
 			text.setCharacterSize(150 * UI_scale);
-			text.setFillColor(Color::Color(0, 0, 0, 255));
+			text.setFillColor(Color(0, 0, 0, 255));
 			text.setString("Isn't hard 2");
 
 			window.draw(text);
 
 			text.setPosition(screenw/2 - (350 * UI_scale), screenh / 20 + 2);
 			text.setCharacterSize(150 * UI_scale);
-			text.setFillColor(Color::Color(200,200,255,255));
+			text.setFillColor(Color(200,200,255,255));
 			text.setString("Isn't hard 2");
 			
 			window.draw(text);
@@ -201,12 +205,12 @@ int main() {
 
 			if (tick % 10 == 1) {
 				if (!music.getStatus()) {
-					music.openFromFile("Sounds\\menu.ogg");
+					music.openFromFile("Sounds/menu.ogg");
 					music.play();
 				}
 			}
 
-			block.setColor(Color::Color(100, 100, 100, 255));
+			block.setColor(Color(100, 100, 100, 255));
 			block.setTexture(bg); block.setOrigin(128, 128); block.setTextureRect(IntRect(0, 0, 256, 256)); block.setScale(1, 1);
 			for (i = 0; i < 8; i++) {
 				for (j = 0; j < 6; j++) {
@@ -220,28 +224,28 @@ int main() {
 					window.draw(block);
 				}
 			}
-			block.setColor(Color::Color(255, 255, 255, 255));
+			block.setColor(Color(255, 255, 255, 255));
 
 			particles_option.cycle();
 			bg_particles_option.cycle();
 
-			text.setFillColor(Color::Color(0, 0, 200, 255));
+			text.setFillColor(Color(0, 0, 200, 255));
 			text.setCharacterSize(40 * UI_scale);
 			text.setPosition(particles_option.middle.getPosition());
 			text.move(-90 * UI_scale, 120 * UI_scale);
 			text.setString("Particles density");
 			window.draw(text);
 			text.move(2, 2);
-			text.setFillColor(Color::Color(0, 0, 0, 255));
+			text.setFillColor(Color(0, 0, 0, 255));
 			window.draw(text);
 
-			text.setFillColor(Color::Color(0, 0, 200, 255));
+			text.setFillColor(Color(0, 0, 200, 255));
 			text.setPosition(bg_particles_option.middle.getPosition());
 			text.move(-90 * UI_scale, 120 * UI_scale);
 			text.setString("BG quality (0 is BG off). FPS depends on this \n value, especially on weak computers");
 			window.draw(text);
 			text.move(2, 2);
-			text.setFillColor(Color::Color(0, 0, 0, 255));
+			text.setFillColor(Color(0, 0, 0, 255));
 			window.draw(text);
 
 			reloader.cycle();
@@ -257,7 +261,7 @@ int main() {
 					i_am_bored.close();
 
 					for (k = 0; k < 43; k++) {
-						i_am_bored.open("Achievements\\" + to_string(ach_but[k].lvl) + " " + to_string(ach_but[k].n) + ".txt");
+						i_am_bored.open("Achievements/" + to_string(ach_but[k].lvl) + " " + to_string(ach_but[k].n) + ".txt");
 
 						i_am_bored << 0;
 						i_am_bored << ' ';
@@ -266,7 +270,7 @@ int main() {
 						i_am_bored.close();
 					}
 
-					i_am_bored.open("Achievements\\-2 0.txt");
+					i_am_bored.open("Achievements/-2 0.txt");
 
 					i_am_bored << 1;
 					i_am_bored << ' ';

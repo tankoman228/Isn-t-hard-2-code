@@ -212,7 +212,7 @@ struct Block : public Sq {
 	}
 
 	void setOpacity(int new_opacity /*0 is invisible, 255 is maximum*/) {
-		box.setColor(Color::Color(255, 255, 255, new_opacity));
+		box.setColor(Color(255, 255, 255, new_opacity));
 	}
 
 	virtual void render() { update_scrolling(); window.draw(box); }
@@ -1084,12 +1084,12 @@ struct Special : public Block {
 
 			helper_s2 = sqrt(helper_s2);
 			if (helper_s2 < 384) {
-				box.setColor(Color::Color(255, 255, 255, 280 - (helper_s2 / 1.5)));
+				box.setColor(Color(255, 255, 255, 280 - (helper_s2 / 1.5)));
 				if (helper_s2 < 100) {
-					box.setColor(Color::Color(255, 255, 255, 280 - (helper_s2 / 3)));
+					box.setColor(Color(255, 255, 255, 280 - (helper_s2 / 3)));
 				}
 			}
-			else { box.setColor(Color::Color(255, 255, 255, 0)); }
+			else { box.setColor(Color(255, 255, 255, 0)); }
 			break;
 		}
 		if ((id != 31) || mode == "editor") {
@@ -1464,13 +1464,13 @@ struct Speed_det : public Block {
 		if (helper < 0.5 && (tick % 50) == 1) { target[group] = false; }
 
 		box.setTextureRect(IntRect(128, 0, 128, 128));
-		box.setColor(Color::Color(255, 255, 255, 190 + helper * 30));
+		box.setColor(Color(255, 255, 255, 190 + helper * 30));
 
 		box.setRotation(helper * 2.5 + tick % 360 / 2);
 		window.draw(box);
 
 		box.setRotation(0);
-		box.setColor(Color::Color(255, 255, 255, 255));
+		box.setColor(Color(255, 255, 255, 255));
 
 		box.setTextureRect(IntRect(0, 0, 128, 128));
 
@@ -1882,7 +1882,7 @@ struct Special_floor : public Block {
 
 		case 18:
 
-			box.setColor(Color::Color(255, 255, 255, 255));
+			box.setColor(Color(255, 255, 255, 255));
 
 			helper_s2 = 0;
 			helper_s[0] = x - px;
@@ -1916,9 +1916,9 @@ struct Special_floor : public Block {
 			window.draw(box);
 
 			if (helper_s2 < 262) {
-				box.setColor(Color::Color(255, 255, 255, 256 - (helper_s2 - 8)));
+				box.setColor(Color(255, 255, 255, 256 - (helper_s2 - 8)));
 				if (helper_s2 < 50) {
-					box.setColor(Color::Color(255, 255, 255, 255));
+					box.setColor(Color(255, 255, 255, 255));
 				}
 
 				box.setTexture(noth);
@@ -1935,7 +1935,7 @@ struct Special_floor : public Block {
 			box.rotate(tick % 360);
 
 			if (tp_rech > 0) {
-				box.setColor(Color::Color(255, 255, 255, 255 - tp_rech));
+				box.setColor(Color(255, 255, 255, 255 - tp_rech));
 				window.draw(box);
 				box.setColor(Color::White);
 			}
@@ -1990,7 +1990,7 @@ struct Special_floor : public Block {
 			box.setTexture(noth);
 			window.draw(box);
 
-			box.setColor(Color::Color(255, 255, 255, 128));
+			box.setColor(Color(255, 255, 255, 128));
 
 			switch (look) {
 			case 1: box.setTexture(blue); break;
@@ -2022,7 +2022,7 @@ struct Special_floor : public Block {
 			box.rotate(tick % 360);
 
 			if (tp_rech > 0) {
-				box.setColor(Color::Color(255, 255, 255, 255 - tp_rech));
+				box.setColor(Color(255, 255, 255, 255 - tp_rech));
 				window.draw(box);
 				box.setColor(Color::White);
 			}
@@ -2086,8 +2086,8 @@ struct Portal : public Block {
 					tp_s.play();
 				}
 
-				playerS.setColor(Color::Color(255, 255, 255, 260 - teleport_frame * 4));
-				eyes.setColor(Color::Color(255, 255, 255, 260 - teleport_frame * 4));
+				playerS.setColor(Color(255, 255, 255, 260 - teleport_frame * 4));
+				eyes.setColor(Color(255, 255, 255, 260 - teleport_frame * 4));
 
 				playerS.setRotation(teleport_frame * 5);
 				spiral[tp_to].rotate(2);
@@ -2725,7 +2725,7 @@ struct Electric : public Block {
 		update_scrolling();
 		bg.setPosition(box.getPosition());
 		bg.setScale(scale, scale);
-		bg.setColor(Color::Color(126 + charge * 2, 129 - charge * 2, 129 - charge * 2, 126 + charge * 2));
+		bg.setColor(Color(126 + charge * 2, 129 - charge * 2, 129 - charge * 2, 126 + charge * 2));
 		window.draw(bg);
 		window.draw(box);
 	}
@@ -2828,7 +2828,7 @@ struct Wire : public Electric {
 		box.setOrigin(64, 64);
 		box.setRotation(rotation);
 		electric = true;
-		c_cross3.loadFromFile("Textures\\Electricity\\C cross 3.png");
+		c_cross3.loadFromFile("Textures/Electricity/C cross 3.png");
 
 		switch (type) {
 		case 25: box.setTexture(c_one); con_size = 1; break;
@@ -3983,7 +3983,7 @@ struct Camera_trigger : public Trigger {
 
 		if (abs(box.getPosition().x - screenw * 0.5) > 20 || abs(box.getPosition().y - screenh * 0.5) > 20) {
 
-			for (int úóú = 0; úóú < 3; úóú++) {
+			for (int auf = 0; auf < 3; auf++) {
 
 				if (box.getPosition().x > screenw * 0.55) {
 					scrollx += 14;
@@ -4468,7 +4468,10 @@ struct Text_Block : public Block {
 
 			window.display();
 			tick++;
-			Sleep(10);
+			
+			
+			sleep(milliseconds(10));
+			
 			window.clear();
 
 		}

@@ -21,20 +21,20 @@ void loading() {
 	if ("textures" == "textures") {
 
 		//somethings
-		eyes_t.loadFromFile("Textures\\Eyes.png");
-		body_t.loadFromFile("Textures\\Player.png");
-		font.loadFromFile("Textures\\Text.ttf");
+		eyes_t.loadFromFile("Textures/Eyes.png");
+		body_t.loadFromFile("Textures/Player.png");
+		font.loadFromFile("Textures/Text.ttf");
 		text.setFont(font);
-		Coin.loadFromFile("Textures\\Coin.png");
-		smoke.loadFromFile("Textures\\Smoke.png");
-		broken.loadFromFile("Textures\\Broken.png");
-		cur.loadFromFile("Textures\\Choose.png");
-		dark.loadFromFile("Textures\\Dark.png");
+		Coin.loadFromFile("Textures/Coin.png");
+		smoke.loadFromFile("Textures/Smoke.png");
+		broken.loadFromFile("Textures/Broken.png");
+		cur.loadFromFile("Textures/Choose.png");
+		dark.loadFromFile("Textures/Dark.png");
 
 		cursor.setTexture(cur);
 		cursor.setOrigin(8, 8);
 
-		spir.loadFromFile("Textures\\Spiral.png");
+		spir.loadFromFile("Textures/Spiral.png");
 		for (i = 0; i < 5; i++) {
 			spiral[i].setTexture(spir);
 			spiral[i].setOrigin(128, 128);
@@ -46,19 +46,19 @@ void loading() {
 		spiral[2].setColor(Color::Magenta);
 		spiral[3].setColor(Color::Green);
 		spiral[4].setColor(Color::White);
-		inter.loadFromFile("Textures\\Int.png");
+		inter.loadFromFile("Textures/Int.png");
 		blend.setPosition(0, 0);
 		blend.setTexture(cur);
 		blend.setTextureRect(IntRect(0, 0, screenw, screenh));
-		lev.loadFromFile("Textures\\Levels.png");
+		lev.loadFromFile("Textures/Levels.png");
 		lvl_but.setTexture(lev); lvl_but.setOrigin(64, 64);
 
-		t_ach.loadFromFile("Textures\\Ach.png");
-		t_editor.loadFromFile("Textures\\Editor.png");
-		t_exit.loadFromFile("Textures\\Exit.png");
-		t_levels.loadFromFile("Textures\\Lvls.png");
-		t_options.loadFromFile("Textures\\Options.png");
-		t_play.loadFromFile("Textures\\Play.png");
+		t_ach.loadFromFile("Textures/Ach.png");
+		t_editor.loadFromFile("Textures/Editor.png");
+		t_exit.loadFromFile("Textures/Exit.png");
+		t_levels.loadFromFile("Textures/Lvls.png");
+		t_options.loadFromFile("Textures/Options.png");
+		t_play.loadFromFile("Textures/Play.png");
 
 		b_levels.init(t_levels, screenw / 4, screenh / 2, " ", 0);
 		b_play.init(t_play, screenw / 2, screenh / 2, " ", 1);
@@ -70,113 +70,113 @@ void loading() {
 
 		//blocks
 		block.setOrigin(64, 64);
-		blue.loadFromFile("Textures\\Blue.png");
-		el.loadFromFile("Textures\\Floor.png");
-		switch_t.loadFromFile("Textures\\switch.png");
-		door.loadFromFile("Textures\\Electric trap.png");
-		smth.loadFromFile("Textures\\Something.png");
-		smth2.loadFromFile("Textures\\Something2.png");
-		smth3.loadFromFile("Textures\\Something3.png");
-		str.loadFromFile("Textures\\Stripes.png");
-		corn.loadFromFile("Textures\\Corner.png");
-		movable.loadFromFile("Textures\\Box.png");
-		finon.loadFromFile("Textures\\Finish(ON).png");
-		finoff.loadFromFile("Textures\\Finish(OFF).png");
-		wall.loadFromFile("Textures\\Wall.png");
-		bg.loadFromFile("Textures\\BG.png");
-		port_in.loadFromFile("Textures\\Portal.png");
-		port_o.loadFromFile("Textures\\Portal_out.png");
-		gray.loadFromFile("Textures\\Gray.png");
-		gr.loadFromFile("Textures\\Gr.png");
-		grb.loadFromFile("Textures\\Grb.png");
-		strp.loadFromFile("Textures\\StripesP.png");
-		differ.loadFromFile("Textures\\Different.png");
-		rb.loadFromFile("Textures\\RB.png");
-		rose.loadFromFile("Textures\\Rose.png");
-		green.loadFromFile("Textures\\Green.png");
-		greenf.loadFromFile("Textures\\GreenFloor.png");
-		greenw.loadFromFile("Textures\\GreenWall.png");
-		roseb.loadFromFile("Textures\\RoseBricks.png");
-		greenf2.loadFromFile("Textures\\GreenFloor2.png");
-		fl.loadFromFile("Textures\\Flowers.png");
-		crys.loadFromFile("Textures\\Crystal.png");
-		act.loadFromFile("Textures\\GreenSwitch.png");
-		gravs.loadFromFile("Textures\\gravS.png");
-		grav.loadFromFile("Textures\\grav.png");
-		buttonblock.loadFromFile("Textures\\Button.png");
-		noth.loadFromFile("Textures\\Nothing.png");
-		glass.loadFromFile("Textures\\Glass.png");
-		_arrow.loadFromFile("Textures\\Arrow.png");
-		white.loadFromFile("Textures\\White.png");
-		rosebut.loadFromFile("Textures\\RoseBut.png");
-		whitewall.loadFromFile("Textures\\White_wall.png");
-		rose_door.loadFromFile("Textures\\Rose_door.png");
-		gray2.loadFromFile("Textures\\Gray2.png");
-		rosefloor2.loadFromFile("Textures\\Blue_floor2.png");
-		blue_floor2.loadFromFile("Textures\\Rosefloor2.png");
-		rosebricks.loadFromFile("Textures\\RoseBricks2.png");
-		lamp_blue.loadFromFile("Textures\\Lamp_blue.png");
-		lamp_green.loadFromFile("Textures\\Lamp_barrier.png");
-		speed_det.loadFromFile("Textures\\Speed_detector.png");
-		portal2.loadFromFile("Textures\\Portal2.png");
-		view_det.loadFromFile("Textures\\View_detector.png");
-		player_det.loadFromFile("Textures\\Player_detector.png");
-		player_det_inv.loadFromFile("Textures\\Player_detector_inv.png");
-		pusher.loadFromFile("Textures\\Pusher.png");
-		some_help.loadFromFile("Textures\\Some_help.png");
-		tp_p.loadFromFile("Textures\\tp.png");
-		position_detector.loadFromFile("Textures\\Position_detector.png");
-		textblock.loadFromFile("Textures\\text.png");
+		blue.loadFromFile("Textures/Blue.png");
+		el.loadFromFile("Textures/Floor.png");
+		switch_t.loadFromFile("Textures/switch.png");
+		door.loadFromFile("Textures/Electric trap.png");
+		smth.loadFromFile("Textures/Something.png");
+		smth2.loadFromFile("Textures/Something2.png");
+		smth3.loadFromFile("Textures/Something3.png");
+		str.loadFromFile("Textures/Stripes.png");
+		corn.loadFromFile("Textures/Corner.png");
+		movable.loadFromFile("Textures/Box.png");
+		finon.loadFromFile("Textures/Finish(ON).png");
+		finoff.loadFromFile("Textures/Finish(OFF).png");
+		wall.loadFromFile("Textures/Wall.png");
+		bg.loadFromFile("Textures/BG.png");
+		port_in.loadFromFile("Textures/Portal.png");
+		port_o.loadFromFile("Textures/Portal_out.png");
+		gray.loadFromFile("Textures/Gray.png");
+		gr.loadFromFile("Textures/Gr.png");
+		grb.loadFromFile("Textures/Grb.png");
+		strp.loadFromFile("Textures/StripesP.png");
+		differ.loadFromFile("Textures/Different.png");
+		rb.loadFromFile("Textures/RB.png");
+		rose.loadFromFile("Textures/Rose.png");
+		green.loadFromFile("Textures/Green.png");
+		greenf.loadFromFile("Textures/GreenFloor.png");
+		greenw.loadFromFile("Textures/GreenWall.png");
+		roseb.loadFromFile("Textures/RoseBricks.png");
+		greenf2.loadFromFile("Textures/GreenFloor2.png");
+		fl.loadFromFile("Textures/Flowers.png");
+		crys.loadFromFile("Textures/Crystal.png");
+		act.loadFromFile("Textures/GreenSwitch.png");
+		gravs.loadFromFile("Textures/gravS.png");
+		grav.loadFromFile("Textures/grav.png");
+		buttonblock.loadFromFile("Textures/Button.png");
+		noth.loadFromFile("Textures/Nothing.png");
+		glass.loadFromFile("Textures/Glass.png");
+		_arrow.loadFromFile("Textures/Arrow.png");
+		white.loadFromFile("Textures/White.png");
+		rosebut.loadFromFile("Textures/RoseBut.png");
+		whitewall.loadFromFile("Textures/White_wall.png");
+		rose_door.loadFromFile("Textures/Rose_door.png");
+		gray2.loadFromFile("Textures/Gray2.png");
+		rosefloor2.loadFromFile("Textures/Blue_floor2.png");
+		blue_floor2.loadFromFile("Textures/Rosefloor2.png");
+		rosebricks.loadFromFile("Textures/RoseBricks2.png");
+		lamp_blue.loadFromFile("Textures/Lamp_blue.png");
+		lamp_green.loadFromFile("Textures/Lamp_barrier.png");
+		speed_det.loadFromFile("Textures/Speed_detector.png");
+		portal2.loadFromFile("Textures/Portal2.png");
+		view_det.loadFromFile("Textures/View_detector.png");
+		player_det.loadFromFile("Textures/Player_detector.png");
+		player_det_inv.loadFromFile("Textures/Player_detector_inv.png");
+		pusher.loadFromFile("Textures/Pusher.png");
+		some_help.loadFromFile("Textures/Some_help.png");
+		tp_p.loadFromFile("Textures/tp.png");
+		position_detector.loadFromFile("Textures/Position_detector.png");
+		textblock.loadFromFile("Textures/text.png");
 
-		c_minus.loadFromFile("Textures\\Electricity\\-.png");
-		c_plus.loadFromFile("Textures\\Electricity\\+.png");
-		c_ac.loadFromFile("Textures\\Electricity\\Acc.png");
-		BGel.loadFromFile("Textures\\Electricity\\BG.png");
-		c_corner.loadFromFile("Textures\\Electricity\\C corner.png");
-		c_cross3.loadFromFile("Textures\\Electricity\\C cross 3.png");
-		c_cross4.loadFromFile("Textures\\Electricity\\C cross 4.png");
-		c_one.loadFromFile("Textures\\Electricity\\C 1.png");
-		c_line.loadFromFile("Textures\\Electricity\\C linear.png");
-		c_resist.loadFromFile("Textures\\Electricity\\Resistor.png");
-		c_sensor.loadFromFile("Textures\\Electricity\\Sensor_off.png");
-		c_sensor_on.loadFromFile("Textures\\Electricity\\Sensor_on.png");
-		c_switch.loadFromFile("Textures\\Electricity\\Switch_on.png");
-		c_switch_off.loadFromFile("Textures\\Electricity\\Switch_off.png");
-		c_switcher3.loadFromFile("Textures\\Electricity\\Switcher_main.png");
-		c_button.loadFromFile("Textures\\Electricity\\Button.png");
-		void_el.loadFromFile("Textures\\Electricity\\void.png");
+		c_minus.loadFromFile("Textures/Electricity/-.png");
+		c_plus.loadFromFile("Textures/Electricity/+.png");
+		c_ac.loadFromFile("Textures/Electricity/Acc.png");
+		BGel.loadFromFile("Textures/Electricity/BG.png");
+		c_corner.loadFromFile("Textures/Electricity/C corner.png");
+		c_cross3.loadFromFile("Textures/Electricity/C cross 3.png");
+		c_cross4.loadFromFile("Textures/Electricity/C cross 4.png");
+		c_one.loadFromFile("Textures/Electricity/C 1.png");
+		c_line.loadFromFile("Textures/Electricity/C linear.png");
+		c_resist.loadFromFile("Textures/Electricity/Resistor.png");
+		c_sensor.loadFromFile("Textures/Electricity/Sensor_off.png");
+		c_sensor_on.loadFromFile("Textures/Electricity/Sensor_on.png");
+		c_switch.loadFromFile("Textures/Electricity/Switch_on.png");
+		c_switch_off.loadFromFile("Textures/Electricity/Switch_off.png");
+		c_switcher3.loadFromFile("Textures/Electricity/Switcher_main.png");
+		c_button.loadFromFile("Textures/Electricity/Button.png");
+		void_el.loadFromFile("Textures/Electricity/void.png");
 
-		t_camera.loadFromFile("Textures\\Editor_UI\\T_camera.png");
-		block_choose.loadFromFile("Textures\\Editor_UI\\BlockChoose.png");
-		t_darkness.loadFromFile("Textures\\Editor_UI\\T_darkness.png");
-		t_portal.loadFromFile("Textures\\Editor_UI\\T_portal.png");
-		t_portal2.loadFromFile("Textures\\Editor_UI\\T_portal_2.png");
-		t_player_size.loadFromFile("Textures\\Editor_UI\\T_player.png");
+		t_camera.loadFromFile("Textures/Editor_UI/T_camera.png");
+		block_choose.loadFromFile("Textures/Editor_UI/BlockChoose.png");
+		t_darkness.loadFromFile("Textures/Editor_UI/T_darkness.png");
+		t_portal.loadFromFile("Textures/Editor_UI/T_portal.png");
+		t_portal2.loadFromFile("Textures/Editor_UI/T_portal_2.png");
+		t_player_size.loadFromFile("Textures/Editor_UI/T_player.png");
 
 		//sounds
-		scl.loadFromFile("Sounds\\S1.ogg");
-		push.loadFromFile("Sounds\\Push.ogg");
-		coin_s.loadFromFile("Sounds\\Coin.ogg");
-		boom.loadFromFile("Sounds\\Boom.ogg");
-		cryst.loadFromFile("Sounds\\crys.ogg");
+		scl.loadFromFile("Sounds/S1.ogg");
+		push.loadFromFile("Sounds/Push.ogg");
+		coin_s.loadFromFile("Sounds/Coin.ogg");
+		boom.loadFromFile("Sounds/Boom.ogg");
+		cryst.loadFromFile("Sounds/crys.ogg");
 		s1.setBuffer(scl); sound_p.setBuffer(push); sound_c.setBuffer(coin_s); sound_b.setBuffer(boom); _break.setBuffer(cryst);
-		telep.loadFromFile("Sounds\\Tp.ogg"); tp_s.setBuffer(telep);
-		arpush.loadFromFile("Sounds\\Arrow_move.ogg");
+		telep.loadFromFile("Sounds/Tp.ogg"); tp_s.setBuffer(telep);
+		arpush.loadFromFile("Sounds/Arrow_move.ogg");
 		sound_ab.setBuffer(arpush);
-		elbuf.loadFromFile("Sounds\\Electro.ogg");
+		elbuf.loadFromFile("Sounds/Electro.ogg");
 		electro.setBuffer(elbuf);
 
-		tp1_buf.loadFromFile("Sounds\\tp1.ogg"); tp1.setBuffer(tp1_buf);
-		tp2_buf.loadFromFile("Sounds\\tp2.ogg"); tp2.setBuffer(tp2_buf);
-		push2_buf.loadFromFile("Sounds\\push2.ogg"); push2.setBuffer(push2_buf);
-		open_buf.loadFromFile("Sounds\\Open.ogg"); open.setBuffer(open_buf);
+		tp1_buf.loadFromFile("Sounds/tp1.ogg"); tp1.setBuffer(tp1_buf);
+		tp2_buf.loadFromFile("Sounds/tp2.ogg"); tp2.setBuffer(tp2_buf);
+		push2_buf.loadFromFile("Sounds/push2.ogg"); push2.setBuffer(push2_buf);
+		open_buf.loadFromFile("Sounds/Open.ogg"); open.setBuffer(open_buf);
 
 		playerS.setTexture(body_t);
 		body_t.setSmooth(true);
 		eyes_t.setSmooth(true);
 		eyes.setTexture(eyes_t);
 		playerS.setOrigin(37.5, 37.5); eyes.setOrigin(37.5, 37.5);
-		blink.loadFromFile("Textures\\Blink.png");
+		blink.loadFromFile("Textures/Blink.png");
 
 	} 
 
@@ -184,7 +184,7 @@ void loading() {
 
 	//UI
 
-	box_t.loadFromFile("Textures\\Context_menu.png"); box_but_t.loadFromFile("Textures\\ContextMenuB.png");
+	box_t.loadFromFile("Textures/Context_menu.png"); box_but_t.loadFromFile("Textures/ContextMenuB.png");
 	box.setTexture(box_t); box_but.setTexture(box_but_t);
 	box.setScale(UI_scale, UI_scale); box_but.setScale(UI_scale, UI_scale * 0.8);
 	box.setOrigin(320, 0); box.setPosition(screenw / 2, 50 * UI_scale);
@@ -219,9 +219,9 @@ void loading() {
 	res_but[int(helper_s2)].is_picked = true;
 
 	ach_text.setFont(font);
-	ach_bg.loadFromFile("Textures\\AchievementBG.png");
+	ach_bg.loadFromFile("Textures/AchievementBG.png");
 	ach_BG.setTexture(ach_bg);
-	ach_complete.loadFromFile("Textures\\Achievement_try.png");
+	ach_complete.loadFromFile("Textures/Achievement_try.png");
 	ach_BG.setOrigin(700,0);
 	ach_BG.setScale(UI_scale / 1.5, UI_scale / 1.5);
 	ach_text.setCharacterSize(UI_scale * 100);
@@ -229,37 +229,37 @@ void loading() {
 	//editor UI
 	if (true) {
 
-		e_B.loadFromFile("Textures\\Editor_UI\\B.png");
-		e_E.loadFromFile("Textures\\Editor_UI\\E.png");
-		e_Gr.loadFromFile("Textures\\Editor_UI\\G.png");
-		e_Gy.loadFromFile("Textures\\Editor_UI\\Gy.png");
-		e_L.loadFromFile("Textures\\Editor_UI\\Layers.png");
-		e_L2.loadFromFile("Textures\\Editor_UI\\Layers2.png");
-		e_load.loadFromFile("Textures\\Editor_UI\\Load.png");
-		e_M.loadFromFile("Textures\\Editor_UI\\M.png");
-		e_Mech.loadFromFile("Textures\\Editor_UI\\Mech.png");
-		e_next.loadFromFile("Textures\\Editor_UI\\Next.png");
-		e_play.loadFromFile("Textures\\Editor_UI\\Play.png");
-		e_player.loadFromFile("Textures\\Editor_UI\\Player.png");
-		e_plus.loadFromFile("Textures\\Editor_UI\\Plus.png");
-		e_prev.loadFromFile("Textures\\Editor_UI\\Previous.png");
-		e_Q.loadFromFile("Textures\\Editor_UI\\Q.png");
-		e_R.loadFromFile("Textures\\Editor_UI\\R.png");
-		e_Rt.loadFromFile("Textures\\Editor_UI\\Rotate.png");
-		e_grid.loadFromFile("Textures\\Editor_UI\\Grid.png");
-		e_save.loadFromFile("Textures\\Editor_UI\\Save.png");
-		trash.loadFromFile("Textures\\Editor_UI\\Trash.png");
-		editor_num.loadFromFile("Textures\\Editor_UI\\Number.png");
-		editor_option.loadFromFile("Textures\\Editor_UI\\Option.png");
-		editor_col.loadFromFile("Textures\\Editor_UI\\Color_choose.png");
-		e_rotate__.loadFromFile("Textures\\Editor_UI\\Rotate2.png");
-		e_choose.loadFromFile("Textures\\Editor_UI\\Lvl_name.png");
-		e_edit.loadFromFile("Textures\\Editor_UI\\Lvl_edit.png");
-		e_rename.loadFromFile("Textures\\Editor_UI\\Lvl_rename.png");
-		EM_add.loadFromFile("Textures\\Editor_UI\\Add.png");
-		e_multichoose.loadFromFile("Textures\\Editor_UI\\Choose.png");
-		e_copy.loadFromFile("Textures\\Editor_UI\\Copy.png");
-		e_fill.loadFromFile("Textures\\Editor_UI\\Fill.png");
+		e_B.loadFromFile("Textures/Editor_UI/B.png");
+		e_E.loadFromFile("Textures/Editor_UI/E.png");
+		e_Gr.loadFromFile("Textures/Editor_UI/G.png");
+		e_Gy.loadFromFile("Textures/Editor_UI/Gy.png");
+		e_L.loadFromFile("Textures/Editor_UI/Layers.png");
+		e_L2.loadFromFile("Textures/Editor_UI/Layers2.png");
+		e_load.loadFromFile("Textures/Editor_UI/Load.png");
+		e_M.loadFromFile("Textures/Editor_UI/M.png");
+		e_Mech.loadFromFile("Textures/Editor_UI/Mech.png");
+		e_next.loadFromFile("Textures/Editor_UI/Next.png");
+		e_play.loadFromFile("Textures/Editor_UI/Play.png");
+		e_player.loadFromFile("Textures/Editor_UI/Player.png");
+		e_plus.loadFromFile("Textures/Editor_UI/Plus.png");
+		e_prev.loadFromFile("Textures/Editor_UI/Previous.png");
+		e_Q.loadFromFile("Textures/Editor_UI/Q.png");
+		e_R.loadFromFile("Textures/Editor_UI/R.png");
+		e_Rt.loadFromFile("Textures/Editor_UI/Rotate.png");
+		e_grid.loadFromFile("Textures/Editor_UI/Grid.png");
+		e_save.loadFromFile("Textures/Editor_UI/Save.png");
+		trash.loadFromFile("Textures/Editor_UI/Trash.png");
+		editor_num.loadFromFile("Textures/Editor_UI/Number.png");
+		editor_option.loadFromFile("Textures/Editor_UI/Option.png");
+		editor_col.loadFromFile("Textures/Editor_UI/Color_choose.png");
+		e_rotate__.loadFromFile("Textures/Editor_UI/Rotate2.png");
+		e_choose.loadFromFile("Textures/Editor_UI/Lvl_name.png");
+		e_edit.loadFromFile("Textures/Editor_UI/Lvl_edit.png");
+		e_rename.loadFromFile("Textures/Editor_UI/Lvl_rename.png");
+		EM_add.loadFromFile("Textures/Editor_UI/Add.png");
+		e_multichoose.loadFromFile("Textures/Editor_UI/Choose.png");
+		e_copy.loadFromFile("Textures/Editor_UI/Copy.png");
+		e_fill.loadFromFile("Textures/Editor_UI/Fill.png");
 
 		E_copy.init(e_copy,0,0,"",0);
 		E_plus.init(e_plus, 0, 0, " ", 0);
@@ -288,8 +288,8 @@ void loading() {
 		E_next_page.init(e_next, screenw / 2 + UI_scale * 190, screenh * 0.75, " ", 19); E_next_page.box.scale(0.75, 0.75);
 		E_prev_page.init(e_prev, screenw / 2 - UI_scale * 285, screenh * 0.75, " ", 20); E_prev_page.box.scale(0.75, 0.75);
 
-		t_plus.loadFromFile("Textures\\Editor_UI\\T_plus.png");
-		t_minus.loadFromFile("Textures\\Editor_UI\\T_minus.png");
+		t_plus.loadFromFile("Textures/Editor_UI/T_plus.png");
+		t_minus.loadFromFile("Textures/Editor_UI/T_minus.png");
 
 		T_plus.init(t_plus,0,0,"",69);
 		T_minus.init(t_minus, 0, 0, "", 69);
@@ -301,7 +301,7 @@ void loading() {
 
 	//achievements UI
 	if (true) {
-		achievement_button_t.loadFromFile("Textures\\Bonus_button.png");
+		achievement_button_t.loadFromFile("Textures/Bonus_button.png");
 
 		ach_but[0].init(achievement_button_t, 300, 150, "achievement :)", 0);
 
@@ -354,7 +354,7 @@ void loading() {
 		ach_but[42].update(-3, 13);
 	}
 
-	arrow_editor_t.loadFromFile("Textures\\Editor_UI\\Arrow_editor.png");
+	arrow_editor_t.loadFromFile("Textures/Editor_UI/Arrow_editor.png");
 	E_arrow[0].init(arrow_editor_t, 0, 0, "", 99); E_arrow[0].box.setOrigin(64, 64); E_arrow[0].box.rotate(-90);
 	E_arrow[1].init(arrow_editor_t, 0, 0, "", 99); E_arrow[1].box.setOrigin(64, 64); E_arrow[1].box.rotate(0);
 	E_arrow[2].init(arrow_editor_t, 0, 0, "", 99); E_arrow[2].box.setOrigin(64, 64); E_arrow[2].box.rotate(90);
