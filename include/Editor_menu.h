@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Values.h"
-#include "Classes.h"
-#include "Voids.h"
-#include "Blocks.h"
-#include "Level_building.h"
+#include <Values.h>
+#include <Classes.h>
+#include <Voids.h>
+#include <Blocks.h>
+#include <Level_building.h>
 
 void editor_menu_cycle() {
 

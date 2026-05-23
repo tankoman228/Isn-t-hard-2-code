@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Physics.h"
-#include "Values.h"
-#include "Player.h"
+#include <Physics.h>
+#include <Values.h>
+#include <Player.h>
 
 void physics_processing() {
 

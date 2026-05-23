@@ -11,29 +11,5 @@ Map_floor has been loaded
 	The game start!
 Music reset 
 click_button_menu 
-Level cycle begin 
-	Level building 3...
-Options are being saved 
-Options are saved
-Map_Basic has been loaded
-Movables has been loaded
-Map_floor has been loaded
-	The level was built 
-	The game start!
-Music reset 
-Smoke spawn: coin 
-Smoke spawn: coin 
-Smoke spawn: coin 
-	Level building 4...
-Options are being saved 
-Options are saved
-Map_Basic has been loaded
-Movables has been loaded
-Map_floor has been loaded
-	The level was built 
-	Checkpoint 
-	Checkpoint is succesfully set 
-	The game start!
-click_button_menu 
 Options are being saved 
 Options are saved

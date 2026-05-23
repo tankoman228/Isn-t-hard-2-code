@@ -20,12 +20,12 @@ find_package(OpenMP REQUIRED)
 
 # Исходные файлы, получить список можно скриптом src/scripts/getSources.sh, выполнять в корне проекта: sh src/scripts/getSources.sh
 set(SOURCES
-    "Isn't hard/Source.cpp"
+    "cpp/Source.cpp"
 )
 
 # Заголовочные файлы
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}"/Isn't hard"
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${OpenCL_INCLUDE_DIRS}  # Добавить пути к заголовкам OpenCL
 )
 

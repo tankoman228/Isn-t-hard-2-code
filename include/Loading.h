@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Classes.h"
-#include "Voids.h"
+#include <Classes.h>
+#include <Voids.h>
 
 void loading() {
 

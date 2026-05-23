@@ -5,11 +5,11 @@
 #include <SFML/Audio.hpp>
 #include <fstream>
 
-#include "Values.h"
-#include "Classes.h"
-#include "Voids.h"
-#include "Blocks.h"
-#include "Editor_building.h"
+#include <Values.h>
+#include <Classes.h>
+#include <Voids.h>
+#include <Blocks.h>
+#include <Editor_building.h>
 
 void save_latest_changes(vector <Block*> *s_map_basic, vector <Block*> *s_map_floor, vector <Movable*> *s_movables, vector <Electric*> *s_electric, vector <Block*> *s_triggers) {
 

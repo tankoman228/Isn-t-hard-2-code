@@ -1,8 +1,8 @@
 #pragma once
-#include "Values.h"
-#include "Blocks.h"
-#include "Voids.h"
-#include "End.h"
+#include <Values.h>
+#include <Blocks.h>
+#include <Voids.h>
+#include <End.h>
 
 string getType(int id, int layer) {
 

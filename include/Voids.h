@@ -4,9 +4,9 @@
 #include <math.h>
 #include <SFML/Audio.hpp>
 #include <fstream>
-#include "Values.h"
-#include "Classes.h"
-#include "Player.h"
+#include <Values.h>
+#include <Classes.h>
+#include <Player.h>
 
 #define px p.x
 #define py p.y

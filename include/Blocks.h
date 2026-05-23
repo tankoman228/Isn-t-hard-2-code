@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Classes.h"
-#include "Voids.h"
-#include "Physics.h"
-#include "Player.h"
+#include <Classes.h>
+#include <Voids.h>
+#include <Physics.h>
+#include <Player.h>
 
 #define px p.x
 #define py p.y

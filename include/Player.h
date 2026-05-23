@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Values.h"
-#include "Physics.h"
+#include <Values.h>
+#include <Physics.h>
 
 Sq p = Sq(0, 0, 35);
 

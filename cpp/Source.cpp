@@ -5,16 +5,16 @@
 //#include <SFML/Audio.hpp>
 //#include <fstream>
 
-#include "Values.h"
-#include "Classes.h"
-#include "Voids.h"
-#include "Game.h"
-#include "Editor.h"
-#include "Levels.h"
-#include "Achievements.h"
-#include "Blocks.h"
-#include "Loading.h"
-#include "Editor_menu.h"
+#include <Values.h>
+#include <Classes.h>
+#include <Voids.h>
+#include <Game.h>
+#include <Editor.h>
+#include <Levels.h>
+#include <Achievements.h>
+#include <Blocks.h>
+#include <Loading.h>
+#include <Editor_menu.h>
 
 using namespace std; //it's absolutely safe. I know what to do
 using namespace sf; //Release x86. Install SFML to this project if doesn't work

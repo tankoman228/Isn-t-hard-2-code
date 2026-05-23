@@ -4,9 +4,9 @@
 #include <math.h>
 #include <SFML/Audio.hpp>
 #include <fstream>
-#include "Values.h"
-#include "Classes.h"
-#include "Voids.h"
+#include <Values.h>
+#include <Classes.h>
+#include <Voids.h>
 
 using namespace std; using namespace sf;
 

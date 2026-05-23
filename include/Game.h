@@ -5,14 +5,14 @@
 #include <SFML/Audio.hpp>
 #include <fstream>
 
-#include "Values.h"
-#include "Classes.h"
-#include "Voids.h"
-#include "Blocks.h"
-#include "Player.h"
-#include "Physics_processing.h"
-#include "Context_menu.h"
-#include "Level_building.h"
+#include <Values.h>
+#include <Classes.h>
+#include <Voids.h>
+#include <Blocks.h>
+#include <Player.h>
+#include <Physics_processing.h>
+#include <Context_menu.h>
+#include <Level_building.h>
 
 #define px p.x
 #define py p.y
