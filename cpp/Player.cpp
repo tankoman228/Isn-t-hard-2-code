@@ -159,10 +159,10 @@ void player_processing(float dt) {
 
 	do {
 		if (Keyboard::isKeyPressed(Keyboard::LControl)) {
-			accelerate = 14096; p.max_speed = 1400;
+			accelerate = PlayerAccelerate * 1.5f; p.max_speed = PlayerMaxSpeed * 1.5f;
 		}
 		else {
-			accelerate = 8096; p.max_speed = 900;
+			accelerate = PlayerAccelerate; p.max_speed = PlayerMaxSpeed;
 		}
 		float accelerateByDelta = accelerate * dt;
 

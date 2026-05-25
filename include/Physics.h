@@ -2,6 +2,17 @@
 
 #include <cmath>
 
+// Параметры подвижных коробок
+#define MovableHardness 20
+#define MovableFriction 20
+
+// Параметры физики/управления игрока
+#define PlayerMaxSpeed   2000
+#define PlayerAccelerate 4096
+#define PlayerHardness   50
+#define PlayerMass 		 0.5
+#define PlayerFriction   2048
+
 int sign(int a);
 
 //AABB-alike physics model
@@ -13,11 +24,11 @@ struct Sq {
 	short layer = 0;
 	float parameter = 2; // скрытый параметр для игровой сущности, какой: зависит от типа, костыль, ранее был ещё и массой
 
-	float hardness = 256; // то, какую силу он создаёт при столкновении на другой объект за секунду, размер пересечения роли не играет
+	float hardness = 64;  // квадратный корень силы, что создаёт при столкновении на другой объект на 8 пикселей проникновения
 	float mass = 1;       // насколько будет движок делить применяемые к объекту силы
 
 	float max_speed = 25;
-	float friction = 3; // замедление за секунду
+	float friction = 30; // замедление за секунду
 	int id;
 
 	bool choosen = false;
@@ -49,6 +60,9 @@ struct Sq {
 	}
 
 	void init_AABB() {
+	
+
+
 		ax = x - size;
 		ay = y - size;
 
@@ -83,8 +97,9 @@ struct Sq {
 		y = _y;
 		size = _size;
 
-		friction = 4096;
-		mass = 0.08;
+		friction = PlayerFriction;
+		mass = PlayerMass;
+		hardness = PlayerHardness;
 
 		init_AABB();
 	}
@@ -93,8 +108,9 @@ struct Sq {
 		sx = 0; sy = 0;
 		size = 35;
 
-		friction = 4096;
-		mass = 0.08;
+		friction = PlayerFriction;
+		mass = PlayerMass;
+		hardness = PlayerHardness;
 
 		init_AABB();
 	}

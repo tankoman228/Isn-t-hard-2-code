@@ -15,36 +15,36 @@
 #define psx p.sx
 #define psy p.sy
 
-#define MovableHardness 256
-#define MovableFriction 1
-
 struct Movable : public Sq {
 
 	Sprite box;
 	Sq anticheat = Sq(0,0,67); //Player mustn't get coin if it is blocked with movable!
 
 	Movable(int _x, int _y, Texture &t, IntRect r) {
-		x = _x;
-		y = _y;
+
 		box.setTexture(t);
 		box.setTextureRect(r);
 		box.setOrigin(64, 64);
-		parameter = 2;
-		hardness = MovableHardness;
-		friction = MovableFriction;
-		id = 5;
+
+		InitMovablePhysics(_x, _y);
 	}
 
 	Movable(int _x, int _y, int _look) {
-		x = _x;
-		y = _y;
+
 		box.setTexture(*MapBasicTextures[5]);
 		box.setTextureRect(IntRect(128 * _look, 0, 128, 128));
 		box.setOrigin(64, 64);
-		parameter = 2;
+
+		InitMovablePhysics(_x, _y);
+	}
+
+	void InitMovablePhysics(int _x, int _y) {
+
+		id = 5; x = _x; y = _y;
+
 		hardness = MovableHardness;
 		friction = MovableFriction;
-		id = 5;
+		parameter = 2;
 	}
 
 	void editor_behave() {

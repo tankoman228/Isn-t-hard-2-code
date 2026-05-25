@@ -58,29 +58,17 @@ void physics_processing(float dt) {
 
 		for (int j = 0; j < map_basic.size(); j++) {
 			if (collide(*movables[i], *map_basic[j], dt)) {
-				/*movables[j]->sx /= 2; movables[j]->sy /= 2;*/
-
-				/*collide(*movables[i], *map_basic[j]);*/
 			}
 		}
 
 		for (int j = 0; j < movables.size(); j++) {
 			if (i != j) {
 				if (collide(*movables[j], *movables[i], dt)) {
-					/*movables[i]->move(); movables[j]->move();*/
-					movables[j]->sx /= 2; movables[j]->sy /= 2;
-					movables[i]->sx /= 2; movables[i]->sy /= 2;
-
-					p.sx /= 2.35;
-					p.sy /= 2.35;
 				};
 			}
 		}
 
 		if (collide(p, *movables[i], dt)) {
-			p.sx /= 1.09;
-			p.sy /= 1.09;
-
 			colint = 0;
 
 			if (Keyboard::isKeyPressed(Keyboard::LControl)) {
@@ -88,8 +76,6 @@ void physics_processing(float dt) {
 					if (!push2.getStatus()) {
 						push2.setVolume(7);
 						push2.play();
-						p.sx /= 2;
-						p.sy /= 2;
 					}
 				}
 			}
@@ -97,12 +83,8 @@ void physics_processing(float dt) {
 				if (abs(p.sx) > 1 || abs(p.sy) > 1) {
 					push2.setVolume(100 * (abs(p.sx) + abs(p.sy)) / 40);
 					push2.play();
-					p.sx /= 3;
-					p.sy /= 3;
 				}
 			}
-
-			/*p.move(-p.sx, -p.sy);*/
 		}
 
 		movables[i]->cycle(dt);
