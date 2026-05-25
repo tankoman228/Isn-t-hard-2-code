@@ -7,13 +7,12 @@
 #include <Player.h>
 #include <Blocks.h>
 
-void physics_processing() {
+void physics_processing(float dt) {
 
 	if (context_menu) return; 
 
-	player_processing();
+	player_processing(dt);
 
-	#pragma omp parallel for
 	for (int i = 0; i < map_floor.size(); i++) {
 		map_floor[i]->cycle();
 
@@ -47,21 +46,18 @@ void physics_processing() {
 
 	}
 
-	#pragma omp parallel for
 	for (int i = 0; i < electric.size(); i++) {
 		electric[i]->cycle();
 	}
 
-	#pragma omp parallel for
 	for (int i = 0; i < map_basic.size(); i++) {
 		map_basic[i]->cycle();
 	}
 
-	#pragma omp parallel for
 	for (int i = 0; i < movables.size(); i++) {
 
 		for (int j = 0; j < map_basic.size(); j++) {
-			if (collide(*movables[i], *map_basic[j])) {
+			if (collide(*movables[i], *map_basic[j], dt)) {
 				/*movables[j]->sx /= 2; movables[j]->sy /= 2;*/
 
 				/*collide(*movables[i], *map_basic[j]);*/
@@ -70,7 +66,7 @@ void physics_processing() {
 
 		for (int j = 0; j < movables.size(); j++) {
 			if (i != j) {
-				if (collide(*movables[j], *movables[i])) {
+				if (collide(*movables[j], *movables[i], dt)) {
 					/*movables[i]->move(); movables[j]->move();*/
 					movables[j]->sx /= 2; movables[j]->sy /= 2;
 					movables[i]->sx /= 2; movables[i]->sy /= 2;
@@ -81,7 +77,7 @@ void physics_processing() {
 			}
 		}
 
-		if (collide(p, *movables[i])) {
+		if (collide(p, *movables[i], dt)) {
 			p.sx /= 1.09;
 			p.sy /= 1.09;
 
@@ -109,7 +105,7 @@ void physics_processing() {
 			/*p.move(-p.sx, -p.sy);*/
 		}
 
-		movables[i]->cycle();
+		movables[i]->cycle(dt);
 	}
 
 	Sleep(1);

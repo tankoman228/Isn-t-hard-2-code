@@ -65,7 +65,7 @@ void InitGame() {
 
 void GameTick(float dt) {
 
-    physics_processing();
+    physics_processing(dt);
 
     if (Keyboard::isKeyPressed(Keyboard::Tab) && !onclick) {
 
@@ -314,7 +314,7 @@ void GameTick(float dt) {
         }
     }
     
-    render_player();
+    render_player(dt);
 
     scroll_pinned = false;
 

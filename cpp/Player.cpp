@@ -7,7 +7,7 @@ float middle(float a, float b, float c, float d, float e, float f) {
 	return (a + b + c + d + e + f) / 6;
 }
 
-void render_player() {
+void render_player(float dt) {
 
 	//��������
 	switch (dir) {
@@ -152,30 +152,41 @@ void render_player() {
 
 }
 
-void player_processing() {
+void player_processing(float dt) {
 
 	#define sx p.sx
 	#define sy p.sy
 
 	do {
-
 		if (Keyboard::isKeyPressed(Keyboard::LControl)) {
-			accelerate = 0.1; p.max_speed = 3;
+			accelerate = 14096; p.max_speed = 1400;
 		}
 		else {
-			accelerate = 0.057; p.max_speed = 2.2;
+			accelerate = 8096; p.max_speed = 900;
 		}
+		float accelerateByDelta = accelerate * dt;
 
 		if (Keyboard::isKeyPressed(Keyboard::Up) || Keyboard::isKeyPressed(Keyboard::W)) {
 			if (Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D)) {
-				sx += accelerate; sy -= accelerate; dir = 2; ex += eyes_accelerate; ey -= eyes_accelerate;
+				sx += accelerateByDelta; 
+				sy -= accelerateByDelta; 
+				
+				dir = 2; 
+
+				ex += accelerateByDelta / 2.f; 
+				ey -= accelerateByDelta / 2.f;
 			}
 			else {
 				if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A)) {
-					sx -= accelerate; sy -= accelerate; dir = 8; ex -= eyes_accelerate; ey -= eyes_accelerate;
+					sx -= accelerateByDelta; 
+					sy -= accelerateByDelta; 
+					
+					dir = 8; 
+
+					ex -= accelerateByDelta / 2.f; ey -= accelerateByDelta / 2.f;
 				}
 				else {
-					sy -= accelerate; dir = 1; ey -= eyes_accelerate;
+					sy -= accelerateByDelta; dir = 1; ey -= accelerateByDelta / 2.f;
 				}
 			}
 			break;
@@ -183,23 +194,33 @@ void player_processing() {
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Down) || Keyboard::isKeyPressed(Keyboard::S)) {
 			if (Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D)) {
-				sx += accelerate; sy += accelerate; dir = 4; ex += eyes_accelerate; ey += eyes_accelerate;
+				sx += accelerateByDelta; 
+				sy += accelerateByDelta; dir = 4; ex += accelerateByDelta / 2.f; ey += accelerateByDelta / 2.f;
 			}
 			else {
 				if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A)) {
-					sx -= accelerate; sy += accelerate; dir = 6; ex -= eyes_accelerate; ey += eyes_accelerate;
+					sx -= accelerateByDelta; 
+					sy += accelerateByDelta; 
+					
+					dir = 6; 
+					
+					ex -= accelerateByDelta / 2.f; 
+					ey += accelerateByDelta / 2.f;
 				}
 				else {
-					sy += accelerate; dir = 5; ey += eyes_accelerate;
+					dir = 5; 
+
+					sy += accelerateByDelta; 
+					ey += accelerateByDelta / 2.f;
 				}
 			}
 			break;
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D)) {
-			sx += accelerate; dir = 3; ex += eyes_accelerate; break;
+			sx += accelerateByDelta; dir = 3; ex += accelerateByDelta / 2.f; break;
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A)) {
-			sx -= accelerate; dir = 7; ex -= eyes_accelerate; break;
+			sx -= accelerateByDelta; dir = 7; ex -= accelerateByDelta / 2.f; break;
 		}
 
 	} while (false);
@@ -212,5 +233,5 @@ void player_processing() {
 	#undef sx
 	#undef sy
 
-	p.move();
+	p.move(dt);
 }

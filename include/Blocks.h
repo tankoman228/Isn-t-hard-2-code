@@ -15,6 +15,9 @@
 #define psx p.sx
 #define psy p.sy
 
+#define MovableHardness 256
+#define MovableFriction 1
+
 struct Movable : public Sq {
 
 	Sprite box;
@@ -26,8 +29,9 @@ struct Movable : public Sq {
 		box.setTexture(t);
 		box.setTextureRect(r);
 		box.setOrigin(64, 64);
-		mass = 2;
-		repulsion = 0.8;
+		parameter = 2;
+		hardness = MovableHardness;
+		friction = MovableFriction;
 		id = 5;
 	}
 
@@ -37,8 +41,9 @@ struct Movable : public Sq {
 		box.setTexture(*MapBasicTextures[5]);
 		box.setTextureRect(IntRect(128 * _look, 0, 128, 128));
 		box.setOrigin(64, 64);
-		mass = 2;
-		repulsion = 0.85;
+		parameter = 2;
+		hardness = MovableHardness;
+		friction = MovableFriction;
 		id = 5;
 	}
 
@@ -48,7 +53,7 @@ struct Movable : public Sq {
 		window.draw(box);
 	}
 
-	void cycle() {
+	void cycle(float dt) {
 
 		anticheat.move_to(*this);
 
@@ -56,7 +61,7 @@ struct Movable : public Sq {
 			colint = -1;
 		}
 
-		move();	
+		move(dt);	
 
 	}
 
@@ -1615,8 +1620,8 @@ struct Special_floor : public Block {
 
 		switch (id) {
 			case 19: magnet = 0; size = 40; break;
-			case 43: size = 65; mass = look; break;
-			case 45: mass = look; break;
+			case 43: size = 65; parameter = look; break;
+			case 45: parameter = look; break;
 		}
 
 		init_AABB();
@@ -1658,7 +1663,7 @@ struct Special_floor : public Block {
 					for (int k = 0; k < map_floor.size(); k++) {
 						if (map_floor[k] == this) { continue; }
 
-						if (map_floor[k]->id == 43 && map_floor[k]->mass == mass) {
+						if (map_floor[k]->id == 43 && map_floor[k]->parameter == parameter) {
 							px = map_floor[k]->x;
 							py = map_floor[k]->y; tp_rech = 80;
 
@@ -1700,7 +1705,7 @@ struct Special_floor : public Block {
 							for (int c = 0; c < map_floor.size(); c++) {
 								if (map_floor[c] == this) { continue; }
 								
-								if (map_floor[c]->id == 43 && map_floor[c]->mass == mass) {
+								if (map_floor[c]->id == 43 && map_floor[c]->parameter == parameter) {
 									movables[k]->x = map_floor[c]->x;
 									movables[k]->y = map_floor[c]->y; tp_rech = 150;
 									smoke_spawn("tp", x, y); smoke_spawn("tp", map_floor[c]->x, map_floor[c]->y);
@@ -1736,10 +1741,10 @@ struct Special_floor : public Block {
 			case 0:
 				
 				if (px > x && py < y) {
-					barmode[int(mass)] = true;
+					barmode[int(parameter)] = true;
 				}
 				else {
-					barmode[int(mass)] = false;
+					barmode[int(parameter)] = false;
 					box.setTextureRect(IntRect(128, 0, 128, 128));
 				}
 				break;
@@ -1747,10 +1752,10 @@ struct Special_floor : public Block {
 			case 90:
 
 				if (px > x && py > y) {
-					barmode[int(mass)] = true;
+					barmode[int(parameter)] = true;
 				}
 				else {
-					barmode[int(mass)] = false;
+					barmode[int(parameter)] = false;
 					box.setTextureRect(IntRect(128, 0, 128, 128));
 				}
 				break;
@@ -1758,10 +1763,10 @@ struct Special_floor : public Block {
 			case 180:
 
 				if (px < x && py > y) {
-					barmode[int(mass)] = true;
+					barmode[int(parameter)] = true;
 				}
 				else {
-					barmode[int(mass)] = false;
+					barmode[int(parameter)] = false;
 					box.setTextureRect(IntRect(128, 0, 128, 128));
 				}
 				break;
@@ -1769,10 +1774,10 @@ struct Special_floor : public Block {
 			case 270:
 
 				if (px < x && py < y) {
-					barmode[int(mass)] = true;
+					barmode[int(parameter)] = true;
 				}
 				else {
-					barmode[int(mass)] = false;
+					barmode[int(parameter)] = false;
 					box.setTextureRect(IntRect(128, 0, 128, 128));
 				}
 				break;
@@ -1965,8 +1970,8 @@ struct Special_floor : public Block {
 				// TODO: box.setTexture(portal2);
 
 				text.setPosition(box.getPosition());
-				mass = look;
-				text.setString(to_string(int(mass)));
+				parameter = look;
+				text.setString(to_string(int(parameter)));
 				text.setFillColor(Color::White);
 				window.draw(text);
 			}*/
@@ -2054,8 +2059,7 @@ struct Portal : public Block {
 				py = y;
 
 				playerS.setRotation((rand() % 4) * 90);
-				
-				render_player();
+			
 				//playerS.setColor(Color::White);
 				//eyes.setColor(Color::White);
 			}
@@ -2428,7 +2432,7 @@ struct Door : public Block {
 				if_collide();
 
 				for (int k = 0; k < movables.size(); k++) {
-					if (collide(*this, *movables[k])) {
+					if (collide(*this, *movables[k], 0.5)) { // TODO: dt
 						/*if (abs(movables[k]->x - x) < 3 || abs(movables[k]->y - y) < 3) {
 							smoke_spawn("smoke", x, y);
 							sound_b.play();
@@ -2446,7 +2450,7 @@ struct Door : public Block {
 				if_collide();
 
 				for (int k = 0; k < movables.size(); k++) {
-					if (collide(*this, *movables[k])) {
+					if (collide(*this, *movables[k], 0.5)) { // TODO: dt
 						//if (abs(movables[k]->x - x) < 3 || abs(movables[k]->y - y) < 3) {
 						//	smoke_spawn("smoke", x, y);
 						//	sound_b.play();
@@ -4117,9 +4121,10 @@ struct Player_size_trigger : public Trigger {
 
 		player_scale *= player_scale_multiplier;
 		p.size *= player_scale_multiplier;
-		p.repulsion /= player_scale_multiplier;
-		p.repulsion /= player_scale_multiplier;
-		p.repulsion /= player_scale_multiplier;
+		// TODO: изменение силы по размеру
+		//p.repulsion /= player_scale_multiplier;
+		//p.repulsion /= player_scale_multiplier;
+		//p.repulsion /= player_scale_multiplier;
 		p.init_AABB();
 	}
 

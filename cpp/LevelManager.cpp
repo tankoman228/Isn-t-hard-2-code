@@ -779,9 +779,12 @@ void load_checkpoint() {
 
 	p.unset_player();
 	p.size *= player_scale;
-	p.repulsion /= player_scale;
-	p.repulsion /= player_scale;
-	p.repulsion /= player_scale;
+
+	// TODO: реинит физ. параметров по размеру
+	//p.repulsion /= player_scale;
+	//p.repulsion /= player_scale;
+	//p.repulsion /= player_scale;
+
 	p.init_AABB();
 
 	logg << "	Success! \n";

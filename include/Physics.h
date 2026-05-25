@@ -11,14 +11,27 @@ struct Sq {
 	float ax = 0, bx = 200, ay = 0, by = 200; //AABB
 	float size = 62; //from center to border
 	short layer = 0;
-	float mass = 2; //not used, but don't delete
-	float repulsion = 0; //this is how much the object is repulsed from the other. (0 is immovable)
-	float max_speed = 6;
+	float parameter = 2; // скрытый параметр для игровой сущности, какой: зависит от типа, костыль, ранее был ещё и массой
+
+	float hardness = 256; // то, какую силу он создаёт при столкновении на другой объект за секунду, размер пересечения роли не играет
+	float mass = 1;       // насколько будет движок делить применяемые к объекту силы
+
+	float max_speed = 25;
+	float friction = 3; // замедление за секунду
 	int id;
 
 	bool choosen = false;
 
-	void move() {
+	// Шаг физики на основе своей скорости, для неподвижных можно просто не вызывать
+	void move(float dt) {
+
+		// Лимиты скорости
+		if (sx > max_speed) { sx = max_speed; } if (sx < -max_speed) { sx = -max_speed; }
+		if (sy > max_speed) { sy = max_speed; } if (sy < -max_speed) { sy = -max_speed; }
+
+		// смещение ключевых точек
+		x += sx * dt;
+		y += sy * dt;
 
 		ax = x - size;
 		ay = y - size;
@@ -26,16 +39,12 @@ struct Sq {
 		bx = x + size;
 		by = y + size;
 
-		sx *= 0.96;
-		sy *= 0.96;
+		// Трение
+		if (abs(sx) < friction * dt) sx = 0;
+		else sx -= sign(sx) * friction * dt;
 
-		if (sx > max_speed) { sx = max_speed; } if (sx < -max_speed) { sx = -max_speed; }
-		if (sy > max_speed) { sy = max_speed; } if (sy < -max_speed) { sy = -max_speed; }
-
-		if (abs(sx) < 0.05) { sx = 0; } if (abs(sy) < 0.05) { sy = 0; }
-
-		x += sx;
-		y += sy;
+		if (abs(sy) < friction * dt) sy = 0;
+		else sy -= sign(sy) * friction * dt;
 
 	}
 
@@ -70,28 +79,30 @@ struct Sq {
 		//player spawn only
 
 		sx = 0; sy = 0;
-
-		repulsion = 2;
-		max_speed = 2.2;
 		x = _x;
 		y = _y;
 		size = _size;
+
+		friction = 4096;
+		mass = 0.08;
+
 		init_AABB();
 	}
+
 	void unset_player() {
 		sx = 0; sy = 0;
-
-		repulsion = 2;
-		max_speed = 2.2;
-
 		size = 35;
+
+		friction = 4096;
+		mass = 0.08;
+
 		init_AABB();
 	}
 
 };
 
 //in case of intersection collision processing
-bool collide(Sq& a, Sq& b);
+bool collide(Sq& a, Sq& b, float dt);
 
 //intersection condition only
 bool intersection(Sq& a, Sq& b);
