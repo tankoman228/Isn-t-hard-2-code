@@ -20,7 +20,24 @@ find_package(OpenMP REQUIRED)
 
 # Исходные файлы, получить список можно скриптом src/scripts/getSources.sh, выполнять в корне проекта: sh src/scripts/getSources.sh
 set(SOURCES
-    "cpp/Source.cpp"
+    cpp/Blocks/ElectricProcess.cpp
+    cpp/EditorFeatures/EditorBuilding.cpp
+    cpp/Engine/Physics.cpp
+    cpp/Engine/Physics_processing.cpp
+    cpp/Engine/Spawn.cpp
+    cpp/LevelManager.cpp
+    cpp/Loading.cpp
+    cpp/Player.cpp
+    cpp/SceneManager.cpp
+    cpp/Scenes/Achievements.cpp
+    cpp/Scenes/ContextMenu.cpp
+    cpp/Scenes/Editor.cpp
+    cpp/Scenes/EditorMenu.cpp
+    cpp/Scenes/Game.cpp
+    cpp/Scenes/Levels.cpp
+    cpp/Scenes/Menu.cpp
+    cpp/Scenes/Options.cpp
+    cpp/Source.cpp
 )
 
 # Заголовочные файлы

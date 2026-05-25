@@ -1,6 +1,7 @@
 #pragma once
 
-#include <Classes.h>
+#include <UI.h>
+#include <Particles.h>
 #include <Voids.h>
 #include <Physics.h>
 #include <Player.h>
@@ -33,7 +34,7 @@ struct Movable : public Sq {
 	Movable(int _x, int _y, int _look) {
 		x = _x;
 		y = _y;
-		box.setTexture(movable);
+		box.setTexture(*MapBasicTextures[5]);
 		box.setTextureRect(IntRect(128 * _look, 0, 128, 128));
 		box.setOrigin(64, 64);
 		mass = 2;
@@ -99,23 +100,12 @@ struct Movable : public Sq {
 
 };
 
-void spawn_movable(int x, int y, int _type) {
+void spawn_movable(int x, int y, int _type);
 
-	Movable* add;
-	/*switch (_type) {
-	case 0: add = new Movable(x,y,movable,IntRect(0,0,128,128));
-	}*/
-
-	add = new Movable(x, y, movable, IntRect(_type / 90 * 128, 0, 128, 128));
-
-	movables.push_back(add);
-	
-}
-
-const bool* a = dmode;
-const bool* b = crystal;
-const bool* c = lmode;
-const bool* d = barmode;
+const inline bool* a = dmode;
+const inline bool* b = crystal;
+const inline bool* c = lmode;
+const inline bool* d = barmode;
 
 struct Block : public Sq {
 
@@ -194,9 +184,7 @@ struct Block : public Sq {
 		E_rotate_block2.box.setPosition(box.getPosition()); E_rotate_block2.box.move(-80 * scale, -80 * scale);
 
 		E_rotate_block.box.setScale(scale, scale);
-		//E_rotate_block.bg_box.setScale(scale * 0.5, scale * 0.5);
 		E_rotate_block2.box.setScale(scale, scale);
-		//E_rotate_block2.bg_box.setScale(scale * 0.5, scale * 0.5);
 	}
 
 	virtual void editor_exist() { 
@@ -230,33 +218,25 @@ struct Block : public Sq {
 		return false;
 	}
 
+	Block(int x_, int y_, int rotation_, int _id) {
+		x = x_; y = y_; rotation = rotation_; id = _id; init_AABB();
+	}
+
+	Block() {}
 };
 
 //Main layer
 
 struct Basic : public Block {
 
-	Basic(int _x, int _y, int _id, int rotation_, int look) {
+	Basic(int _x, int _y, int _id, int rotation_, int look) : Block(_x, _y, rotation_, _id) {
 
-		x = _x; y = _y; id = _id; rotation = rotation_; layer = 0;
+		layer = 0;
 		init_AABB();
 
+		box.setTexture(*MapBasicTextures[id]);
 		switch(id) {
-
-		case 1: box.setTexture(blue); break;
-		case 7: box.setTexture(wall); break;
-		case 8: box.setTexture(gr); break;
-		case 9: box.setTexture(grb); break; 
-		case 10: box.setTexture(green); break;
-		case 11: box.setTexture(greenw); break;
-		case 12: box.setTexture(roseb); break;
-		case 13: box.setTexture(rb); break;
-		case 14: box.setTexture(fl); size = 40; init_AABB(); break;
-		case 21: box.setTexture(smth3); break;
-		case 22: box.setTexture(white); break;
-		case 23: box.setTexture(whitewall); break;
-		case 25: box.setTexture(rosebricks); break;
-
+			case 14: size = 40; init_AABB(); break;
 		}
 
 		box.setTextureRect(IntRect(look * 128, 0, 128, 128));
@@ -310,23 +290,16 @@ struct Activators : public Block {
 		}
 	}
 
-	Activators(int _x, int _y, int _id, int rotation_, bool* target_, int group_, bool irreversible_) {
+	Activators(int _x, int _y, int _id, int rotation_, bool* target_, int group_, bool irreversible_) : Block(_x, _y, rotation_, _id) {
 
 		irreversible = irreversible_;
+		layer = 0; group = group_;
 
-		x = _x; y = _y; id = _id; layer = 0; group = group_; rotation = rotation_;
-		init_AABB();
 		box.setRotation(rotation);
 		target = target_;
 		text.setString(to_string(group));
 
-		switch (id) {
-
-		case 2: box.setTexture(switch_t); break;
-		case 15: box.setTexture(crys); break;
-		case 24: box.setTexture(rosebut); break;
-
-		}
+		box.setTexture(*MapBasicTextures[id]);
 
 		box.setTextureRect(IntRect(0, 0, 128, 128));
 		box.setRotation(rotation);
@@ -644,7 +617,7 @@ struct Detector : public Block {
 		}
 	}
 
-	Detector(int _x, int _y, int _id, int rotation_, bool* target_, int group_, bool change_) {
+	Detector(int _x, int _y, int _id, int rotation_, bool* target_, int group_, bool change_) : Block(_x, _y, rotation_, _id) {
 
 		x = _x; y = _y; id = _id; group = group_; layer = 0; init_AABB(); rotation = rotation_;
 		box.setRotation(rotation);
@@ -653,20 +626,7 @@ struct Detector : public Block {
 
 		text.setString(to_string(group));
 
-		if (id == 26) {
-			
-			box.setTexture(player_det);
-			/*change = false;*/
-			
-			
-		}
-		if (id == 27) {
-
-			/*change = true;*/
-			box.setTexture(player_det_inv);
-
-			/*program = player_detector_program;*/
-		}
+		box.setTexture(*MapBasicTextures[id]);
 
 		box.setTextureRect(IntRect(0, 0, 128, 128));
 		box.setRotation(rotation);
@@ -842,7 +802,7 @@ struct Questions : public Block {
 		//box.setTextureRect(IntRect(0, 0, 128, 128)); box.setTexture(smth3);
 		if (id != 29) {
 			id = 4;
-			box.setTexture(smth2);
+			box.setTexture(*MapBasicTextures[id]);
 		}
 		init_AABB();
 	}
@@ -850,32 +810,28 @@ struct Questions : public Block {
 	int look;
 	Text txt = Text(::text);
 
-	Questions(int _x, int _y, int _id, int rotation_, int _look) {
+	Questions(int _x, int _y, int _id, int rotation_, int _look) : Block(_x, _y, rotation_, _id) {
 
 		x = _x; y = _y; id = _id; look = _look; rotation = rotation_; layer = 0;
 		init_AABB();
 
-		box.setTexture(smth);
+		box.setTexture(*MapBasicTextures[id]);
 
 		box.setTextureRect(IntRect(look * 128, 0, 128, 128));
 		box.setRotation(rotation);
 
 		if (id == 3) { coins_required++; }
 		if (id == 29) {
-			box.setTexture(pusher);
 			box.setTextureRect(IntRect(0, 0, 128, 128));
-		}
-		if (id == 4) {
-			box.setTexture(smth2);
 		}
 
 		switch (id) {
-		case 3: txt.setString("Coin"); txt.setFillColor(Color::White); break;
-		case 6: txt.setString("Boom"); txt.setFillColor(Color::Red); break;
-		case 18: txt.setString("Movable");  txt.setFillColor(Color::White); break;
-		case 19: txt.setString("Set all"); txt.setFillColor(Color::White); break;
-		case 20: txt.setString("Unset all"); txt.setFillColor(Color::White); break;
-		case 29: txt.setString("Pusher");  txt.setFillColor(Color::Cyan); break;
+			case 3: txt.setString("Coin"); txt.setFillColor(Color::White); break;
+			case 6: txt.setString("Boom"); txt.setFillColor(Color::Red); break;
+			case 18: txt.setString("Movable");  txt.setFillColor(Color::White); break;
+			case 19: txt.setString("Set all"); txt.setFillColor(Color::White); break;
+			case 20: txt.setString("Unset all"); txt.setFillColor(Color::White); break;
+			case 29: txt.setString("Pusher");  txt.setFillColor(Color::Cyan); break;
 		}
 
 	}
@@ -975,10 +931,10 @@ struct Movable_spawn : public Block {
 
 	bool exist = true; int look; 
 
-	Movable_spawn(int _x, int _y, int _look) {
+	Movable_spawn(int _x, int _y, int _look) : Block(_x, _y, 0, 5) {
 
-		x = _x; y = _y; look = _look; layer = 0; init_AABB();
-		box.setTexture(movable);
+		look = _look; layer = 0; init_AABB();
+		box.setTexture(*MapBasicTextures[id]);
 		box.setTextureRect(IntRect(128 * look, 0, 128, 128));
 
 	}
@@ -990,24 +946,17 @@ struct Movable_spawn : public Block {
 			id = -1;
 		}
 	}
-
 };
 
 struct Special : public Block {
 
 	int look;
-	Special(int _x, int _y, int _id, int rotation_, int _look) {
+	Special(int _x, int _y, int _id, int rotation_, int _look) : Block(_x, _y, rotation_, _id) {
 
-		x = _x; y = _y; id = _id; look = _look; rotation = rotation_; layer = 0;
+		id = _id; look = _look; layer = 0;
 		init_AABB();
 
-		switch (id) {
-
-		case 16: box.setTexture(grav); break;
-		case 17: box.setTexture(glass); break;
-		case 31: box.setTexture(glass); break;
-
-		}
+		box.setTexture(*MapBasicTextures[id]);
 
 		box.setTextureRect(IntRect(look * 128, 0, 128, 128));
 		box.setRotation(rotation);
@@ -1051,12 +1000,12 @@ struct Special : public Block {
 			helper_s[1] = (y - py);
 			helper_s2 += helper_s[1] * helper_s[1];
 
-			box.setTexture(gravs);
+			// TODO: box.setTexture(gravs);
 			if (look == 0) { box.rotate(-2 * tick % 360); }
 			else { box.rotate(2 * tick % 360); }
 			window.draw(box);
 
-			box.setTexture(grav);
+			// TODO: box.setTexture(grav);
 			if (look == 0) { box.rotate(2 * tick % 360); }
 			else { box.rotate(-2 * tick % 360); }
 
@@ -1086,7 +1035,7 @@ struct Special : public Block {
 			else { box.setColor(Color(255, 255, 255, 0)); }
 			break;
 		}
-		if ((id != 31) || mode == "editor") {
+		if ((id != 31) /*|| mode == "editor" TODO: отрендерить в редакторе*/) {
 			window.draw(box); 
 		}
 	}
@@ -1196,14 +1145,14 @@ struct View_det : public Block {
 		return group;
 	}
 
-	View_det(int _x, int _y, int _id, int rotation_, bool* target_, int group_) {
+	View_det(int _x, int _y, int _id, int rotation_, bool* target_, int group_) : Block(_x, _y, rotation_, _id)  {
 
 		x = _x; y = _y; id = _id; group = group_; init_AABB(); rotation = rotation_; layer = 0;
 		box.setRotation(rotation); text.setString(to_string(group));
 		target = target_;
 
 		box.setTextureRect(IntRect(0, 0, 128, 128));
-		box.setTexture(view_det);
+		box.setTexture(*MapBasicTextures[id]);
 		box.setRotation(rotation);
 
 		setTextColor();
@@ -1428,14 +1377,14 @@ struct Speed_det : public Block {
 		}
 	}
 
-	Speed_det(int _x, int _y, int _id, int rotation_, bool* target_, int group_) {
+	Speed_det(int _x, int _y, int _id, int rotation_, bool* target_, int group_) : Block(_x, _y, rotation_, _id)  {
 
 		x = _x; y = _y; id = _id; group = group_; init_AABB(); rotation = rotation_; layer = 0;
 		box.setRotation(rotation); text.setString(to_string(group));
 		target = target_;
 
 		box.setTextureRect(IntRect(0, 0, 128, 128));
-		box.setTexture(speed_det);
+		box.setTexture(*MapBasicTextures[id]);
 		box.setRotation(rotation);
 
 		setTextColor();
@@ -1452,7 +1401,7 @@ struct Speed_det : public Block {
 		update_scrolling();
 
 		float helper = abs(p.sx) + abs(p.sy);
-		box.setTexture(speed_det);
+		// TODO: box.setTexture(speed_det);
 
 		if (helper > 0.85) { target[group] = true; }
 		if (helper < 0.5 && (tick % 50) == 1) { target[group] = false; }
@@ -1623,28 +1572,11 @@ struct Speed_det : public Block {
 
 struct Basic_floor : public Block {
 
-	Basic_floor(int _x, int _y, int _id, int rotation_, int look) {
+	Basic_floor(int _x, int _y, int _id, int rotation_, int look) : Block(_x, _y, rotation_, _id) {
 
 		x = _x; y = _y; id = _id; init_AABB(); rotation = rotation_; layer = 1;
 
-		switch (id) {
-
-		case 1: box.setTexture(el);  break;
-		case 4: box.setTexture(str); break;
-		case 5: box.setTexture(corn); break;
-		case 9: box.setTexture(gray); break;
-		case 10: box.setTexture(strp); break;
-		case 11: box.setTexture(greenf); break;
-		case 12: box.setTexture(differ); break;
-		case 13: box.setTexture(rose); break;
-		case 14: box.setTexture(greenf2); break;
-		case 20: box.setTexture(blue_floor2); break;
-		case 21: box.setTexture(rosefloor2); break;
-		case 22: box.setTexture(gray2); break;
-		case 42: box.setTexture(void_el); break;
-		case 44: box.setTexture(some_help); break;
-
-		}
+		box.setTexture(*MapFloorTextures[id]);
 
 		box.setTextureRect(IntRect(look * 128, 0, 128, 128));
 		box.setRotation(rotation);
@@ -1675,19 +1607,16 @@ struct Basic_floor : public Block {
 struct Special_floor : public Block {
 
 	int look;
-	Special_floor(int _x, int _y, int _id, int rotation_, int _look) {
+	Special_floor(int _x, int _y, int _id, int rotation_, int _look) : Block(_x, _y, rotation_, _id)  {
 
 		x = _x; y = _y; id = _id; look = _look; rotation = rotation_; layer = 1;
 		box.setRotation(rotation);
+		box.setTexture(*MapFloorTextures[id]);
 
 		switch (id) {
-
-		case 6: box.setTexture(finoff); break;
-		case 18: box.setTexture(glass); break;
-		case 19: box.setTexture(_arrow); magnet = 0; size = 40; break;
-		case 43: box.setTexture(portal2); size = 65; mass = look; break;
-		case 45: box.setTexture(position_detector); mass = look; break;
-
+			case 19: magnet = 0; size = 40; break;
+			case 43: size = 65; mass = look; break;
+			case 45: mass = look; break;
 		}
 
 		init_AABB();
@@ -1702,9 +1631,7 @@ struct Special_floor : public Block {
 		case 6:
 			break;
 		case 18:
-
 			//Fake block
-
 			break;
 
 		case 19:
@@ -1869,7 +1796,7 @@ struct Special_floor : public Block {
 		case 6:
 
 			if (coins_gathered >= coins_required) {
-				box.setTexture(finon);
+				// TODO: box.setTexture(finon);
 				if (intersection(p,*this)) {
 					alpha -= 1;
 				}
@@ -1887,6 +1814,7 @@ struct Special_floor : public Block {
 			helper_s2 += helper_s[1] * helper_s[1];
 			helper_s2 = sqrt(helper_s2);
 
+			/* TODO: 
 			switch (look) {
 			case 1: box.setTexture(blue); break;
 			case 2: box.setTexture(switch_t); break;
@@ -1906,7 +1834,7 @@ struct Special_floor : public Block {
 			case 16: box.setTexture(grav); break;
 			case 17: box.setTexture(whitewall); break;
 				deafult: box.setTexture(wall); break;
-			}
+			}*/
 
 			window.draw(box);
 
@@ -1916,7 +1844,7 @@ struct Special_floor : public Block {
 					box.setColor(Color(255, 255, 255, 255));
 				}
 
-				box.setTexture(noth);
+				// TODO: box.setTexture(noth);
 			}
 
 			window.draw(box);
@@ -1982,11 +1910,12 @@ struct Special_floor : public Block {
 			break;
 		case 18:
 
-			box.setTexture(noth);
+			// TODO: box.setTexture(noth);
 			window.draw(box);
 
 			box.setColor(Color(255, 255, 255, 128));
 
+			/*
 			switch (look) {
 			case 1: box.setTexture(blue); break;
 			case 2: box.setTexture(switch_t); break;
@@ -2006,7 +1935,7 @@ struct Special_floor : public Block {
 			case 16: box.setTexture(grav); break;
 			case 17: box.setTexture(whitewall); break;
 			deafult: box.setTexture(wall); break;
-			}
+			}*/
 
 			break;
 
@@ -2027,18 +1956,20 @@ struct Special_floor : public Block {
 
 			box.setTextureRect(IntRect(0, 0, 128, 128));
 
+			/*
+			TODO: рендер в редакторе стрелочки
 			if (mode == "editor") {
-				box.setTexture(_arrow);
+				// TODO: box.setTexture(_arrow);
 				box.setColor(Color(255, 255, 255, 128));
 				window.draw(box);
-				box.setTexture(portal2);
+				// TODO: box.setTexture(portal2);
 
 				text.setPosition(box.getPosition());
 				mass = look;
 				text.setString(to_string(int(mass)));
 				text.setFillColor(Color::White);
 				window.draw(text);
-			}
+			}*/
 
 			break;
 		}
@@ -2052,21 +1983,19 @@ struct Portal : public Block {
 
 	int tp_to;
 	Portal(int _x, int _y, int _id, int _tp_to) {
-
 		box.setOrigin(64, 64);
 		x = _x; y = _y; id = _id; tp_to = _tp_to; layer = 1; 
 		size = 20; init_AABB();
 
+		box.setTexture(*MapFloorTextures[id]); 
+
 		switch (id) {
-
-		case 7: box.setTexture(port_in); break;
-		case 8: box.setTexture(port_o);  tx[tp_to] = x; ty[tp_to] = y; break;
-
+			case 7: break;
+			case 8: tx[tp_to] = x; ty[tp_to] = y; break;
 		}
 
 		box.setTextureRect(IntRect(0, 0, 128, 128));
 		box.setRotation(0);
-
 	}
 
 	void render() {
@@ -2198,7 +2127,7 @@ struct Floor_button : public Block {
 		target = target_; init_AABB();
 		change = change_;
 
-		box.setTexture(buttonblock);
+		// TODO: box.setTexture(buttonblock);
 
 		box.setTextureRect(IntRect(0, 0, 128, 128));
 		box.setRotation(rotation);
@@ -2460,26 +2389,25 @@ struct Door : public Block {
 		return group;
 	}
 
-	Door(int _x, int _y, int _id, int rotation_, bool* target_, int _group, bool reversed_) {
+	Door(int _x, int _y, int _id, int rotation_, bool* target_, int _group, bool reversed_) : Block(_x, _y, rotation_, _id)  {
 
-		x = _x; y = _y; id = _id; target = target_; group = _group; init_AABB(); rotation = rotation_; layer = 1;
+		target = target_; group = _group; layer = 1;
 		/*magnet = -0.15;*/
 
-		block.setTextureRect(IntRect(0, 0, 128, 128));
+		box.setTexture(*MapFloorTextures[id]);
+		box.setTextureRect(IntRect(0, 0, 128, 128));
 
 		switch (id) {
-
-		case 2: box.setTexture(door); reversed = false; box.setTextureRect(IntRect(0, 0, 128, 128)); break;
-		case 3: box.setTexture(door); reversed = true; box.setTextureRect(IntRect(128, 0, 128, 128)); break;
-		case 15: box.setTexture(act); reversed = true; box.setTextureRect(IntRect(0, 0, 128, 128)); break;
-		case 16: box.setTexture(act); reversed = false; box.setTextureRect(IntRect(128, 0, 128, 128)); break;
-		case 23: box.setTexture(rose_door); reversed = false; box.setTextureRect(IntRect(0, 0, 128, 128)); break;
-		case 24: box.setTexture(rose_door); reversed = true; box.setTextureRect(IntRect(128, 0, 128, 128)); break;
-		case 38: box.setTexture(lamp_blue); reversed = false; box.setTextureRect(IntRect(0, 0, 128, 128)); break;
-		case 39: box.setTexture(lamp_blue); reversed = true; box.setTextureRect(IntRect(128, 0, 128, 128)); break;
-		case 40: box.setTexture(lamp_green); reversed = false; box.setTextureRect(IntRect(0, 0, 128, 128)); break;
-		case 41: box.setTexture(lamp_green); reversed = true; box.setTextureRect(IntRect(128, 0, 128, 128)); break;
-
+			case 2:  reversed = false; box.setTextureRect(IntRect(0, 0, 128, 128)); break;
+			case 3:  reversed = true; box.setTextureRect(IntRect(128, 0, 128, 128)); break;
+			case 15: reversed = true; box.setTextureRect(IntRect(0, 0, 128, 128)); break;
+			case 16: reversed = false; box.setTextureRect(IntRect(128, 0, 128, 128)); break;
+			case 23: reversed = false; box.setTextureRect(IntRect(0, 0, 128, 128)); break;
+			case 24: reversed = true; box.setTextureRect(IntRect(128, 0, 128, 128)); break;
+			case 38: reversed = false; box.setTextureRect(IntRect(0, 0, 128, 128)); break;
+			case 39: reversed = true; box.setTextureRect(IntRect(128, 0, 128, 128)); break;
+			case 40: reversed = false; box.setTextureRect(IntRect(0, 0, 128, 128)); break;
+			case 41: reversed = true; box.setTextureRect(IntRect(128, 0, 128, 128)); break;
 		}
 
 		reversed = reversed_;
@@ -2696,9 +2624,9 @@ struct Electric : public Block {
 	int con[4] = {0,0,0,0}; int con_size = 0;
 	int charge = 0, type = 0, group;
 
-	Electric(int _x, int _y, int rotation, int _type, int _group) {
+	Electric(int _x, int _y, int rotation, int _type, int _group)  {
 
-		bg.setTexture(BGel);
+		// TODO: bg.setTexture(BGel);
 		x = _x; y = _y; init_AABB();
 		layer = 1;
 		box.setRotation(rotation);
@@ -2706,7 +2634,14 @@ struct Electric : public Block {
 		group = _group;
 
 	}
-	Electric() { box.setTexture(void_el); layer = 1; bg.setOrigin(64, 64); bg.setTexture(BGel); box.setTextureRect(IntRect(0, 0, 128, 128));}
+	Electric() { 
+		// TODO: 
+		//box.setTexture(void_el); 
+		layer = 1; 
+		bg.setOrigin(64, 64); 
+		//bg.setTexture(BGel); 
+		box.setTextureRect(IntRect(0, 0, 128, 128));
+	}
 
 	void set_connections(int* cons) {
 		con[0] = cons[0];
@@ -2726,91 +2661,12 @@ struct Electric : public Block {
 	}
 };
 
-vector <Electric*> electric;
+inline vector <Electric*> electric;
 
-void rech(int a, int b) {
-
-		if (((electric[a]->type > 32) && (electric[a]->type < 37)) || ((electric[b]->type > 32) && (electric[b]->type < 37))) { return; }
-
-	/*	else { if ((electric[a]->type == 32 || electric[b]->type == 32) && (rand()%2 == 0)) { return; } }*/
-
-		if (electric[a]->charge == electric[b]->charge) { return; }
-
-		if (electric[a]->charge > electric[b]->charge) {
-			electric[b]->charge++;
-			electric[a]->charge -= 1;
-
-			if (electric[a]->charge > electric[b]->charge + 1) {
-				electric[b]->charge += 2;
-				electric[a]->charge -= 2;
-			}
-			return;
-		}
-
-		electric[b]->charge -= 1;
-		electric[a]->charge++;
-		if (electric[a]->charge + 1 > electric[b]->charge) { return; }
-		electric[b]->charge -= 2;
-		electric[a]->charge += 2;
-
-	}
-void rech(Electric& a, Electric& b) {
-
-	if (((a.type > 32) && (a.type < 37)) || ((b.type > 32) && (b.type < 37))) { return; }
-
-	/*	else { if ((electric[a]->type == 32 || electric[b]->type == 32) && (rand()%2 == 0)) { return; } }*/
-
-	if (a.charge == b.charge) { return; }
-
-	if (a.charge > b.charge) {
-		b.charge++;
-		a.charge -= 1;
-
-		if (a.charge > b.charge + 1) {
-			b.charge += 2;
-			a.charge -= 2;
-		}
-		return;
-	}
-
-	b.charge -= 1;
-	a.charge++;
-	if (a.charge + 1 > a.charge) { return; }
-	b.charge -= 2;
-	a.charge += 2;
-
-}
-void rech(Electric& a, int c) {
-
-	Electric& b = *electric[c];
-
-	if (((a.type > 32) && (a.type < 37)) || ((b.type > 32) && (b.type < 37))) { return; }
-
-	/*	else { if ((electric[a]->type == 32 || electric[b]->type == 32) && (rand()%2 == 0)) { return; } }*/
-
-	if (a.charge == b.charge) { return; }
-
-	if (a.charge > b.charge) {
-		b.charge++;
-		a.charge -= 1;
-
-		if (a.charge > b.charge + 1) {
-			b.charge += 2;
-			a.charge -= 2;
-		}
-		return;
-	}
-
-	b.charge -= 1;
-	a.charge++;
-	if (a.charge + 1 > a.charge) { return; }
-	b.charge -= 2;
-	a.charge += 2;
-
-}
-void rech_give_charge(int a) {
-	if (electric[a]->charge < 58) { electric[a]->charge += 2; }
-}
+void rech(int a, int b);
+void rech(Electric& a, Electric& b);
+void rech(Electric& a, int c);
+void rech_give_charge(int a);
 
 struct Wire : public Electric {
 
@@ -2823,17 +2679,16 @@ struct Wire : public Electric {
 		box.setOrigin(64, 64);
 		box.setRotation(rotation);
 		electric = true;
-		c_cross3.loadFromFile("Textures/Electricity/C cross 3.png");
 
+		box.setTexture(*MapFloorTextures[id]); 
 		switch (type) {
-		case 25: box.setTexture(c_one); con_size = 1; break;
-		case 26: box.setTexture(c_line); con_size = 2; break;
-		case 27: box.setTexture(c_corner); con_size = 2; break;
-		case 28: box.setTexture(c_cross3); con_size = 3; break;
-		case 29: box.setTexture(c_cross4); con_size = 4; break;
-		case 32: box.setTexture(c_resist); con_size = 2; break;
+			case 25: con_size = 1; break;
+			case 26: con_size = 2; break;
+			case 27: con_size = 2; break;
+			case 28: con_size = 3; break;
+			case 29: con_size = 4; break;
+			case 32: con_size = 2; break;
 		}
-
 	}
 
 	void cycle() {
@@ -2863,17 +2718,14 @@ struct Generator : public Electric {
 
 	Generator(int _x, int _y, int rotation_, int type, bool generator_) {
 		electric = true;
-		bg.setTexture(BGel); 
+		// TODO: bg.setTexture(BGel); 
 		x = _x; y = _y; rotation = rotation_; id = type; init_AABB();
 		box.setRotation(rotation);
 		/*con[0] = con_;*/ box.setOrigin(64, 64);
 		generator = generator_;
 
-		switch (type) {
-		case 30: box.setTexture(c_plus); /*generator = true;*/ con_size = 1; break;
-		case 31: box.setTexture(c_minus); /*generator = false;*/ con_size = 1; break;
-		}
-
+		box.setTexture(*MapFloorTextures[id]); 
+		con_size = 1; 
 	}
 
 	void cycle() {
@@ -2970,7 +2822,7 @@ struct Switcher : public Electric {
 		//con[1] = cons[1];
 		//con[2] = cons[2];
 		box.setRotation(rotation);
-		box.setTexture(c_switcher3);
+		box.setTexture(*MapFloorTextures[id]); 
 		box.setOrigin(64, 64);
 		type = type_;id = type;
 		setTextColor();
@@ -3186,7 +3038,7 @@ struct Switcher2 : public Electric {
 		//con[0] = cons[0];
 		//con[1] = cons[1];
 		box.setRotation(rotation);
-		box.setTexture(c_switch);
+		box.setTexture(*MapFloorTextures[id]); 
 		box.setOrigin(64, 64);
 		type = type_; id = type;
 		setTextColor();
@@ -3196,10 +3048,10 @@ struct Switcher2 : public Electric {
 	void cycle() {
 		if (target[group] == reversed) {
 			rech(con[0], con[1]);
-			box.setTexture(c_switch);
+			// TODO: box.setTexture(c_switch);
 		}
 		else {
-			box.setTexture(c_switch_off);
+			// TODO: box.setTexture(c_switch_off);
 		}
 	}
 
@@ -3402,7 +3254,7 @@ struct Ac : public Electric {
 		//con[0] = cons[0];
 		//con[1] = cons[1];
 		box.setRotation(rotation);
-		box.setTexture(c_ac);
+		box.setTexture(*MapFloorTextures[id]);
 		box.setOrigin(64, 64);
 		type = type_; id = type;
 		setTextColor();
@@ -3615,7 +3467,7 @@ struct El_Detector : public Electric {
 		target = target_;
 		group = group_; electric = true;
 		/*con[0] = con_;*/
-		box.setTexture(c_sensor);
+		box.setTexture(*MapFloorTextures[id]);
 		box.setRotation(rotation);
 		box.setOrigin(64, 64);
 		type = type_; id = type;
@@ -3628,11 +3480,11 @@ struct El_Detector : public Electric {
 		rech(*this, con[0]);
 
 		if (charge > 25) {
-			box.setTexture(c_sensor_on);
+			// TODO: box.setTexture(c_sensor_on);
 			target[group] = true;
 		}
 		else {
-			box.setTexture(c_sensor);
+			// TODO: box.setTexture(c_sensor);
 			target[group] = false;
 		}
 
@@ -3795,7 +3647,7 @@ struct El_button : public Electric {
 	El_button(int _x, int _y, int _rotation, bool _reversed) {
 		x = _x; y = _y; size = 40; type = 46; id = 46; init_AABB(); rotation = _rotation; reversed = _reversed;
 		box.setRotation(_rotation);
-		box.setTexture(c_button);
+		box.setTexture(*MapFloorTextures[id]);
 		box.setOrigin(64, 64); magnet = 0.3; electric = true;
 	}
 
@@ -3907,7 +3759,7 @@ struct Trigger : public Block {
 
 		zone_marker.setPosition(box.getPosition());
 
-		zone_marker.setTexture(block_choose);
+		// TODO: zone_marker.setTexture(block_choose);
 
 		zone_marker.setOrigin(64, 64);
 		zone_marker.setScale(scale * size / 64, scale * size / 64);
@@ -4006,7 +3858,7 @@ struct Camera_trigger : public Trigger {
 		box.setOrigin(64, 64);
 		init_AABB();
 		box.setPosition((x - scrollx) * scale, (y - scrolly) * scale);
-		box.setTexture(t_camera);
+		box.setTexture(*MapFloorTextures[id]);
 	}
 
 };
@@ -4038,7 +3890,7 @@ struct Blind_trigger : public Trigger {
 	}
 
 	Blind_trigger(int id_, int x_, int y_, int size_) {
-		box.setTexture(t_darkness);
+		box.setTexture(*MapFloorTextures[id]);
 		id = id_; x = x_; y = y_; size = size_;
 		magnet = 0;
 		box.setOrigin(64, 64);
@@ -4082,8 +3934,9 @@ struct Portal_trigger : public Trigger {
 
 		delta_x = dx; delta_y = dy;
 
-		box.setTexture(t_portal);
-		box2.setTexture(t_portal2);
+		box.setTexture(*MapFloorTextures[id]);
+		// TODO: box2.setTexture(t_portal2);
+
 		box.setOrigin(64, 64);
 		box2.setOrigin(64, 64);
 		init_AABB();
@@ -4206,7 +4059,7 @@ struct Portal_trigger : public Trigger {
 
 		zone_marker.setPosition(box.getPosition());
 
-		zone_marker.setTexture(block_choose);
+		// TODO: zone_marker.setTexture(block_choose);
 
 		zone_marker.setOrigin(64, 64);
 		zone_marker.setScale(scale * size / 64, scale * size / 64);
@@ -4220,7 +4073,7 @@ struct Portal_trigger : public Trigger {
 
 		zone_marker2.setPosition(box2.getPosition());
 
-		zone_marker2.setTexture(block_choose);
+		// TODO: zone_marker2.setTexture(block_choose);
 
 		zone_marker2.setOrigin(64, 64);
 		zone_marker2.setScale(scale * size / 64, scale * size / 64);
@@ -4321,7 +4174,7 @@ struct Player_size_trigger : public Trigger {
 		box.setOrigin(64, 64);
 		init_AABB();
 		box.setPosition((x - scrollx) * scale, (y - scrolly) * scale);
-		box.setTexture(t_player_size);
+		box.setTexture(*MapFloorTextures[id]);
 	}
 
 	void save(ofstream& save) {
@@ -4361,7 +4214,7 @@ struct Text_Block : public Block {
 		txt.setCharacterSize(30);
 		txt.setOrigin(50, 50);
 
-		box.setTexture(glass);
+		box.setTexture(*MapFloorTextures[id]);
 		box.setOrigin(64, 64);
 		box.setTextureRect(IntRect(0, 0, 128, 128));
 	}
@@ -4462,9 +4315,7 @@ struct Text_Block : public Block {
 			window.draw(txt);
 
 			window.display();
-			tick++;
-			
-			
+		
 			sleep(milliseconds(10));
 			
 			window.clear();

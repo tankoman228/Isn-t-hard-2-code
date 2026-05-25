@@ -1,57 +1,33 @@
-#pragma once
-
 #include <Values.h>
-#include <Classes.h>
+#include <UI.h>
+#include <Particles.h>
 #include <Voids.h>
 #include <Blocks.h>
 #include <Level_building.h>
+#include <Scenes.hpp>
+#include <GlobalVoids.hpp>
 
-void editor_menu_cycle() {
+int mouseHolding = 0;
+Button5 adder;
+int j = 0, renamed = 0;
+bool isRenaming = false;
+Button5 higher , lower;
+Texture up, down;
+Custom_Level_choose* cheese;
+std::string ex_file;
 
-	srand(tick * 909);
+void InitEditorMenu() {
 
-	logg << "Editor menu opened!" << endl;
-	
-	logg << "Searching for levels... \n";
+    srand(tick * 909);
 
 	ofstream saves;
 	saves.open("saves.txt");
+    j = 0; renamed = 0; 
+    isRenaming = false; // TODO: что ругается то?
 
-	int j = 0, renamed = 0;
-	bool rename = false;
-	string ex;
+    saves.close();
+	logg << "Searching for levels incomplete, create list of files then \n";
 
-	/* 
-	TODO: 
-	
-	WIN32_FIND_DATA FindFileData;
-	HANDLE hf;
-	hf = FindFirstFile(TEXT("Saves/*"), &FindFileData);
-	if (hf != INVALID_HANDLE_VALUE)
-	{
-		while (FindNextFile(hf, &FindFileData) != 0)
-		{
-			wstring ws = (FindFileData.cFileName);
-
-			saves << string(ws.begin(), ws.end()) << endl;
-			logg << string(ws.begin(), ws.end()) << endl;
-
-			j++;
-
-		}
-		FindClose(hf);
-	}
-	j -= 1;
-	logg << j << endl;
-	*/
-
-
-	saves.close();
-	logg << "Searching for levels complete \n";
-	
-
-	Custom_Level_choose* cheese = new Custom_Level_choose[j];
-	Button5 adder;
 	adder.init(EM_add, 100 * UI_scale, 100 * UI_scale, "", 666);
 
 	ifstream levels;
@@ -59,15 +35,13 @@ void editor_menu_cycle() {
 
 	levels >> helper_string;
 
+    cheese = new Custom_Level_choose[j];
 	for (int i = 0; i < j; i++) {
 		levels >> helper_string;
 		cheese[i] = Custom_Level_choose(helper_string,i);
 	}
 
 	levels.close();
-
-	Button5 higher , lower;
-	Texture up, down;
 
 	up.loadFromFile("Textures/Editor_UI/Up.png");
 	down.loadFromFile("Textures/Editor_UI/Down.png");
@@ -77,18 +51,21 @@ void editor_menu_cycle() {
 
 	text.setFillColor(Color(0, 0, 128, 255));
 
+    Texture bg;
+    bg.loadFromFile("Textures/BG.png");
+
 	block.setRotation(0); block.setTexture(bg); block.setTextureRect(IntRect(0, 0, 256, 256)); block.setScale(1, 1);
 	block.setOrigin(128, 128);
 
-	int mouseHolding = 0;
+    mouseHolding = 0;
+}
 
-	while (mode == "editor_menu") {
+void EditorMenuTick(float dt) {
+    if (onclick && !Mouse::isButtonPressed(Mouse::Left)) {
+        onclick = false;
+    }
 
-		if (onclick && !Mouse::isButtonPressed(Mouse::Left)) {
-			onclick = false;
-		}
-
-		if (mouseHolding > 0 && !Mouse::isButtonPressed(Mouse::Left)) { mouseHolding = 0; }
+    if (mouseHolding > 0 && !Mouse::isButtonPressed(Mouse::Left)) { mouseHolding = 0; }
 
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 8; j++) {
@@ -107,14 +84,14 @@ void editor_menu_cycle() {
 
 			onclick = true;
 
-			if (rename) {
-				rename = false;
+			if (isRenaming) {
+				isRenaming = false;
 				
-				if (ex == cheese[renamed].filename) {
+				if (ex_file == cheese[renamed].filename) {
 					return;
 				}
 
-				std::ifstream ifs("Saves/" + ex);
+				std::ifstream ifs("Saves/" + ex_file);
 				std::ofstream ofs("Saves/" + cheese[renamed].filename);
 
 				std::string str;
@@ -124,7 +101,7 @@ void editor_menu_cycle() {
 				}
 				ifs.close(); ofs.close();
 
-				helper_string = "Saves/" + ex;
+				helper_string = "Saves/" + ex_file;
 				const char* chr = helper_string.c_str();
 				logg << "Delete: " << chr << endl;
 				std::remove(chr);
@@ -148,12 +125,12 @@ void editor_menu_cycle() {
 
 			if (cheese[i].chooser.if_click() && !onclick) {
 
-				if (rename) {
-					rename = false;
-					if (ex == cheese[renamed].filename) {
+				if (isRenaming) {
+					isRenaming = false;
+					if (ex_file == cheese[renamed].filename) {
 						return;
 					}
-					std::ifstream ifs("Saves/" + ex);
+					std::ifstream ifs("Saves/" + ex_file);
 					std::ofstream ofs("Saves/" + cheese[renamed].filename);
 
 					std::string str;
@@ -163,7 +140,7 @@ void editor_menu_cycle() {
 					}
 					ifs.close(); ofs.close();
 
-					helper_string = "Saves/" + ex;
+					helper_string = "Saves/" + ex_file;
 					const char* chr = helper_string.c_str();
 					logg << "Delete: " << chr << endl;
 					std::remove(chr);
@@ -175,18 +152,19 @@ void editor_menu_cycle() {
 				logg << cheese[i].filename << endl;
 
 				lvlnum = -2;
-				mode = "game";
-				build(-2);
+				InitGameSceneLevel(-2);
+				ChangeScene("game");
+				
 				return;
 			}
 
 			if (cheese[i].deleter.if_click()) {
-				if (rename) {
-					rename = false;
-					if (ex == cheese[renamed].filename) {
+				if (isRenaming) {
+					isRenaming = false;
+					if (ex_file == cheese[renamed].filename) {
 						return;
 					}
-					std::ifstream ifs("Saves/" + ex);
+					std::ifstream ifs("Saves/" + ex_file);
 					std::ofstream ofs("Saves/" + cheese[renamed].filename);
 
 					std::string str;
@@ -196,7 +174,7 @@ void editor_menu_cycle() {
 					}
 					ifs.close(); ofs.close();
 
-					helper_string = "Saves/" + ex;
+					helper_string = "Saves/" + ex_file;
 					const char* chr = helper_string.c_str();
 					logg << "Delete: " << chr << endl;
 					std::remove(chr);
@@ -226,14 +204,14 @@ void editor_menu_cycle() {
 
 				onclick = true;
 
-				if (rename) {
-					rename = false;
+				if (isRenaming) {
+					isRenaming = false;
 
-					if (ex == cheese[renamed].filename) {
+					if (ex_file == cheese[renamed].filename) {
 						return;
 					}
 
-					std::ifstream ifs("Saves/" + ex);
+					std::ifstream ifs("Saves/" + ex_file);
 					std::ofstream ofs("Saves/" + cheese[renamed].filename);
 
 					std::string str;
@@ -243,25 +221,25 @@ void editor_menu_cycle() {
 					}
 					ifs.close(); ofs.close();
 
-					helper_string = "Saves/" + ex;
+					helper_string = "Saves/" + ex_file;
 					const char* chr = helper_string.c_str();
 					logg << "Delete: " << chr << endl;
 					std::remove(chr);
 				}
 
-				rename = true;
+				isRenaming = true;
 				renamed = i;
-				ex = cheese[i].filename;
+				ex_file = cheese[i].filename;
 
 			}
 
 			if (cheese[i].editor.if_click()) {
-				if (rename) {
-					rename = false;
-					if (ex == cheese[renamed].filename) {
+				if (isRenaming) {
+					isRenaming = false;
+					if (ex_file == cheese[renamed].filename) {
 						return;
 					}
-					std::ifstream ifs("Saves/" + ex);
+					std::ifstream ifs("Saves/" + ex_file);
 					std::ofstream ofs("Saves/" + cheese[renamed].filename);
 
 					lvl_name = cheese[renamed].filename;
@@ -273,15 +251,15 @@ void editor_menu_cycle() {
 					}
 					ifs.close(); ofs.close();
 
-					helper_string = "Saves/" + ex;
+					helper_string = "Saves/" + ex_file;
 					const char* chr = helper_string.c_str();
 					logg << "Delete: " << chr << endl;
 					std::remove(chr);
 				}
 				current_filename = "Saves/" + cheese[i].filename;
 				lvlnum = -2;
-				mode = "editor";
-				build(-2);
+				InitGameSceneLevel(-2);
+				ChangeScene("editor");
 				Sleep(300);
 				return;
 			}
@@ -290,7 +268,7 @@ void editor_menu_cycle() {
 			text.move(UI_scale * 30, UI_scale * 20);
 			text.setCharacterSize(UI_scale * 60);
 
-			if (i == renamed && rename) {
+			if (i == renamed && isRenaming) {
 				if (tick % 80 > 40) {
 					text.setString(cheese[i].filename + "|");
 				}
@@ -329,91 +307,20 @@ void editor_menu_cycle() {
 			}
 		}
 
-		sf::Event event;
-		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::TextEntered && rename) {
-				if (event.text.unicode < 128) {
-					if (Keyboard::isKeyPressed(Keyboard::Space)) {
-						cheese[renamed].filename += "_"; continue;
-					}
-					if (Keyboard::isKeyPressed(Keyboard::BackSpace)) {
-						cheese[renamed].filename = cheese[renamed].filename.substr(0, cheese[renamed].filename.size() - 1); continue;
-					}
-					if (Keyboard::isKeyPressed(Keyboard::Enter)) {
-						rename = false;
-
-						std::ifstream ifs("Saves/" + ex);
-						std::ofstream ofs("Saves/" + cheese[renamed].filename);
-
-						std::string str;
-
-						while (std::getline(ifs, str)) {
-							ofs << str << '\n';
-						}
-						ifs.close(); ofs.close();
-
-						helper_string = "Saves/" + ex;
-						const char* chr = helper_string.c_str();
-						logg << "Delete: " << chr << endl;
-						std::remove(chr);
-
-						return;
-
-					}
-					cheese[renamed].filename += static_cast<char>(event.text.unicode);
+	sf::Event event;
+	while (window.pollEvent(event)) {
+		if (event.type == sf::Event::TextEntered && isRenaming) {
+			if (event.text.unicode < 128) {
+				if (Keyboard::isKeyPressed(Keyboard::Space)) {
+					cheese[renamed].filename += "_"; continue;
 				}
-			}
-		}
-
-		if (Keyboard::isKeyPressed(Keyboard::Escape)) {
-			mode = "menu";
-			if (rename) {
-				if (ex == cheese[renamed].filename) {
-					return;
+				if (Keyboard::isKeyPressed(Keyboard::BackSpace)) {
+					cheese[renamed].filename = cheese[renamed].filename.substr(0, cheese[renamed].filename.size() - 1); continue;
 				}
-				rename = false;
+				if (Keyboard::isKeyPressed(Keyboard::Enter)) {
+					isRenaming = false;
 
-				std::ifstream ifs("Saves/" + ex);
-				std::ofstream ofs("Saves/" + cheese[renamed].filename);
-
-				std::string str;
-
-				while (std::getline(ifs, str)) {
-					ofs << str << '\n';
-				}
-				ifs.close(); ofs.close();
-
-				helper_string = "Saves/" + ex;
-				const char* chr = helper_string.c_str();
-				logg << "Delete: " << chr << endl;
-				std::remove(chr);
-
-				return;
-			}
-			return;
-		}
-
-		//CuRsOr!!!
-		if (true) {
-			cursor.setPosition(Mouse::getPosition().x - window.getPosition().x, (Mouse::getPosition().y) - window.getPosition().y);
-			cursor.setScale(1.5, 1.5);
-			window.draw(cursor);
-		}
-
-		if (onclick && !Mouse::isButtonPressed(Mouse::Left)) {
-			onclick = false;
-		}
-
-		while (window.pollEvent(event))
-		{
-			// "������ ��������" �������: �� ��������� ����
-			if (event.type == sf::Event::Closed) {
-				mode = "menu";
-				save_options();
-				if (rename) {
-					rename = false;
-
-					std::ifstream ifs("Saves/" + ex);
+					std::ifstream ifs("Saves/" + ex_file);
 					std::ofstream ofs("Saves/" + cheese[renamed].filename);
 
 					std::string str;
@@ -423,20 +330,21 @@ void editor_menu_cycle() {
 					}
 					ifs.close(); ofs.close();
 
-					helper_string = "Saves/" + ex;
+					helper_string = "Saves/" + ex_file;
 					const char* chr = helper_string.c_str();
 					logg << "Delete: " << chr << endl;
 					std::remove(chr);
+
+					return;
+
 				}
-				close = true; window.close();
+				cheese[renamed].filename += static_cast<char>(event.text.unicode);
 			}
-
 		}
-
-		window.display();
-		tick++;
-		Sleep(1);
-		window.clear();
 	}
 
+	if (onclick && !Mouse::isButtonPressed(Mouse::Left)) {
+		onclick = false;
+	}
 }
+

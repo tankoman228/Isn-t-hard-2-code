@@ -38,7 +38,7 @@ public:
 	}
 
 };
-ButtonRes res_but[2];
+inline ButtonRes res_but[2];
 //Button of screen resolution
 
 class Checkbox {
@@ -88,7 +88,7 @@ public:
 		window.draw(box_); window.draw(text_);
 	}
 };
-Checkbox screenmode;
+inline Checkbox screenmode;
 
 class Option_Button {
 public:
@@ -176,9 +176,9 @@ public:
 		window.draw(txt_);
 	}
 };
-Option_Button reloader, auto_reloader, anti_progress;
+inline Option_Button reloader, auto_reloader, anti_progress;
 
-Texture thbtexture_;
+inline Texture thbtexture_;
 class ThreeBut {
 public:
 	int minval = 10, maxval = 40, currentval, x = 50, y = 400, option = 0;
@@ -265,11 +265,12 @@ public:
 		value.setPosition((x + 168) * UI_scale, y * UI_scale + UI_scale * 38);
 		value.setFont(font);
 		value.setCharacterSize(40 * UI_scale);
-		value.setFillColor(Color::Black);
+		// TODO: а что я тут удалил случайно? Всё равно переделывать же box.setPosition
+		//value.setFillColor(Color::Black);
 	}
 	ThreeBut() {}
 };
-ThreeBut particles_option, bg_particles_option;
+inline ThreeBut particles_option, bg_particles_option;
 //For non-boolean values
 
 class UI {
@@ -300,7 +301,7 @@ public:
 	}
 };
 
-int btnCLICK_KOSTIL = -1;
+inline int btnCLICK_KOSTIL = -1;
 class Button : public UI {
 public:
 	void cycle() {
@@ -321,7 +322,7 @@ public:
 		window.draw(box);
 	}
 };
-Button b_play, b_levels, b_editor, b_ach, b_options, b_exit;
+inline Button b_play, b_levels, b_editor, b_ach, b_options, b_exit;
 //Like in menu
 
 class Button2 : public UI {
@@ -375,8 +376,8 @@ public:
 	}
 
 };
-Button2 E_B, E_E, E_Gr, E_Gy, E_L, E_L2, E_M, E_Mech, E_next, E_prev, E_play, E_player, E_plus, E_Q, E_R, E_Rt, E_save, E_load, E_trash, E_next_page, E_prev_page, E_grid;
-Button2 E_multichoose, E_fill;
+inline Button2 E_B, E_E, E_Gr, E_Gy, E_L, E_L2, E_M, E_Mech, E_next, E_prev, E_play, E_player, E_plus, E_Q, E_R, E_Rt, E_save, E_load, E_trash, E_next_page, E_prev_page, E_grid;
+inline Button2 E_multichoose, E_fill;
 //Editor_buttons
 
 class ButtonInAchievementMenu : public UI {
@@ -390,7 +391,7 @@ public:
 	bool unlocked = false, finished = false;
 	bool wisdom = false;
 
-	void update(int _lvl, int _n) { // TODO: избавиться от N 
+	void updateCheckAchievement(int _lvl, int _n) { 
 
 		lvl = _lvl; n = _n; wisdom = false;
 
@@ -588,7 +589,7 @@ public:
 	}
 
 };
-ButtonInAchievementMenu ach_but[43];
+
 //Buttons in achievements' menu
 
 class Button4 : public UI {
@@ -648,9 +649,9 @@ public:
 	}
 
 };
-Button4 E_edit_block = Button4(editor_option,0,0,0), E_edit_color = Button4(editor_col, 0, 0, 1), E_edit_number = Button4(editor_num, 0, 0, 0);
-Button4 E_rotate_block = Button4(e_rotate__, 0, 0, 2);
-Button4 E_rotate_block2 = Button4(e_rotate__, 0, 0, 3);
+inline Button4 E_edit_block = Button4(editor_option,0,0,0), E_edit_color = Button4(editor_col, 0, 0, 1), E_edit_number = Button4(editor_num, 0, 0, 0);
+inline Button4 E_rotate_block = Button4(e_rotate__, 0, 0, 2);
+inline Button4 E_rotate_block2 = Button4(e_rotate__, 0, 0, 3);
 
 class Button5 : public UI {
 public:
@@ -710,9 +711,9 @@ public:
 	}
 
 };
-Button5 E_arrow[4], E_copy, T_plus, T_minus;
+inline Button5 E_arrow[4], E_copy, T_plus, T_minus;
 
-Texture e_choose, e_edit, e_rename;
+inline Texture e_choose, e_edit, e_rename;
 class Custom_Level_choose {
 public:
 
