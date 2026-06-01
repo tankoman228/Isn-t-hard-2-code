@@ -28,3 +28,9 @@ Isn't hard/checkpoint.txt
 Isn't hard/log.txt
 /Isn't hard/Achievements
 /Isn't hard/Achievements
+
+/Release
+/Debug
+
+/Release/*
+/Debug/*

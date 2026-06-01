@@ -6,9 +6,9 @@
 #include <Loading.h>
 #include <GlobalVoids.hpp>
 
-#ifdef _WIN32
+/*#ifdef _WIN32
 	#include <windows.h>
-#endif
+#endif*/
 
 using namespace std; 
 using namespace sf; 
@@ -54,12 +54,12 @@ void ProcessPollEvents() {
 int main() {
 
 	// на винде надо спрятать командную строку
-	#ifdef _WIN32
+	/*#ifdef _WIN32
 		HWND Stealth;
 		AllocConsole();
 		Stealth = FindWindowA("ConsoleWindowClass", NULL);
 		ShowWindow(Stealth, 0);
-	#endif
+	#endif*/
 
 	logg.open("log.txt");
 

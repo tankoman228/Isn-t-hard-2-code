@@ -81,6 +81,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnabled>false</VcpkgEnabled>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -139,37 +144,59 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\2100\SFML\include;C:\Users\2100\Desktop\Isn-t-hard-2-code\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\2100\SFML\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;sfml-network.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="cpp\Blocks\ElectricProcess.cpp" />
+    <ClCompile Include="cpp\EditorFeatures\EditorBuilding.cpp" />
+    <ClCompile Include="cpp\Engine\Physics.cpp" />
+    <ClCompile Include="cpp\Engine\Physics_processing.cpp" />
+    <ClCompile Include="cpp\Engine\Spawn.cpp" />
+    <ClCompile Include="cpp\LevelManager.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\2100\Desktop\Isn-t-hard-2-code\include;C:\Users\2100\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="cpp\Loading.cpp" />
+    <ClCompile Include="cpp\Player.cpp" />
+    <ClCompile Include="cpp\SceneManager.cpp" />
+    <ClCompile Include="cpp\Scenes\Achievements.cpp" />
+    <ClCompile Include="cpp\Scenes\ContextMenu.cpp" />
+    <ClCompile Include="cpp\Scenes\Editor.cpp" />
+    <ClCompile Include="cpp\Scenes\EditorMenu.cpp" />
+    <ClCompile Include="cpp\Scenes\Game.cpp" />
+    <ClCompile Include="cpp\Scenes\Levels.cpp" />
+    <ClCompile Include="cpp\Scenes\Menu.cpp" />
+    <ClCompile Include="cpp\Scenes\Options.cpp" />
+    <ClCompile Include="cpp\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Achievements.h" />
-    <ClInclude Include="Classes.h" />
-    <ClInclude Include="Context_menu.h" />
-    <ClInclude Include="Editor.h" />
-    <ClInclude Include="Editor_building.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Blocks.h" />
-    <ClInclude Include="Editor_menu.h" />
-    <ClInclude Include="End.h" />
-    <ClInclude Include="Levels.h" />
-    <ClInclude Include="Level_building.h" />
-    <ClInclude Include="Loading.h" />
-    <ClInclude Include="Particles.h" />
-    <ClInclude Include="Physics.h" />
-    <ClInclude Include="Physics_processing.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="UI.h" />
-    <ClInclude Include="Voids.h" />
-    <ClInclude Include="Values.h" />
+    <ClInclude Include="include\Blocks.h" />
+    <ClInclude Include="include\Blocks\AbstractBlock.h" />
+    <ClInclude Include="include\Blocks\Floor.h" />
+    <ClInclude Include="include\Blocks\Switch.h" />
+    <ClInclude Include="include\Blocks\Wall.h" />
+    <ClInclude Include="include\Context_menu.h" />
+    <ClInclude Include="include\Editor_building.h" />
+    <ClInclude Include="include\GlobalVoids.hpp" />
+    <ClInclude Include="include\Level_building.h" />
+    <ClInclude Include="include\Loading.h" />
+    <ClInclude Include="include\Particles.h" />
+    <ClInclude Include="include\Physics.h" />
+    <ClInclude Include="include\Physics_processing.h" />
+    <ClInclude Include="include\Player.h" />
+    <ClInclude Include="include\Scenes.hpp" />
+    <ClInclude Include="include\UI.h" />
+    <ClInclude Include="include\Values.h" />
+    <ClInclude Include="include\Voids.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
