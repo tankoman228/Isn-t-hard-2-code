@@ -29,8 +29,13 @@ Isn't hard/log.txt
 /Isn't hard/Achievements
 /Isn't hard/Achievements
 
-/Release
-/Debug
+/Isn't hard/Release
+/Isn't hard/Debug
 
-/Release/*
-/Debug/*
+/Isn't hard/Release/*
+/Isn't hard/Debug/*
+
+
+# Simlinks
+/Isn't hard/cpp
+/Isn't hard/include
