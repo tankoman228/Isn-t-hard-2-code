@@ -34,8 +34,6 @@ void OptionsTick(float dt) {
     text.setFillColor(Color(0, 0, 0, 255));
     window.draw(text);
 
-    reloader.cycle();
-    auto_reloader.cycle();
     anti_progress.cycle();
 
     if (anti_progress.is_clicked) {
@@ -72,55 +70,6 @@ void OptionsTick(float dt) {
     }
 
     float helper_s[2];
-
-    if (reloader.is_clicked) {
-        for (int i = 0; i < 2; i++) {
-            if (res_but[i].is_picked) {
-                helper_s[0] = res_but[i].W; helper_s[1] = res_but[i].H;
-                switch (i) {
-                case 0: UI_scale = 1; break;
-                case 1: UI_scale = 0.5; break;
-                }
-            }
-            ofstream scr;
-            scr.open("Screen.txt");
-            scr << helper_s[0] << " " << helper_s[1] << " ";
-            if (screenmode.is_checked) {
-                scr << 1 << " ";
-            }
-            else { scr << 0 << " "; }
-            scr << UI_scale * 10 << " ";
-            scr.close();
-        }
-        return;
-    }
-
-    if (auto_reloader.is_clicked) {
-        ofstream scr;
-        scr.open("Screen.txt");
-        UI_scale = helper_s[0] / 1920;
-        scr << helper_s[0] << " " << helper_s[1] << " ";
-        scr << 1 << " ";
-        scr << UI_scale * 10 << " ";
-        scr.close();
-        return;
-    }
-
-    screenmode.cycle();
-
-    for (int i = 0; i < 2; i++) {
-        res_but[i].cycle();
-        if (res_but[i].click) {
-            for (int j = 0; j < 2; j++) {
-                if (i == j) {
-                    res_but[j].is_picked = true;
-                }
-                else {
-                    res_but[j].is_picked = false;
-                }
-            }
-        }
-    }
 
     if (Mouse::isButtonPressed(Mouse::Left)) {
         onclick = true;

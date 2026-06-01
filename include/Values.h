@@ -62,7 +62,7 @@ inline bool deleting = false;
 
 inline std::string helper_string = "", lvl_name = "Does_not_exist", current_filename = "";
 
-inline Sprite playerS, eyes, blink, block, cursor, spiral[5], blend, NPC, lvl_but, box, box_but;
+inline Sprite playerS, eyes, blink, cursor, spiral[5], blend, block, box, box_but;
 inline Font font; 
 inline Text text, ach_text; 
 inline Sprite ach_box, ach_BG;

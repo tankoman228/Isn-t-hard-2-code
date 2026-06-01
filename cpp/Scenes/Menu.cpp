@@ -8,12 +8,24 @@
 #include <GlobalVoids.hpp>
 #include <Level_building.h>
 
-void InitMenu() {
+MainMenuButton b_play, b_levels, b_editor, b_ach, b_options, b_exit;
+Sprite background;
 
+void InitMenu() {
+    b_levels .init(Textures["b_levels"],     screenw / 4,     screenh / 2,       " ", 0);
+    b_play   .init(Textures["b_play"],         screenw / 2,     screenh / 2,       " ", 1);
+    b_editor .init(Textures["b_editor"],     screenw / 4 * 3, screenh / 2,       " ", 2);
+    b_ach    .init(Textures["b_ach"],           screenw / 4,     screenh / 3.7 * 3, " ", 3);
+    b_options.init(Textures["b_options"],   screenw / 2,     screenh / 3.7 * 3, " ", 4);
+    b_exit   .init(Textures["b_exit"],         screenw / 4 * 3, screenh / 3.7 * 3, " ", 5);
+
+    background.setTexture(Textures["BG"]);
 }
 
-
 void MenuTick(float dt) {
+
+    background.setTextureRect(IntRect(0, 0, screenw, screenh));
+    window.draw(background);
 
     text.setPosition(screenw / 2 - (352 * UI_scale), screenh / 20);
     text.setCharacterSize(150 * UI_scale);
@@ -35,12 +47,12 @@ void MenuTick(float dt) {
     text.setString("Beta 1.7");
     window.draw(text);
 
-    b_levels.cycle();
-    b_ach.cycle();
-    b_exit.cycle();
-    b_options.cycle();
-    b_play.cycle();
-    b_editor.cycle();
+    b_levels .cycle(screenw / 4    , screenh / 2      );
+    b_play   .cycle(screenw / 2    , screenh / 2      );
+    b_editor .cycle(screenw / 4 * 3, screenh / 2      );
+    b_ach    .cycle(screenw / 4    , screenh / 3.7 * 3);
+    b_options.cycle(screenw / 2    , screenh / 3.7 * 3);
+    b_exit   .cycle(screenw / 4 * 3, screenh / 3.7 * 3);
 
     if (click_button_menu) {
         logg << "click_button_menu \n";

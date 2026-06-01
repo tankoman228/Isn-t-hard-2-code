@@ -2,93 +2,7 @@
 
 #include <Values.h>
 
-class ButtonRes {
-public:
-	Sprite _box; Text _text; Texture _t;
-	bool is_picked = false, click = false;
-	int W, H;
-	void init(int w, int h, int i) {
-		W = w, H = h;
-		helper_string = to_string(w) + " : " + to_string(h);
-		_text.setString(helper_string);
-		_box.setScale(UI_scale / 1.5, UI_scale);
-		_t.loadFromFile("Textures/ResBut.png");
-		_box.setTexture(_t);
-		_box.setPosition(50 + i * 200, 750 * UI_scale);
-		_text.setPosition(50 + i * 200, 770 * UI_scale);
-		_text.setFont(font); _text.setFillColor(Color::Black);
-		_text.setCharacterSize(UI_scale * 30);
-	}
-	void cycle() {
-		click = false;
-		if (_box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
-			_box.setTextureRect(IntRect(0, 64, 256, 64));
-			if (!onclick && (Mouse::isButtonPressed(Mouse::Left))) {
-				click = true;
-			}
-		}
-		else {
-			_box.setTextureRect(IntRect(0, 0, 256, 64));
-		}
-		if (is_picked) {
-			_box.setTextureRect(IntRect(0, 64, 256, 64));
-		}
-		window.draw(_box);
-		window.draw(_text);
-	}
-
-};
-inline ButtonRes res_but[2];
 //Button of screen resolution
-
-class Checkbox {
-public:
-	Sprite box_;
-	Text text_;
-	Texture texture_;
-	string text__ = "Fullscreen";
-	int type = 0;
-	bool is_checked = false;
-
-	void init(int x, int y) {
-		text_.setFont(font);
-		text_.setCharacterSize(30);
-		text_.setFillColor(Color::Blue);
-		text_.setPosition(x, y);
-		texture_.loadFromFile("Textures/Check_Box.png");
-		box_.setScale(UI_scale / 2, UI_scale / 2);
-		box_.setTexture(texture_);
-		box_.setPosition(x, y);
-		text_.setPosition(x + 72 * UI_scale, y + 10 * UI_scale);
-		text_.setString(text__);
-	}
-
-	void cycle() {
-		if (is_checked) {
-			box_.setTextureRect(IntRect(0, 128, 128, 128));
-		}
-		else {
-			box_.setTextureRect(IntRect(0, 0, 128, 128));
-		}
-		if (cursor.getGlobalBounds().intersects(box_.getGlobalBounds())) {
-			if (!onclick) {
-				if (Mouse::isButtonPressed(Mouse::Left)) {
-					if (is_checked) {
-						is_checked = false;
-					}
-					else {
-						is_checked = true;
-					}
-					switch (type) {
-					case 0: break;
-					}
-				}
-			}
-		}
-		window.draw(box_); window.draw(text_);
-	}
-};
-inline Checkbox screenmode;
 
 class Option_Button {
 public:
@@ -120,51 +34,6 @@ public:
 			button_.setTextureRect(IntRect(0, 128, 512, 128));
 			if (!onclick) {
 				if (Mouse::isButtonPressed(Mouse::Left)) {
-					switch (type) {
-					case 0:
-						if (true) {
-							helper_s[0] = 1920;
-							helper_s[1] = 1080;
-							ofstream file;
-							file.open("Screen.txt");
-							file << helper_s[0] << " ";
-							file << helper_s[1] << " ";
-							if (screenmode.is_checked) {
-								file << 1 << " ";
-							}
-							else {
-								file << 0 << " ";
-							}
-							file << UI_scale * 10 << " ";
-							file.close();
-						}
-						break;
-					case 1:
-
-						if (true) {
-
-							// TODO: 
-							//helper_s[0] = GetSystemMetrics(0);
-							//helper_s[1] = GetSystemMetrics(1);
-
-							helper_s[0] = 1920;
-							helper_s[1] = 1080;
-
-							UI_scale = helper_s[0] / 1920.0;
-
-							ofstream file;
-							file.open("Screen.txt");
-							file << helper_s[0] << " ";
-							file << helper_s[1] << " ";
-							file << 1 << " ";
-							file << UI_scale * 10 << " ";
-							file.close();
-
-						}
-						break;
-					case 2:
-						break;
-					}
 					is_clicked = true;
 				}
 			}
@@ -176,7 +45,7 @@ public:
 		window.draw(txt_);
 	}
 };
-inline Option_Button reloader, auto_reloader, anti_progress;
+inline Option_Button anti_progress;
 
 inline Texture thbtexture_;
 class ThreeBut {
@@ -302,9 +171,13 @@ public:
 };
 
 inline int btnCLICK_KOSTIL = -1;
-class Button : public UI {
+class MainMenuButton : public UI {
 public:
-	void cycle() {
+	void cycle(float x, float y) {
+
+		box.setPosition(x, y);
+		box.setScale(UI_scale, UI_scale);
+
 		if (Mouse::isButtonPressed(Mouse::Left)) {
 			if (box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
 				if (!onclick) {
@@ -322,7 +195,6 @@ public:
 		window.draw(box);
 	}
 };
-inline Button b_play, b_levels, b_editor, b_ach, b_options, b_exit;
 //Like in menu
 
 class Button2 : public UI {
@@ -713,23 +585,21 @@ public:
 };
 inline Button5 E_arrow[4], E_copy, T_plus, T_minus;
 
-inline Texture e_choose, e_edit, e_rename;
-class Custom_Level_choose {
+class BtnEditorMenuLevel {
 public:
 
 	Button5 chooser, editor, renamer, deleter;
 	string filename = "does not exist";
 
-	Custom_Level_choose() { }
+	BtnEditorMenuLevel() { }
 
-	Custom_Level_choose(string file, int number) {
+	BtnEditorMenuLevel(string file, int number) {
 
 		filename = file;
 
-		chooser.init(e_choose, screenw / 2 - UI_scale * 500, (100 + number * 200) * UI_scale, filename, number);
-		editor.init(e_edit, screenw / 2 + UI_scale * 340, (100 + number * 200) * UI_scale, " ", number);
-		renamer.init(e_rename, screenw / 2 + UI_scale * 480, (100 + number * 200) * UI_scale, " ", number);
-		deleter.init(trash, screenw / 2 + UI_scale * 620, (100 + number * 200) * UI_scale, " ", number);
+		chooser.init(Textures["eb_chooser"], screenw / 2 - UI_scale * 500, (100 + number * 200) * UI_scale, filename, number);
+		editor. init(Textures["eb_editor"],  screenw / 2 + UI_scale * 340, (100 + number * 200) * UI_scale, " ", number);
+		renamer.init(Textures["eb_renamer"], screenw / 2 + UI_scale * 480, (100 + number * 200) * UI_scale, " ", number);
+		deleter.init(Textures["eb_deleter"], screenw / 2 + UI_scale * 620, (100 + number * 200) * UI_scale, " ", number);
 	}
-
 };

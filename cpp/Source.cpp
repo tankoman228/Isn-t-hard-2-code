@@ -6,10 +6,6 @@
 #include <Loading.h>
 #include <GlobalVoids.hpp>
 
-/*#ifdef _WIN32
-	#include <windows.h>
-#endif*/
-
 using namespace std; 
 using namespace sf; 
 
@@ -19,14 +15,14 @@ void InitWindow() {
 	sf::VideoMode fullscreen = sf::VideoMode::getFullscreenModes()[0];
 
 	//Auto screen
-	window.create(fullscreen, "Isn't hard 2", sf::Style::Fullscreen);
+	window.create(fullscreen, "Isn't hard 2", sf::Style::Default);
 	window.setFramerateLimit(60);
 
 	window.setVerticalSyncEnabled(true);
 	window.setMouseCursorVisible(false); 
 
-	// Глобальные параметры для рендера UI
-	screenw = fullscreen.width;
+	// Глобальные параметры для рендера UI, 
+	screenw = fullscreen.width - 60; // TODO: получить размер панели снизу 
 	screenh = fullscreen.height;
 	UI_scale = fullscreen.width / 1920.0;
 }
@@ -45,6 +41,9 @@ void ProcessPollEvents() {
 			screenw = event.size.width;
 			screenh = event.size.height;
 			UI_scale = screenw / 1920.f;
+
+			sf::FloatRect visibleArea(0.f, 0.f, event.size.width, event.size.height);
+			window.setView(sf::View(visibleArea));
 		}
 	}
 }
@@ -53,20 +52,13 @@ void ProcessPollEvents() {
 
 int main() {
 
-	// на винде надо спрятать командную строку
-	/*#ifdef _WIN32
-		HWND Stealth;
-		AllocConsole();
-		Stealth = FindWindowA("ConsoleWindowClass", NULL);
-		ShowWindow(Stealth, 0);
-	#endif*/
-
 	logg.open("log.txt");
 
 	InitWindow();
 	logg << "Loading...\n";
 	loading(); 
 	logg << "Loading succesfully finished \n";
+	ChangeScene("menu");
 
 	sf::Clock clock;
 

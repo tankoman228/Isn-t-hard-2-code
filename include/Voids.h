@@ -40,12 +40,7 @@ inline void save_options() {
 	ofstream options;
 	options.open("Options.txt");
 	options << partnum << " " << levels_opened << " ";
-	for (int i = 0; i < 2; i++) {
-		if (res_but[i].is_picked) {
-			options << i << " ";
-			break;
-		}
-	}
+	options << 1 << " ";
 	options << BG_particles_number << " ";
 	options.close();
 	logg << "Options are saved\n";

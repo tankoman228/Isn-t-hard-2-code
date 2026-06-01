@@ -11,16 +11,21 @@
 #include <Level_building.h>
 #include <Scenes.hpp>
 
+Sprite lvl_but;
+
 void InitLevels() {
 	while(Mouse::isButtonPressed(Mouse::Left)){}
 	logg << "Level cycle begin \n";
 	onclick = false;
 	level_scroll = 400;
+
+    lvl_but.setTexture(Textures["lev"]); 
+    lvl_but.setOrigin(64, 64);
 }
 
 void LevelsTick(float dt) {
 
-    block.setTexture(Textures["BG"]); block.setScale(2, 2);
+    block.setTexture(Textures["BG"]); 
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < 6; j++) {
             block.setPosition(i * 256 + level_scroll % 256 - 128, j * 256);

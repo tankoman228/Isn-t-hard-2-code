@@ -6,15 +6,18 @@
 #include <Level_building.h>
 #include <Scenes.hpp>
 #include <GlobalVoids.hpp>
+#include <System/FileLib.hpp>
 
 int mouseHolding = 0;
 Button5 adder;
-int j = 0, renamed = 0;
+int renamed = 0;
+int levelsCount = 0;
 bool isRenaming = false;
 Button5 higher , lower;
 Texture up, down;
-Custom_Level_choose* cheese;
+BtnEditorMenuLevel* cheese;
 std::string ex_file;
+Sprite bg;
 
 void InitEditorMenu() {
 
@@ -22,40 +25,34 @@ void InitEditorMenu() {
 
 	ofstream saves;
 	saves.open("saves.txt");
-    j = 0; renamed = 0; 
+    renamed = 0; 
     isRenaming = false; // TODO: что ругается то?
 
     saves.close();
 	logg << "Searching for levels incomplete, create list of files then \n";
+	
+	auto levels = FilesList("Saves");
+	levelsCount = levels.size();
 
-	adder.init(EM_add, 100 * UI_scale, 100 * UI_scale, "", 666);
+	cheese = new BtnEditorMenuLevel[levels.size()];
 
-	ifstream levels;
-	levels.open("saves.txt");
-
-	levels >> helper_string;
-
-    cheese = new Custom_Level_choose[j];
-	for (int i = 0; i < j; i++) {
-		levels >> helper_string;
-		cheese[i] = Custom_Level_choose(helper_string,i);
+	int j = 0;
+	for (auto level : levels) {
+		cheese[j] = BtnEditorMenuLevel(level.path().filename().u8string(), j);
+		j++;
 	}
-
-	levels.close();
 
 	up.loadFromFile("Textures/Editor_UI/Up.png");
 	down.loadFromFile("Textures/Editor_UI/Down.png");
 
+	adder.init(EM_add, 100 * UI_scale, 100 * UI_scale, "", 666);
 	higher.init(up, 100 * UI_scale, screenh - 600 * UI_scale, "", 0);
 	lower.init(down, 100 * UI_scale, screenh - 300 * UI_scale, "", 0);
 
 	text.setFillColor(Color(0, 0, 128, 255));
 
-    Texture bg;
-    bg.loadFromFile("Textures/BG.png");
-
-	block.setRotation(0); block.setTexture(bg); block.setTextureRect(IntRect(0, 0, 256, 256)); block.setScale(1, 1);
-	block.setOrigin(128, 128);
+	bg.setTexture(Textures["BG"]);
+	bg.setTextureRect(IntRect(0, 0, screenw, screenh));
 
     mouseHolding = 0;
 }
@@ -67,18 +64,7 @@ void EditorMenuTick(float dt) {
 
     if (mouseHolding > 0 && !Mouse::isButtonPressed(Mouse::Left)) { mouseHolding = 0; }
 
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 8; j++) {
-				switch ((i + j) % 4) {
-				case 0: block.setRotation(0); break;
-				case 1: block.setRotation(90); break;
-				case 2: block.setRotation(180); break;
-				case 3: block.setRotation(270); break;
-				}
-				block.setPosition(i * 256 - 128, j * 256 - 128);
-				window.draw(block);
-			}
-		}
+		window.draw(bg);
 
 		if (adder.if_click() && !onclick) {
 
@@ -91,15 +77,7 @@ void EditorMenuTick(float dt) {
 					return;
 				}
 
-				std::ifstream ifs("Saves/" + ex_file);
 				std::ofstream ofs("Saves/" + cheese[renamed].filename);
-
-				std::string str;
-
-				while (std::getline(ifs, str)) {
-					ofs << str << '\n';
-				}
-				ifs.close(); ofs.close();
 
 				helper_string = "Saves/" + ex_file;
 				const char* chr = helper_string.c_str();
@@ -107,7 +85,7 @@ void EditorMenuTick(float dt) {
 				std::remove(chr);
 			}
 
-			std::ifstream ifs("Levels/3");
+			std::ifstream ifs("Levels/" + rand() % 30);
 			std::ofstream ofs("Saves/" + to_string(rand()));
 
 			std::string str;
@@ -121,7 +99,7 @@ void EditorMenuTick(float dt) {
 
 		}
 
-		for (int i = 0; i < j; i++) {
+		for (int i = 0; i < levelsCount; i++) {
 
 			if (cheese[i].chooser.if_click() && !onclick) {
 
@@ -230,7 +208,6 @@ void EditorMenuTick(float dt) {
 				isRenaming = true;
 				renamed = i;
 				ex_file = cheese[i].filename;
-
 			}
 
 			if (cheese[i].editor.if_click()) {
@@ -285,7 +262,7 @@ void EditorMenuTick(float dt) {
 		}
 
 		if (higher.if_click()) {
-			for (int i = 0; i < j; i++) {
+			for (int i = 0; i < levelsCount; i++) {
 
 				cheese[i].chooser.box.move(0, 19 * UI_scale);
 				cheese[i].deleter.box.move(0, 19 * UI_scale);
@@ -296,7 +273,7 @@ void EditorMenuTick(float dt) {
 			}
 		}
 		if (lower.if_click()) {
-			for (int i = 0; i < j; i++) {
+			for (int i = 0; i < levelsCount; i++) {
 
 				cheese[i].chooser.box.move(0, -19 * UI_scale);
 				cheese[i].renamer.box.move(0, -19 * UI_scale);

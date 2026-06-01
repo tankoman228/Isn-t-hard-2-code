@@ -47,6 +47,9 @@ void loading() {
 		loadTexture("Dark",   "Textures/Dark.png");
 		loadTexture("cursor", "Textures/Choose.png");
 
+		loadTexture("BG", "Textures/BG.png");
+		Textures["BG"].setRepeated(true);
+
 		loadTexture("Gray2", "Textures/Gray2.png"); // для текстуры в меню ачивок
 		Textures["Gray2"].setRepeated(true);
 
@@ -70,7 +73,6 @@ void loading() {
 		blend.setTexture(Textures["cursor"]);
 		blend.setTextureRect(IntRect(0, 0, screenw, screenh));
 		loadTexture("lev",  "Textures/Levels.png");
-		lvl_but.setTexture(Textures["lev"]); lvl_but.setOrigin(64, 64);
 
 		loadTexture("b_ach", "Textures/Ach.png");
 		loadTexture("b_editor", "Textures/Editor.png");
@@ -79,13 +81,10 @@ void loading() {
 		loadTexture("b_options", "Textures/Options.png");
 		loadTexture("b_play", "Textures/Play.png");
 
-		b_levels.init(Textures["b_levels"], screenw / 4, screenh / 2, " ", 0);
-		b_play.init(Textures["b_play"], screenw / 2, screenh / 2, " ", 1);
-		b_editor.init(Textures["b_editor"], screenw / 4 * 3, screenh / 2, " ", 2);
-		b_ach.init(Textures["b_ach"], screenw / 4, screenh / 3.7 * 3, " ", 3);
-		b_options.init(Textures["b_options"], screenw / 2, screenh / 3.7 * 3, " ", 4);
-		b_exit.init(Textures["b_exit"], screenw / 4 * 3, screenh / 3.7 * 3, " ", 5);
-
+		loadTexture("eb_chooser", "Textures/Editor_UI/Lvl_name.png");
+		loadTexture("eb_editor",  "Textures/Editor_UI/Lvl_edit.png");
+		loadTexture("eb_renamer", "Textures/Editor_UI/Lvl_rename.png");
+		loadTexture("eb_deleter", "Textures/Editor_UI/Trash.png");
 
 		//blocks
 		block.setOrigin(64, 64);
@@ -369,24 +368,9 @@ void loading() {
 	bg_particles_option = ThreeBut(0,20,1000,400,1);
 	bg_particles_option.currentval = BG_particles_number;
 
-	reloader.type = 0;
-	reloader.text_ = " Change screen resolution";
-	reloader.init();
-
-	auto_reloader.type = 1;
-	auto_reloader.text_ = " Auto screen setting";
-	auto_reloader.init();
-
 	anti_progress.type = 2;
 	anti_progress.text_ = " Destroy your progress (!!!)\n \n (press F, K and this button)";
 	anti_progress.init();
-
-	screenmode.init(600 * UI_scale, 100 * UI_scale);
-
-	res_but[0].init(1920, 1080, 0);
-	res_but[1].init(1280, 720, 1);
-
-	res_but[int(helper_s2)].is_picked = true;
 
 	ach_text.setFont(font);
 
@@ -426,9 +410,6 @@ void loading() {
 		editor_option.loadFromFile( "Textures/Editor_UI/Option.png");
 		editor_col.loadFromFile("Textures/Editor_UI/Color_choose.png");
 		e_rotate__.loadFromFile( "Textures/Editor_UI/Rotate2.png");
-		e_choose.loadFromFile( "Textures/Editor_UI/Lvl_name.png");
-		e_edit.loadFromFile( "Textures/Editor_UI/Lvl_edit.png");
-		e_rename.loadFromFile("Textures/Editor_UI/Lvl_rename.png");
 		EM_add.loadFromFile( "Textures/Editor_UI/Add.png");
 		e_multichoose.loadFromFile( "Textures/Editor_UI/Choose.png");
 		e_copy.loadFromFile( "Textures/Editor_UI/Copy.png");
