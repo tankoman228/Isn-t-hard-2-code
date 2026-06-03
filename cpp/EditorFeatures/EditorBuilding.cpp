@@ -136,24 +136,24 @@ void place_block(int x, int  y) {
 
 	helper_string = getType(editor_block, editor_layer);
 
-	if (helper_string == "Basic") {
+	if (helper_string == "Wall") {
 
 		if (id == 1) {
 			rotation = (rand() % 4) * 90;
 		}
 
-		Basic* add = new Basic(x, y, id, rotation, look);
+		Wall* add = new Wall(x, y, id, rotation, look);
 
 		add[0].box.setOrigin(64, 64);
 
 		map_basic.push_back(add);
 		chosen = add;
 	}
-	if (helper_string == "Activators") {
+	if (helper_string == "Switcher") {
 
 		bool if_crystal = (id == 15);
 
-		Activators* add = new Activators(x, y, id, rotation, getTarget(), group, if_crystal);
+		Switcher* add = new Switcher(x, y, id, rotation, getTarget(), group, if_crystal);
 
 		add[0].box.setOrigin(64, 64);
 
@@ -303,9 +303,9 @@ void place_block(int x, int  y) {
 
 		electric.push_back(add); chosen = add;
 	}
-	if (helper_string == "Switcher") {
+	if (helper_string == "ElectricSwitcher") {
 
-		Switcher* add = new Switcher(x, y, rotation, id, getTarget(), group);
+		ElectricSwitcher* add = new ElectricSwitcher(x, y, rotation, id, getTarget(), group);
 
 		electric.push_back(add); chosen = add;
 	}
@@ -337,7 +337,7 @@ void place_block(int x, int  y) {
 	}
 
 	if (helper_string == "Error") {
-		Basic* add = new Basic(x, y, 1, rotation, look);
+		Wall* add = new Wall(x, y, 1, rotation, look);
 
 		add[0].box.setOrigin(64, 64);
 

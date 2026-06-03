@@ -211,7 +211,7 @@ void loading() {
 
 		texturesFilenames = {
 			"Textures/NULL.png", // TODO: файл загадочного нуля
-			"Textures/Floor.png.png", // 1
+			"Textures/Floor.png", // 1
 			"Textures/Electric trap.png", // 2
 			"Textures/Electric trap.png", // 3
 			"Textures/Stripes.png", // 4
@@ -230,8 +230,8 @@ void loading() {
 			"Textures/NULL.png", // 17
 			"Textures/Glass.png", // 18
 			"Textures/Arrow.png", // 19
-			"Textures/Blue_floor2.png", // 20
-			"Textures/Rosefloor2.png", // 21
+			"Textures/Rosefloor2.png", // 20
+			"Textures/Blue_floor2.png", // 21
 			"Textures/Gray2.png", // 22
 			"Textures/Rose_door.png", // 23
 			"Textures/Rose_door.png", // 24

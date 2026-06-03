@@ -29,7 +29,7 @@ struct Sq {
 
 	float max_speed = 25;
 	float friction = 30; // замедление за секунду
-	int id;
+	int id = 0;
 
 	bool choosen = false;
 

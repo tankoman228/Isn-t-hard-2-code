@@ -158,7 +158,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cpp\Blocks\AbstractBlock.cpp" />
     <ClCompile Include="cpp\Blocks\ElectricProcess.cpp" />
+    <ClCompile Include="cpp\Blocks\GroupController.cpp" />
+    <ClCompile Include="cpp\Blocks\Movable.cpp" />
+    <ClCompile Include="cpp\Blocks\Switcher.cpp" />
+    <ClCompile Include="cpp\Blocks\Wall.cpp" />
     <ClCompile Include="cpp\EditorFeatures\EditorBuilding.cpp" />
     <ClCompile Include="cpp\Engine\Physics.cpp" />
     <ClCompile Include="cpp\Engine\Physics_processing.cpp" />

@@ -33,7 +33,7 @@ std::string getType(int id, int layer) {
 			return "Generator";
 		}
 		if (id == 33) {
-			return "Switcher";
+			return "ElectricSwitcher";
 		}
 		if (id == 34 || id == 35) {
 			return "Switcher2";
@@ -69,10 +69,10 @@ std::string getType(int id, int layer) {
 	if (layer == 0) {
 
 		if (id == 1 || id == 7 || id == 8 || id == 9 || id == 10 || id == 11 || id == 12 || id == 13 || id == 14 || id == 21 || id == 22 || id == 23 || id == 25) {
-			return "Basic";
+			return "Wall";
 		}
 		if (id == 2 || id == 15 || id == 24) {
-			return "Activators";
+			return "Switcher";
 		}
 		if (id == 3 || id == 4 || id == 6 || id == 18 || id == 19 || id == 20 || id == 29) {
 			return "Questions";
@@ -280,18 +280,18 @@ void load_checkpoint() {
 
 			helper_string = getType(id, 0);
 
-			if (helper_string == "Basic") {
+			if (helper_string == "Wall") {
 
 				save >> rotation;
 				save >> look;
 
-				Basic* add = new Basic(x, y, id, rotation, look);
+				Wall* add = new Wall(x, y, id, rotation, look);
 
 				add[0].box.setOrigin(64, 64);
 
 				map_basic.push_back(add);
 			}
-			if (helper_string == "Activators") {
+			if (helper_string == "Switcher") {
 
 				save >> rotation;
 				save >> helper_string;
@@ -313,7 +313,7 @@ void load_checkpoint() {
 
 				save >> something_else;
 
-				Activators* add = new Activators(x, y, id, rotation, target, group, something_else);
+				Switcher* add = new Switcher(x, y, id, rotation, target, group, something_else);
 
 				add[0].box.setOrigin(64, 64);
 
@@ -647,7 +647,7 @@ void load_checkpoint() {
 
 				electric.push_back(add);
 			}
-			if (helper_string == "Switcher") {
+			if (helper_string == "ElectricSwitcher") {
 
 				save >> helper_string;
 
@@ -666,7 +666,7 @@ void load_checkpoint() {
 
 				save >> group;
 
-				Switcher* add = new Switcher(x, y, rotation, id, target, group);
+				ElectricSwitcher* add = new ElectricSwitcher(x, y, rotation, id, target, group);
 
 				electric.push_back(add);
 			}
@@ -879,18 +879,18 @@ void InitGameSceneLevel(int l) {
 
 			helper_string = getType(id, 0);
 
-			if (helper_string == "Basic") {
+			if (helper_string == "Wall") {
 
 				save >> rotation;
 				save >> look;
 
-				Basic* add = new Basic(x, y, id, rotation, look);
+				Wall* add = new Wall(x, y, id, rotation, look);
 
 				add[0].box.setOrigin(64, 64);
 
 				map_basic.push_back(add);
 			}
-			if (helper_string == "Activators") {
+			if (helper_string == "Switcher") {
 
 				save >> rotation;
 				save >> helper_string;
@@ -912,7 +912,7 @@ void InitGameSceneLevel(int l) {
 
 				save >> something_else;
 
-				Activators* add = new Activators(x, y, id, rotation, target, group, something_else);
+				Switcher* add = new Switcher(x, y, id, rotation, target, group, something_else);
 
 				add[0].box.setOrigin(64, 64);
 
@@ -1266,7 +1266,7 @@ void InitGameSceneLevel(int l) {
 
 				save >> group;
 
-				Switcher* add = new Switcher(x, y, rotation, id, target, group);
+				ElectricSwitcher* add = new ElectricSwitcher(x, y, rotation, id, target, group);
 
 				electric.push_back(add);
 			}

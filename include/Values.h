@@ -26,10 +26,10 @@ inline int colint = 0; //time of player-block collision
 
 inline bool scroll_pinned = false;
 
-class Block; inline vector <Block*> map_basic, map_floor; 
+class AbstractBlock; inline vector <AbstractBlock*> map_basic, map_floor; 
 class Movable; inline vector <Movable*> movables; //map
 
-inline vector <Block*> triggers;
+inline vector <AbstractBlock*> triggers;
 
 class Sq; inline Sq* chosen; //in editor
 

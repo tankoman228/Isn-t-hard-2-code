@@ -20,89 +20,16 @@ struct Movable : public Sq {
 	Sprite box;
 	Sq anticheat = Sq(0,0,67); //Player mustn't get coin if it is blocked with movable!
 
-	Movable(int _x, int _y, Texture &t, IntRect r) {
+	Movable(int _x, int _y, Texture& t, IntRect r);
+	Movable(int _x, int _y, int _look);
 
-		box.setTexture(t);
-		box.setTextureRect(r);
-		box.setOrigin(64, 64);
-
-		InitMovablePhysics(_x, _y);
-	}
-
-	Movable(int _x, int _y, int _look) {
-
-		box.setTexture(*MapBasicTextures[5]);
-		box.setTextureRect(IntRect(128 * _look, 0, 128, 128));
-		box.setOrigin(64, 64);
-
-		InitMovablePhysics(_x, _y);
-	}
-
-	void InitMovablePhysics(int _x, int _y) {
-
-		id = 5; x = _x; y = _y;
-
-		hardness = MovableHardness;
-		friction = MovableFriction;
-		parameter = 2;
-	}
-
-	void editor_behave() {
-		box.setScale(scale, scale);
-		box.setPosition(scale * (x - scrollx), scale * (y - scrolly));
-		window.draw(box);
-	}
-
-	void cycle(float dt) {
-
-		anticheat.move_to(*this);
-
-		if (intersection(anticheat, p)) {
-			colint = -1;
-		}
-
-		move(dt);	
-
-	}
-
-	void save(ofstream& save) {
-		save << "[ ";
-		save << int(x) << ' ';
-		save << int(y) << ' ';
-		save << int(box.getTextureRect().left / 128) << ' ';
-		save << "]" << endl;
-	}
-
-	void editing() {
-		//edit();
-
-		if (editor_mode != 4) { return; }
-
-		E_arrow[0].setPosition(box.getPosition().x, box.getPosition().y - 128 * scale);
-		E_arrow[1].setPosition(box.getPosition().x + 128 * scale, box.getPosition().y);
-		E_arrow[2].setPosition(box.getPosition().x, box.getPosition().y + 128 * scale);
-		E_arrow[3].setPosition(box.getPosition().x - 128 * scale, box.getPosition().y);
-
-		E_arrow[0].box.setScale(scale * 0.8, scale * 0.8);
-		E_arrow[1].box.setScale(scale * 0.8, scale * 0.8);
-		E_arrow[2].box.setScale(scale * 0.8, scale * 0.8);
-		E_arrow[3].box.setScale(scale * 0.8, scale * 0.8);
-	}
-
-	//editor flickering
-	void do_some_magic() {
-		box.setColor(Color(90, 255, 90, 255));
-		window.draw(box);
-		box.setColor(Color(255, 255, 255, 255));
-	}
-
-	void render() {
-		box.setScale(scale, scale);
-		box.setPosition(scale * (x - scrollx), scale * (y - scrolly));
-
-		window.draw(box);
-	}
-
+	void InitMovablePhysics(int _x, int _y);
+	void editor_behave();
+	void cycle(float dt);
+	void save(ofstream& save);
+	void editing();
+	void do_some_magic();
+	void render();
 };
 
 void spawn_movable(int x, int y, int _type);
@@ -112,447 +39,69 @@ const inline bool* b = crystal;
 const inline bool* c = lmode;
 const inline bool* d = barmode;
 
-struct Block : public Sq {
+struct AbstractBlock : public Sq {
 
 	Sprite box;
 	int rotation = 0; float magnet = 0.14;
 	bool electric = false;
 
 	//editor flickering
-	void do_some_magic() {
-		box.setColor(Color(90, 255, 90, 255));
-		window.draw(box);
-		box.setColor(Color(255, 255, 255, 255));
-	}
+	void do_some_magic();
+	void update_scrolling();
+	bool if_collide();
+	void rotate(int angle);
+	void editing();
+	void setOpacity(int new_opacity /*0 is invisible, 255 is maximum*/);
+	void basic_init(int x_, int y_, int rotation_, int _id);
 
-	void update_scrolling() {
-		box.setScale(scale * 1.017, scale * 1.009);
-		box.setPosition(scale * (x - scrollx), scale * (y - scrolly));
-	}
-
-	bool if_collide() {
-
-		if (intersection(p, *this)) {
-
-			p.sx = 0; p.sy = 0;
-
-			do {
-				// TODO: что-то мне не нравится эта физика
-				block_collision = true;
-
-				float dx = (px - x);
-				float dy = (py - y);
-
-				if (abs(dx) > abs(dy)) {
-					px += 0.1 * sign(dx);
-				}
-				else {
-					py += 0.1 * sign(dy);
-				}
-
-				p.init_AABB();
-			}
-			while (intersection(p, *this));
-
-			return true;
-		}
-
-		return false;
-	}
-
-	void rotate(int angle) {
-		rotation += angle;
-		if (angle >= 360) { rotation -= 360; }
-		if (angle < 0) { rotation += 360; }
-		box.setRotation(rotation);
-		last_angle = box.getRotation();
-	}
-
+	virtual void render();
+	virtual void save(ofstream& save);
+	virtual bool* getTarget();
+	virtual int getGroup();
+	virtual bool getReverse();
+	virtual void editor_exist();
 	virtual void cycle() {}
 
-	void editing() {
-		//edit();
-
-		if (editor_mode != 4) { return; }
-
-		E_arrow[0].setPosition(box.getPosition().x, box.getPosition().y - 128 * scale);
-		E_arrow[1].setPosition(box.getPosition().x + 128 * scale, box.getPosition().y);
-		E_arrow[2].setPosition(box.getPosition().x, box.getPosition().y + 128 * scale);
-		E_arrow[3].setPosition(box.getPosition().x - 128 * scale, box.getPosition().y);
-
-		E_arrow[0].box.setScale(scale * 0.8, scale * 0.8);
-		E_arrow[1].box.setScale(scale * 0.8, scale * 0.8);
-		E_arrow[2].box.setScale(scale * 0.8, scale * 0.8);
-		E_arrow[3].box.setScale(scale * 0.8, scale * 0.8);
-
-		E_rotate_block.box.setPosition(box.getPosition()); E_rotate_block.box.move(80 * scale, -80 * scale);
-		E_rotate_block2.box.setPosition(box.getPosition()); E_rotate_block2.box.move(-80 * scale, -80 * scale);
-
-		E_rotate_block.box.setScale(scale, scale);
-		E_rotate_block2.box.setScale(scale, scale);
-	}
-
-	virtual void editor_exist() { 
-		update_scrolling(); 
-		window.draw(box); 
-	}
-
-	void setOpacity(int new_opacity /*0 is invisible, 255 is maximum*/) {
-		box.setColor(Color(255, 255, 255, new_opacity));
-	}
-
-	virtual void render() { update_scrolling(); window.draw(box); }
-
-	virtual void save(ofstream &save) { 
-		save << "[ ";
-		save << id << ' ';
-		save << x << ' ';
-		save << y << ' ';
-		save << rotation << ' ';
-		save << int(box.getTextureRect().left / 128) << ' ';
-		save << "]" << endl;
-	}
-
-	virtual bool* getTarget() {
-		return dmode;
-	}
-
-	virtual int getGroup() { return 0; }
-
-	virtual bool getReverse() {
-		return false;
-	}
-
-	Block(int x_, int y_, int rotation_, int _id) {
-		x = x_; y = y_; rotation = rotation_; id = _id; init_AABB();
-	}
-
-	Block() {}
+	AbstractBlock() {}
 };
 
 //Main layer
 
-struct Basic : public Block {
+struct Wall : public AbstractBlock {
 
-	Basic(int _x, int _y, int _id, int rotation_, int look) : Block(_x, _y, rotation_, _id) {
+	Wall(int _x, int _y, int _id, int rotation_, int look);
 
-		layer = 0;
-		init_AABB();
-
-		box.setTexture(*MapBasicTextures[id]);
-		switch(id) {
-			case 14: size = 40; init_AABB(); break;
-		}
-
-		box.setTextureRect(IntRect(look * 128, 0, 128, 128));
-		box.setRotation(rotation);
-
-	}
-
-	void cycle() {
-		if_collide();
-	}
-
-	void editor_behave() {
-
-	}
-
-	void edit() {
-
-		if (!onclick && editor_mode == 4 && box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
-			if (Mouse::isButtonPressed(Mouse::Left)) {
-				box.setTextureRect(IntRect(box.getTextureRect().left + 128, 0, 128, 128));
-				onclick = true; return;
-			}
-			if (Mouse::isButtonPressed(Mouse::Right)) {
-				if (box.getTextureRect().left > 0) { box.setTextureRect(IntRect(box.getTextureRect().left - 128, 0, 128, 128)); }
-				onclick = true; return;
-			}
-		}
-
-	}
-
+	void cycle();
+	void edit();
 };
 
-struct Activators : public Block {
+struct TargetGroupController : public AbstractBlock {
+	bool* target;
+	int group;
 
-	bool irreversible, available = true; bool* target; int group;
-	Text text = Text(::text);
-
-	void setTextColor() {
-
-		if (target == a) {
-			text.setFillColor(Color::White); return;
-		}
-		if (target == b) {
-			text.setFillColor(Color::Black); return;
-		}
-		if (target == c) {
-			text.setFillColor(Color::Red); return;
-		}
-		if (target == barmode) {
-			text.setFillColor(Color::Magenta); return;
-		}
-	}
-
-	Activators(int _x, int _y, int _id, int rotation_, bool* target_, int group_, bool irreversible_) : Block(_x, _y, rotation_, _id) {
-
-		irreversible = irreversible_;
-		layer = 0; group = group_;
-
-		box.setRotation(rotation);
-		target = target_;
-		text.setString(to_string(group));
-
-		box.setTexture(*MapBasicTextures[id]);
-
-		box.setTextureRect(IntRect(0, 0, 128, 128));
-		box.setRotation(rotation);
-		setTextColor();
-	}
-
-	void editor_exist() {
-
-		render();
-		text.setPosition((x - scrollx + 20) * scale, (y - scrolly + 5) * scale);
-		text.setCharacterSize(40 * scale);
-		window.draw(text);
-	}
-
-	void update() {
-
-		if (target[group]) {
-			box.setTextureRect(IntRect(128, 0, 128, 128));
-		}
-		else {
-			box.setTextureRect(IntRect(0, 0, 128, 128));
-		}
-
-	}
-
-	void cycle() {
-
-		if (if_collide() && available) {
-
-			if ((dir%2 == 1) && colint > 25) {
-
-				colint = -5;
-
-				if (target[group]) { target[group] = false; }
-				else { target[group] = true; }
-
-				if (irreversible) { available = false; }
-
-				switch (id) {
-
-				case 2: s1.play(); break;
-				case 15: _break.play(); smoke_spawn("cryst",x,y); break;
-
-				}
-
-				update();
-
-			}
-
-		}
-
-	}
-
-	void save(ofstream& save) {
-		save << "[ ";
-		save << id << ' ';
-		save << x << ' ';
-		save << y << ' ';
-		save << rotation << ' ';
-
-		if (target == a) {
-			save << "dmode" << ' ';
-		}
-		if (target == b) {
-			save << "crystal" << ' ';
-		}
-		if (target == c) {
-			save << "lmode" << ' ';
-		}
-		if (target == barmode) {
-			save << "barmode" << ' ';
-		}
-		save << group << ' ';
-		save << int(irreversible) << ' ';
-		save << "]" << endl;
-	}
-
-	void editing() {
-
-		//edit();
-		if (editor_mode != 4) { return; }
-
-		text.setString(to_string(group));
-
-		if (option_mode) {
-
-			E_edit_block.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y - 40 * scale);
-			E_edit_block.box.setScale(scale * 0.4, scale * 0.4);
-
-			if (E_edit_block.if_click()) {
-				option_mode = !option_mode;
-			}
-
-			E_arrow[0].setPosition(box.getPosition().x, box.getPosition().y - 200 * scale);
-			E_arrow[1].setPosition(box.getPosition().x + 200 * scale, box.getPosition().y);
-			E_arrow[2].setPosition(box.getPosition().x, box.getPosition().y + 200 * scale);
-			E_arrow[3].setPosition(box.getPosition().x - 200 * scale, box.getPosition().y);
-
-			E_arrow[0].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[1].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[2].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[3].box.setScale(scale * 0.8, scale * 0.8);
-
-			E_edit_color.box.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y + 40 * scale);
-			E_edit_color.bg_box.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y + 40 * scale);
-			E_edit_color.box.setScale(0.5 * scale, 0.5 * scale);
-			E_edit_color.bg_box.setScale(0.45 * scale, 0.45 * scale);
-			E_edit_color.bg_box.setColor(text.getFillColor());
-
-			E_rotate_block.box.setPosition(box.getPosition()); E_rotate_block.box.move(80 * scale, -80 * scale);
-			E_rotate_block2.box.setPosition(box.getPosition()); E_rotate_block2.box.move(-80 * scale, -80 * scale);
-
-			E_rotate_block.box.setScale(scale, scale);
-			//E_rotate_block.bg_box.setScale(scale * 0.5, scale * 0.5);
-			E_rotate_block2.box.setScale(scale, scale);
-			//E_rotate_block2.bg_box.setScale(scale * 0.5, scale * 0.5);
-
-			setTextColor();
-			E_edit_color.bg_box.setColor(text.getFillColor());
-
-			if (E_edit_color.if_click()) {
-
-				if (target == a) {
-					target = crystal; return;
-				}
-				if (target == b) {
-					target = lmode; return;
-				}
-				if (target == c) {
-					target = barmode; return;
-				}
-				if (target == barmode) {
-					target = dmode; return;
-				}
-			}
-
-			E_edit_number.box.setPosition(box.getPosition());
-			E_edit_number.box.move(-40 * scale, 40 * scale);
-			E_edit_number.box.setScale(scale * 0.5, scale * 0.5);
-			E_edit_number.bg_box.setScale(scale * 0.5, scale * 0.5);
-
-			if (E_edit_number.if_click()) {
-
-				if (Mouse::isButtonPressed(Mouse::Left)) {
-					group++; onclick = true;
-					last_group = group;
-				}
-				if (Mouse::isButtonPressed(Mouse::Right)) {
-					if (group > 0) {
-						group--; onclick = true;
-						last_group = group;
-					}
-				}
-
-			}
-			
-			text.setPosition(E_edit_number.box.getPosition());
-			text.setString(to_string(group));
-			text.move(-25 * UI_scale, -30 * UI_scale);
-
-			window.draw(text);
-
-		}
-		else {
-
-			if (E_edit_block.if_click()) {
-				option_mode = !option_mode;
-			}
-
-			if (!onclick && Mouse::isButtonPressed(Mouse::Left) && cursor.getGlobalBounds().intersects(box.getGlobalBounds())) {
-				group++; onclick = true; last_group = group;
-			}
-			if (!onclick && Mouse::isButtonPressed(Mouse::Right) && cursor.getGlobalBounds().intersects(box.getGlobalBounds())) {
-				group = 0; onclick = true; last_group = group;
-			}
-
-			E_edit_block.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y - 40 * scale);
-			E_edit_block.box.setScale(scale * 0.4, scale * 0.4);
-
-			E_arrow[0].setPosition(box.getPosition().x, box.getPosition().y - 128 * scale);
-			E_arrow[1].setPosition(box.getPosition().x + 128 * scale, box.getPosition().y);
-			E_arrow[2].setPosition(box.getPosition().x, box.getPosition().y + 128 * scale);
-			E_arrow[3].setPosition(box.getPosition().x - 128 * scale, box.getPosition().y);
-
-			E_arrow[0].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[1].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[2].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[3].box.setScale(scale * 0.8, scale * 0.8);
-
-			E_rotate_block.box.setPosition(box.getPosition()); E_rotate_block.box.move(80 * scale, -80 * scale);
-			E_rotate_block2.box.setPosition(box.getPosition()); E_rotate_block2.box.move(-80 * scale, -80 * scale);
-
-			E_rotate_block.box.setScale(scale, scale);
-			//E_rotate_block.bg_box.setScale(scale * 0.5, scale * 0.5);
-			E_rotate_block2.box.setScale(scale, scale);
-			//E_rotate_block2.bg_box.setScale(scale * 0.5, scale * 0.5);
-		}
-	}
-
-	bool* getTarget() {
-
-		if (target == a) {
-			return dmode;
-		}
-		if (target == b) {
-			return crystal;
-		}
-		if (target == c) {
-			return lmode;
-		}
-		if (target == barmode) {
-			return barmode;
-		}
-
-	}
-
-	int getGroup() {
-		return group;
-	}
-
+	bool* getTarget();
+	int getGroup();
 };
 
-struct Detector : public Block {
+struct Switcher : public TargetGroupController {
 
-	bool change = false; bool* target; int group;
+	bool irreversible, available = true; 
 	Text text = Text(::text);
-	//function<void()> program = {};
 
-	bool* getTarget() {
+	Switcher(int _x, int _y, int _id, int rotation_, bool* target_, int group_, bool irreversible_);
+	
+	void setTextColor();
+	void editor_exist();
+	void update();
+	void cycle();
+	void save(ofstream& save);
+	void editing();
+};
 
-		if (target == a) {
-			return dmode;
-		}
-		if (target == b) {
-			return crystal;
-		}
-		if (target == c) {
-			return lmode;
-		}
-		if (target == barmode) {
-			return barmode;
-		}
+struct Detector : public TargetGroupController {
 
-	}
-
-	int getGroup() {
-		return group;
-	}
+	bool change = false;
+	Text text = Text(::text);
 
 	void player_detector_program() {
 
@@ -622,8 +171,9 @@ struct Detector : public Block {
 		}
 	}
 
-	Detector(int _x, int _y, int _id, int rotation_, bool* target_, int group_, bool change_) : Block(_x, _y, rotation_, _id) {
+	Detector(int _x, int _y, int _id, int rotation_, bool* target_, int group_, bool change_) {
 
+		basic_init(_x, _y, rotation_, _id);
 		x = _x; y = _y; id = _id; group = group_; layer = 0; init_AABB(); rotation = rotation_;
 		box.setRotation(rotation);
 		target = target_;
@@ -800,7 +350,7 @@ struct Detector : public Block {
 
 };
 
-struct Questions : public Block {
+struct Questions : public AbstractBlock {
 
 	void update() {
 
@@ -815,8 +365,9 @@ struct Questions : public Block {
 	int look;
 	Text txt = Text(::text);
 
-	Questions(int _x, int _y, int _id, int rotation_, int _look) : Block(_x, _y, rotation_, _id) {
+	Questions(int _x, int _y, int _id, int rotation_, int _look) {
 
+		basic_init(_x, _y, rotation_, _id);
 		x = _x; y = _y; id = _id; look = _look; rotation = rotation_; layer = 0;
 		init_AABB();
 
@@ -932,16 +483,16 @@ struct Questions : public Block {
 
 };
 
-struct Movable_spawn : public Block {
+struct Movable_spawn : public AbstractBlock {
 
 	bool exist = true; int look; 
 
-	Movable_spawn(int _x, int _y, int _look) : Block(_x, _y, 0, 5) {
+	Movable_spawn(int _x, int _y, int _look) {
 
+		basic_init(_x, _y, 0, 5);
 		look = _look; layer = 0; init_AABB();
 		box.setTexture(*MapBasicTextures[id]);
 		box.setTextureRect(IntRect(128 * look, 0, 128, 128));
-
 	}
 
 	void cycle() {
@@ -953,12 +504,13 @@ struct Movable_spawn : public Block {
 	}
 };
 
-struct Special : public Block {
+struct Special : public AbstractBlock {
 
 	int look;
-	Special(int _x, int _y, int _id, int rotation_, int _look) : Block(_x, _y, rotation_, _id) {
+	Special(int _x, int _y, int _id, int rotation_, int _look) {
 
-		id = _id; look = _look; layer = 0;
+		basic_init(_x, _y, rotation_, _id);
+		look = _look; layer = 0;
 		init_AABB();
 
 		box.setTexture(*MapBasicTextures[id]);
@@ -1108,9 +660,8 @@ struct Special : public Block {
 
 };
 
-struct View_det : public Block {
+struct View_det : public TargetGroupController {
 
-	bool* target; int group;
 	Text text = Text(::text);
 
 	void setTextColor() {
@@ -1129,30 +680,10 @@ struct View_det : public Block {
 		}
 	}
 
-	bool* getTarget() {
+	View_det(int _x, int _y, int _id, int rotation_, bool* target_, int group_)   {
 
-		if (target == a) {
-			return dmode;
-		}
-		if (target == b) {
-			return crystal;
-		}
-		if (target == c) {
-			return lmode;
-		}
-		if (target == barmode) {
-			return barmode;
-		}
-
-	}
-
-	int getGroup() {
-		return group;
-	}
-
-	View_det(int _x, int _y, int _id, int rotation_, bool* target_, int group_) : Block(_x, _y, rotation_, _id)  {
-
-		x = _x; y = _y; id = _id; group = group_; init_AABB(); rotation = rotation_; layer = 0;
+		basic_init(_x, _y, rotation_, _id);
+		group = group_; init_AABB(); layer = 0;
 		box.setRotation(rotation); text.setString(to_string(group));
 		target = target_;
 
@@ -1161,7 +692,6 @@ struct View_det : public Block {
 		box.setRotation(rotation);
 
 		setTextColor();
-
 	}
 
 	void cycle() {
@@ -1340,31 +870,9 @@ struct View_det : public Block {
 
 };
 
-struct Speed_det : public Block {
+struct Speed_det : public TargetGroupController {
 
-	bool* target; int group;
 	Text text = Text(::text);
-
-	bool* getTarget() {
-
-		if (target == a) {
-			return dmode;
-		}
-		if (target == b) {
-			return crystal;
-		}
-		if (target == c) {
-			return lmode;
-		}
-		if (target == barmode) {
-			return barmode;
-		}
-
-	}
-
-	int getGroup() {
-		return group;
-	}
 
 	void setTextColor() {
 
@@ -1382,9 +890,12 @@ struct Speed_det : public Block {
 		}
 	}
 
-	Speed_det(int _x, int _y, int _id, int rotation_, bool* target_, int group_) : Block(_x, _y, rotation_, _id)  {
+	Speed_det(int _x, int _y, int _id, int rotation_, bool* target_, int group_) {
 
-		x = _x; y = _y; id = _id; group = group_; init_AABB(); rotation = rotation_; layer = 0;
+		basic_init(_x, _y, rotation_, _id); 
+		group = group_; 
+		init_AABB(); 
+		layer = 0;
 		box.setRotation(rotation); text.setString(to_string(group));
 		target = target_;
 
@@ -1396,9 +907,7 @@ struct Speed_det : public Block {
 	}
 
 	void cycle() {
-
 		if_collide();
-
 	}
 
 	void render() {
@@ -1575,11 +1084,11 @@ struct Speed_det : public Block {
 
 //Floor
 
-struct Basic_floor : public Block {
+struct Basic_floor : public AbstractBlock {
 
-	Basic_floor(int _x, int _y, int _id, int rotation_, int look) : Block(_x, _y, rotation_, _id) {
+	Basic_floor(int _x, int _y, int _id, int rotation_, int look) {
 
-		x = _x; y = _y; id = _id; init_AABB(); rotation = rotation_; layer = 1;
+		basic_init(_x, _y, rotation_, _id); init_AABB(); layer = 1;
 
 		box.setTexture(*MapFloorTextures[id]);
 
@@ -1609,12 +1118,14 @@ struct Basic_floor : public Block {
 
 };
 
-struct Special_floor : public Block {
+struct Special_floor : public AbstractBlock {
 
 	int look;
-	Special_floor(int _x, int _y, int _id, int rotation_, int _look) : Block(_x, _y, rotation_, _id)  {
+	Special_floor(int _x, int _y, int _id, int rotation_, int _look) {
 
-		x = _x; y = _y; id = _id; look = _look; rotation = rotation_; layer = 1;
+		basic_init(_x, _y, rotation_, _id);
+		look = _look; 
+		layer = 1;
 		box.setRotation(rotation);
 		box.setTexture(*MapFloorTextures[id]);
 
@@ -1984,7 +1495,7 @@ struct Special_floor : public Block {
 	}
 };
 
-struct Portal : public Block {
+struct Portal : public AbstractBlock {
 
 	int tp_to;
 	Portal(int _x, int _y, int _id, int _tp_to) {
@@ -2103,9 +1614,9 @@ struct Portal : public Block {
 
 };
 
-struct Floor_button : public Block {
+struct Floor_button : public TargetGroupController {
 
-	bool change = false; bool* target; int group;
+	bool change = false; 
 	Text text = Text(::text);
 
 	void setTextColor() {
@@ -2327,33 +1838,11 @@ struct Floor_button : public Block {
 		text.setCharacterSize(40 * scale);
 		window.draw(text);
 	}
-
-	bool* getTarget() {
-
-		if (target == a) {
-			return dmode;
-		}
-		if (target == b) {
-			return crystal;
-		}
-		if (target == c) {
-			return lmode;
-		}
-		if (target == barmode) {
-			return barmode;
-		}
-
-	}
-
-	int getGroup() {
-		return group;
-	}
-
 };
 
-struct Door : public Block {
+struct Door : public TargetGroupController {
 
-	int group; bool reversed; bool* target;
+	bool reversed;
 	Text text = ::text;
 
 	void setTextColor() {
@@ -2372,29 +1861,9 @@ struct Door : public Block {
 		}
 	}
 
-	bool* getTarget() {
+	Door(int _x, int _y, int _id, int rotation_, bool* target_, int _group, bool reversed_)  {
 
-		if (target == a) {
-			return dmode;
-		}
-		if (target == b) {
-			return crystal;
-		}
-		if (target == c) {
-			return lmode;
-		}
-		if (target == barmode) {
-			return barmode;
-		}
-
-	}
-
-	int getGroup() {
-		return group;
-	}
-
-	Door(int _x, int _y, int _id, int rotation_, bool* target_, int _group, bool reversed_) : Block(_x, _y, rotation_, _id)  {
-
+		basic_init(_x, _y, rotation_, _id);
 		target = target_; group = _group; layer = 1;
 		/*magnet = -0.15;*/
 
@@ -2622,7 +2091,7 @@ struct Door : public Block {
 
 //Electricity
 
-struct Electric : public Block {
+struct Electric : public AbstractBlock {
 
 	Sprite bg;
 	int con[4] = {0,0,0,0}; int con_size = 0;
@@ -2778,7 +2247,7 @@ struct Generator : public Electric {
 
 };
 
-struct Switcher : public Electric {
+struct ElectricSwitcher : public Electric {
 
 	bool* target; int group;
 	Text text = ::text;
@@ -2818,7 +2287,7 @@ struct Switcher : public Electric {
 	int getGroup() {
 		return group;
 	}
-	Switcher(int x_, int y_, int rotation_, int type_, bool* target_, int group_) {
+	ElectricSwitcher(int x_, int y_, int rotation_, int type_, bool* target_, int group_) {
 		x = x_; y = y_; rotation = rotation_;  init_AABB(); electric = true;
 		target = target_;
 		group = group_;
@@ -3741,7 +3210,7 @@ struct El_button : public Electric {
 
 //Triggers
 
-struct Trigger : public Block {
+struct Trigger : public AbstractBlock {
 
 	bool once_flag = false, stop = false;
 
@@ -4194,7 +3663,7 @@ struct Player_size_trigger : public Trigger {
 
 };
 
-struct Text_Block : public Block {
+struct Text_Block : public AbstractBlock {
 
 	Text txt;
 	string text;

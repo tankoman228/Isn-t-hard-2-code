@@ -785,9 +785,9 @@ void EditorTick(float dt) {
                             int id = map_basic[i]->id, look = (map_basic[i]->box.getTextureRect().left) / 128;
 
 
-                            if (helper_string == "Basic") {
+                            if (helper_string == "Wall") {
 
-                                Basic* add = new Basic(x, y, id, rotation, look);
+                                Wall* add = new Wall(x, y, id, rotation, look);
 
                                 add[0].box.setOrigin(64, 64);
                                 add->move(128, -128);
@@ -795,11 +795,11 @@ void EditorTick(float dt) {
 
                                 map_basic.push_back(add);
                             }
-                            if (helper_string == "Activators") {
+                            if (helper_string == "Switcher") {
 
                                 bool if_crystal = (id == 15);
 
-                                Activators* add = new Activators(x, y, id, rotation, map_basic[i]->getTarget(), map_basic[i]->getGroup(), if_crystal);
+                                Switcher* add = new Switcher(x, y, id, rotation, map_basic[i]->getTarget(), map_basic[i]->getGroup(), if_crystal);
 
                                 add[0].box.setOrigin(64, 64);
                                 add->move(128, -128);
@@ -991,7 +991,7 @@ void EditorTick(float dt) {
                             }
                             if (helper_string == "Switcher") {
 
-                                Switcher* add = new Switcher(x, y, rotation, id, electric[i]->getTarget(), electric[i]->getGroup());
+                                ElectricSwitcher* add = new ElectricSwitcher(x, y, rotation, id, electric[i]->getTarget(), electric[i]->getGroup());
 
                                 add->move(128, -128);
                                 add->choosen = true;
