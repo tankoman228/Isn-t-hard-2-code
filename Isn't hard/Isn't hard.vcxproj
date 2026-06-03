@@ -160,7 +160,7 @@
   <ItemGroup>
     <ClCompile Include="cpp\Blocks\AbstractBlock.cpp" />
     <ClCompile Include="cpp\Blocks\ElectricProcess.cpp" />
-    <ClCompile Include="cpp\Blocks\GroupController.cpp" />
+    <ClCompile Include="cpp\Blocks\TargetGroupController.cpp" />
     <ClCompile Include="cpp\Blocks\Movable.cpp" />
     <ClCompile Include="cpp\Blocks\Switcher.cpp" />
     <ClCompile Include="cpp\Blocks\Wall.cpp" />
@@ -187,10 +187,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Blocks.h" />
-    <ClInclude Include="include\Blocks\AbstractBlock.h" />
-    <ClInclude Include="include\Blocks\Floor.h" />
-    <ClInclude Include="include\Blocks\Switch.h" />
-    <ClInclude Include="include\Blocks\Wall.h" />
     <ClInclude Include="include\Context_menu.h" />
     <ClInclude Include="include\Editor_building.h" />
     <ClInclude Include="include\System\FileLib.hpp" />

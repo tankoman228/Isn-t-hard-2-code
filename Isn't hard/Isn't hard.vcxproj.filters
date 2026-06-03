@@ -84,23 +84,11 @@
     <ClCompile Include="cpp\Blocks\Switcher.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\Blocks\GroupController.cpp">
+    <ClCompile Include="cpp\Blocks\TargetGroupController.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Blocks\AbstractBlock.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Blocks\Floor.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Blocks\Switch.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Blocks\Wall.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="include\Blocks.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>

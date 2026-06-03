@@ -76,32 +76,33 @@ struct Wall : public AbstractBlock {
 };
 
 struct TargetGroupController : public AbstractBlock {
+
+	Text text = Text(::text);
 	bool* target;
 	int group;
+	bool reversed = false;
 
 	bool* getTarget();
 	int getGroup();
+	void editing();
+	void setTextColor();
+	void editor_exist();
+	bool getReverse();
 };
 
 struct Switcher : public TargetGroupController {
 
 	bool irreversible, available = true; 
-	Text text = Text(::text);
 
 	Switcher(int _x, int _y, int _id, int rotation_, bool* target_, int group_, bool irreversible_);
 	
-	void setTextColor();
 	void editor_exist();
 	void update();
 	void cycle();
 	void save(ofstream& save);
-	void editing();
 };
 
 struct Detector : public TargetGroupController {
-
-	bool change = false;
-	Text text = Text(::text);
 
 	void player_detector_program() {
 
@@ -113,7 +114,7 @@ struct Detector : public TargetGroupController {
 			for (int k = 0; k < 3; k++) {
 				block.move(scale * 128, 0);
 				if (playerS.getGlobalBounds().intersects(block.getGlobalBounds())) {
-					target[group] = change; break;
+					target[group] = reversed; break;
 				}
 			}
 
@@ -124,7 +125,7 @@ struct Detector : public TargetGroupController {
 			for (int k = 0; k < 3; k++) {
 				block.move(0, scale * 128);
 				if (playerS.getGlobalBounds().intersects(block.getGlobalBounds())) {
-					target[group] = change; break;
+					target[group] = reversed; break;
 				}
 			}
 
@@ -135,7 +136,7 @@ struct Detector : public TargetGroupController {
 			for (int k = 0; k < 3; k++) {
 				block.move(-scale * 128, 0);
 				if (playerS.getGlobalBounds().intersects(block.getGlobalBounds())) {
-					target[group] = change; break;
+					target[group] = reversed; break;
 				}
 			}
 
@@ -146,7 +147,7 @@ struct Detector : public TargetGroupController {
 			for (int k = 0; k < 3; k++) {
 				block.move(0, -scale * 128);
 				if (playerS.getGlobalBounds().intersects(block.getGlobalBounds())) {
-					target[group] = change; break;
+					target[group] = reversed; break;
 				}
 			}
 
@@ -155,29 +156,13 @@ struct Detector : public TargetGroupController {
 
 	}
 
-	void setTextColor() {
-
-		if (target == a) {
-			text.setFillColor(Color::White); return;
-		}
-		if (target == b) {
-			text.setFillColor(Color::Black); return;
-		}
-		if (target == c) {
-			text.setFillColor(Color::Red); return;
-		}
-		if (target == barmode) {
-			text.setFillColor(Color::Magenta); return;
-		}
-	}
-
-	Detector(int _x, int _y, int _id, int rotation_, bool* target_, int group_, bool change_) {
+	Detector(int _x, int _y, int _id, int rotation_, bool* target_, int group_, bool reversed_) {
 
 		basic_init(_x, _y, rotation_, _id);
 		x = _x; y = _y; id = _id; group = group_; layer = 0; init_AABB(); rotation = rotation_;
 		box.setRotation(rotation);
 		target = target_;
-		change = change_;
+		reversed = reversed_;
 
 		text.setString(to_string(group));
 
@@ -217,137 +202,10 @@ struct Detector : public TargetGroupController {
 		}
 		save << group << ' ';
 
-		save << int(change) << ' ';
+		save << int(reversed) << ' ';
 
 		save << "]" << endl;
 	}
-
-	void editor_exist() {
-		render();
-		text.setPosition((x - scrollx + 20) * scale, (y - scrolly + 5) * scale);
-		text.setCharacterSize(40 * scale);
-		window.draw(text);
-	}
-
-	void editing() {
-
-		//edit();
-		if (editor_mode != 4) { return; }
-
-		text.setString(to_string(group));
-
-		E_rotate_block.box.setPosition(box.getPosition()); E_rotate_block.box.move(80 * scale, -80 * scale);
-		E_rotate_block2.box.setPosition(box.getPosition()); E_rotate_block2.box.move(-80 * scale, -80 * scale);
-
-		E_rotate_block.box.setScale(scale, scale);
-		//E_rotate_block.bg_box.setScale(scale * 0.5, scale * 0.5);
-		E_rotate_block2.box.setScale(scale, scale);
-		//E_rotate_block2.bg_box.setScale(scale * 0.5, scale * 0.5);
-
-		if (option_mode) {
-
-			E_edit_block.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y - 40 * scale);
-			E_edit_block.box.setScale(scale * 0.4, scale * 0.4);
-
-			if (E_edit_block.if_click()) {
-				option_mode = !option_mode;
-			}
-
-			E_arrow[0].setPosition(box.getPosition().x, box.getPosition().y - 200 * scale);
-			E_arrow[1].setPosition(box.getPosition().x + 200 * scale, box.getPosition().y);
-			E_arrow[2].setPosition(box.getPosition().x, box.getPosition().y + 200 * scale);
-			E_arrow[3].setPosition(box.getPosition().x - 200 * scale, box.getPosition().y);
-
-			E_arrow[0].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[1].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[2].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[3].box.setScale(scale * 0.8, scale * 0.8);
-
-			E_edit_color.box.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y + 40 * scale);
-			E_edit_color.bg_box.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y + 40 * scale);
-			E_edit_color.box.setScale(0.5 * scale, 0.5 * scale);
-			E_edit_color.bg_box.setScale(0.45 * scale, 0.45 * scale);
-			E_edit_color.bg_box.setColor(text.getFillColor());
-
-
-			setTextColor();
-			E_edit_color.bg_box.setColor(text.getFillColor());
-
-			if (E_edit_color.if_click()) {
-
-				if (target == a) {
-					target = crystal; return;
-				}
-				if (target == b) {
-					target = lmode; return;
-				}
-				if (target == c) {
-					target = barmode; return;
-				}
-				if (target == barmode) {
-					target = dmode; return;
-				}
-			}
-
-			E_edit_number.box.setPosition(box.getPosition());
-			E_edit_number.box.move(-40 * scale, 40 * scale);
-			E_edit_number.box.setScale(scale * 0.5, scale * 0.5);
-			E_edit_number.bg_box.setScale(scale * 0.5, scale * 0.5);
-
-			if (E_edit_number.if_click()) {
-
-				if (Mouse::isButtonPressed(Mouse::Left)) {
-					group++; onclick = true;
-					last_group = group;
-				}
-				if (Mouse::isButtonPressed(Mouse::Right)) {
-					if (group > 0) {
-						group--; onclick = true;
-						last_group = group;
-					}
-				}
-
-			}
-
-			text.setPosition(E_edit_number.box.getPosition());
-			text.setString(to_string(group));
-			text.move(-25 * UI_scale, -30 * UI_scale);
-
-			window.draw(text);
-
-		}
-		else {
-
-			E_edit_block.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y - 40 * scale);
-			E_edit_block.box.setScale(scale * 0.4, scale * 0.4);
-
-			if (E_edit_block.if_click()) {
-				option_mode = !option_mode;
-			}
-
-			if (!onclick && Mouse::isButtonPressed(Mouse::Left) && cursor.getGlobalBounds().intersects(box.getGlobalBounds())) {
-				group++; onclick = true; last_group = group;
-			}
-			if (!onclick && Mouse::isButtonPressed(Mouse::Right) && cursor.getGlobalBounds().intersects(box.getGlobalBounds())) {
-				group = 0; onclick = true; last_group = group;
-			}
-
-			E_arrow[0].setPosition(box.getPosition().x, box.getPosition().y - 128 * scale);
-			E_arrow[1].setPosition(box.getPosition().x + 128 * scale, box.getPosition().y);
-			E_arrow[2].setPosition(box.getPosition().x, box.getPosition().y + 128 * scale);
-			E_arrow[3].setPosition(box.getPosition().x - 128 * scale, box.getPosition().y);
-
-			E_arrow[0].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[1].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[2].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[3].box.setScale(scale * 0.8, scale * 0.8);
-		}
-	}
-
-	bool getReverse() {
-		return change;
-	}
-
 };
 
 struct Questions : public AbstractBlock {
@@ -662,24 +520,6 @@ struct Special : public AbstractBlock {
 
 struct View_det : public TargetGroupController {
 
-	Text text = Text(::text);
-
-	void setTextColor() {
-
-		if (target == a) {
-			text.setFillColor(Color::White); return;
-		}
-		if (target == b) {
-			text.setFillColor(Color::Black); return;
-		}
-		if (target == c) {
-			text.setFillColor(Color::Red); return;
-		}
-		if (target == barmode) {
-			text.setFillColor(Color::Magenta); return;
-		}
-	}
-
 	View_det(int _x, int _y, int _id, int rotation_, bool* target_, int group_)   {
 
 		basic_init(_x, _y, rotation_, _id);
@@ -695,9 +535,7 @@ struct View_det : public TargetGroupController {
 	}
 
 	void cycle() {
-
 		if_collide();
-
 	}
 
 	void render() {
@@ -746,149 +584,9 @@ struct View_det : public TargetGroupController {
 		save << group << ' ';
 		save << "]" << endl;
 	}
-
-	void editor_exist() {
-		render();
-		text.setPosition((x - scrollx + 20) * scale, (y - scrolly + 5) * scale);
-		text.setCharacterSize(40 * scale);
-		window.draw(text);
-	}
-
-	void editing() {
-
-		//edit();
-		if (editor_mode != 4) { return; }
-
-		text.setString(to_string(group));
-
-		E_rotate_block.box.setPosition(box.getPosition()); E_rotate_block.box.move(80 * scale, -80 * scale);
-		E_rotate_block2.box.setPosition(box.getPosition()); E_rotate_block2.box.move(-80 * scale, -80 * scale);
-
-		E_rotate_block.box.setScale(scale, scale);
-		//E_rotate_block.bg_box.setScale(scale * 0.5, scale * 0.5);
-		E_rotate_block2.box.setScale(scale, scale);
-		//E_rotate_block2.bg_box.setScale(scale * 0.5, scale * 0.5);
-
-		if (option_mode) {
-
-			E_edit_block.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y - 40 * scale);
-			E_edit_block.box.setScale(scale * 0.4, scale * 0.4);
-
-			if (E_edit_block.if_click()) {
-				option_mode = !option_mode;
-			}
-
-			E_arrow[0].setPosition(box.getPosition().x, box.getPosition().y - 200 * scale);
-			E_arrow[1].setPosition(box.getPosition().x + 200 * scale, box.getPosition().y);
-			E_arrow[2].setPosition(box.getPosition().x, box.getPosition().y + 200 * scale);
-			E_arrow[3].setPosition(box.getPosition().x - 200 * scale, box.getPosition().y);
-
-			E_arrow[0].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[1].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[2].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[3].box.setScale(scale * 0.8, scale * 0.8);
-
-			E_edit_color.box.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y + 40 * scale);
-			E_edit_color.bg_box.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y + 40 * scale);
-			E_edit_color.box.setScale(0.5 * scale, 0.5 * scale);
-			E_edit_color.bg_box.setScale(0.45 * scale, 0.45 * scale);
-			E_edit_color.bg_box.setColor(text.getFillColor());
-
-			setTextColor();
-			E_edit_color.bg_box.setColor(text.getFillColor());
-
-			if (E_edit_color.if_click()) {
-
-				if (target == a) {
-					target = crystal; return;
-				}
-				if (target == b) {
-					target = lmode; return;
-				}
-				if (target == c) {
-					target = barmode; return;
-				}
-				if (target == barmode) {
-					target = dmode; return;
-				}
-			}
-
-			E_edit_number.box.setPosition(box.getPosition());
-			E_edit_number.box.move(-40 * scale, 40 * scale);
-			E_edit_number.box.setScale(scale * 0.5, scale * 0.5);
-			E_edit_number.bg_box.setScale(scale * 0.5, scale * 0.5);
-
-			if (E_edit_number.if_click()) {
-
-				if (Mouse::isButtonPressed(Mouse::Left)) {
-					group++; onclick = true;
-					last_group = group;
-				}
-				if (Mouse::isButtonPressed(Mouse::Right)) {
-					if (group > 0) {
-						group--; onclick = true;
-						last_group = group;
-					}
-				}
-
-			}
-
-			text.setPosition(E_edit_number.box.getPosition());
-			text.setString(to_string(group));
-			text.move(-25 * UI_scale, -30 * UI_scale);
-
-			window.draw(text);
-
-		}
-		else {
-
-			E_edit_block.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y - 40 * scale);
-			E_edit_block.box.setScale(scale * 0.4, scale * 0.4);
-
-			if (E_edit_block.if_click()) {
-				option_mode = !option_mode;
-			}
-
-			if (!onclick && Mouse::isButtonPressed(Mouse::Left) && cursor.getGlobalBounds().intersects(box.getGlobalBounds())) {
-				group++; onclick = true; last_group = group;
-			}
-			if (!onclick && Mouse::isButtonPressed(Mouse::Right) && cursor.getGlobalBounds().intersects(box.getGlobalBounds())) {
-				group = 0; onclick = true; last_group = group;
-			}
-
-			E_arrow[0].setPosition(box.getPosition().x, box.getPosition().y - 128 * scale);
-			E_arrow[1].setPosition(box.getPosition().x + 128 * scale, box.getPosition().y);
-			E_arrow[2].setPosition(box.getPosition().x, box.getPosition().y + 128 * scale);
-			E_arrow[3].setPosition(box.getPosition().x - 128 * scale, box.getPosition().y);
-
-			E_arrow[0].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[1].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[2].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[3].box.setScale(scale * 0.8, scale * 0.8);
-		}
-	}
-
 };
 
 struct Speed_det : public TargetGroupController {
-
-	Text text = Text(::text);
-
-	void setTextColor() {
-
-		if (target == a) {
-			text.setFillColor(Color::White); return;
-		}
-		if (target == b) {
-			text.setFillColor(Color::Black); return;
-		}
-		if (target == c) {
-			text.setFillColor(Color::Red); return;
-		}
-		if (target == barmode) {
-			text.setFillColor(Color::Magenta); return;
-		}
-	}
 
 	Speed_det(int _x, int _y, int _id, int rotation_, bool* target_, int group_) {
 
@@ -965,120 +663,6 @@ struct Speed_det : public TargetGroupController {
 		text.setPosition((x - scrollx + 20) * scale, (y - scrolly + 5) * scale);
 		text.setCharacterSize(40 * scale);
 		window.draw(text);
-	}
-
-	void editing() {
-
-		//edit();
-		if (editor_mode != 4) { return; }
-
-		text.setString(to_string(group));
-
-		E_rotate_block.box.setPosition(box.getPosition()); E_rotate_block.box.move(80 * scale, -80 * scale);
-		E_rotate_block2.box.setPosition(box.getPosition()); E_rotate_block2.box.move(-80 * scale, -80 * scale);
-
-		E_rotate_block.box.setScale(scale, scale);
-		//E_rotate_block.bg_box.setScale(scale * 0.5, scale * 0.5);
-		E_rotate_block2.box.setScale(scale, scale);
-		//E_rotate_block2.bg_box.setScale(scale * 0.5, scale * 0.5);
-
-		if (option_mode) {
-
-			E_edit_block.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y - 40 * scale);
-			E_edit_block.box.setScale(scale * 0.4, scale * 0.4);
-
-			if (E_edit_block.if_click()) {
-				option_mode = !option_mode;
-			}
-
-			E_arrow[0].setPosition(box.getPosition().x, box.getPosition().y - 200 * scale);
-			E_arrow[1].setPosition(box.getPosition().x + 200 * scale, box.getPosition().y);
-			E_arrow[2].setPosition(box.getPosition().x, box.getPosition().y + 200 * scale);
-			E_arrow[3].setPosition(box.getPosition().x - 200 * scale, box.getPosition().y);
-
-			E_arrow[0].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[1].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[2].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[3].box.setScale(scale * 0.8, scale * 0.8);
-
-			E_edit_color.box.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y + 40 * scale);
-			E_edit_color.bg_box.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y + 40 * scale);
-			E_edit_color.box.setScale(0.5 * scale, 0.5 * scale);
-			E_edit_color.bg_box.setScale(0.45 * scale, 0.45 * scale);
-			E_edit_color.bg_box.setColor(text.getFillColor());
-
-			setTextColor();
-			E_edit_color.bg_box.setColor(text.getFillColor());
-
-			if (E_edit_color.if_click()) {
-
-				if (target == a) {
-					target = crystal; return;
-				}
-				if (target == b) {
-					target = lmode; return;
-				}
-				if (target == c) {
-					target = barmode; return;
-				}
-				if (target == barmode) {
-					target = dmode; return;
-				}
-			}
-
-			E_edit_number.box.setPosition(box.getPosition());
-			E_edit_number.box.move(-40 * scale, 40 * scale);
-			E_edit_number.box.setScale(scale * 0.5, scale * 0.5);
-			E_edit_number.bg_box.setScale(scale * 0.5, scale * 0.5);
-
-			if (E_edit_number.if_click()) {
-
-				if (Mouse::isButtonPressed(Mouse::Left)) {
-					group++; onclick = true;
-					last_group = group;
-				}
-				if (Mouse::isButtonPressed(Mouse::Right)) {
-					if (group > 0) {
-						group--; onclick = true;
-						last_group = group;
-					}
-				}
-
-			}
-
-			text.setPosition(E_edit_number.box.getPosition());
-			text.setString(to_string(group));
-			text.move(-25 * UI_scale, -30 * UI_scale);
-
-			window.draw(text);
-
-		}
-		else {
-
-			if (E_edit_block.if_click()) {
-				option_mode = !option_mode;
-			}
-
-			if (!onclick && Mouse::isButtonPressed(Mouse::Left) && cursor.getGlobalBounds().intersects(box.getGlobalBounds())) {
-				group++; onclick = true; last_group = group;
-			}
-			if (!onclick && Mouse::isButtonPressed(Mouse::Right) && cursor.getGlobalBounds().intersects(box.getGlobalBounds())) {
-				group = 0; onclick = true; last_group = group;
-			}
-
-			E_edit_block.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y - 40 * scale);
-			E_edit_block.box.setScale(scale * 0.4, scale * 0.4);
-
-			E_arrow[0].setPosition(box.getPosition().x, box.getPosition().y - 128 * scale);
-			E_arrow[1].setPosition(box.getPosition().x + 128 * scale, box.getPosition().y);
-			E_arrow[2].setPosition(box.getPosition().x, box.getPosition().y + 128 * scale);
-			E_arrow[3].setPosition(box.getPosition().x - 128 * scale, box.getPosition().y);
-
-			E_arrow[0].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[1].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[2].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[3].box.setScale(scale * 0.8, scale * 0.8);
-		}
 	}
 };
 
@@ -1617,23 +1201,6 @@ struct Portal : public AbstractBlock {
 struct Floor_button : public TargetGroupController {
 
 	bool change = false; 
-	Text text = Text(::text);
-
-	void setTextColor() {
-
-		if (target == a) {
-			text.setFillColor(Color::White); return;
-		}
-		if (target == b) {
-			text.setFillColor(Color::Black); return;
-		}
-		if (target == c) {
-			text.setFillColor(Color::Red); return;
-		}
-		if (target == barmode) {
-			text.setFillColor(Color::Magenta); return;
-		}
-	}
 
 	Floor_button(int _x, int _y, int _id, int rotation_, bool* target_, int group_, bool change_) {
 
@@ -1714,152 +1281,11 @@ struct Floor_button : public TargetGroupController {
 		save << int(change) << ' ';
 		save << "]" << endl;
 	}
-
-	void editing() {
-
-		text.setString(to_string(group));
-
-		//edit();
-		if (editor_mode != 4) { return; }
-
-		E_rotate_block.box.setPosition(box.getPosition()); E_rotate_block.box.move(80 * scale, -80 * scale);
-		E_rotate_block2.box.setPosition(box.getPosition()); E_rotate_block2.box.move(-80 * scale, -80 * scale);
-
-		E_rotate_block.box.setScale(scale, scale);
-		//E_rotate_block.bg_box.setScale(scale * 0.5, scale * 0.5);
-		E_rotate_block2.box.setScale(scale, scale);
-		//E_rotate_block2.bg_box.setScale(scale * 0.5, scale * 0.5);
-
-		if (option_mode) {
-
-			E_edit_block.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y - 40 * scale);
-			E_edit_block.box.setScale(scale * 0.4, scale * 0.4);
-
-			if (E_edit_block.if_click()) {
-				option_mode = !option_mode;
-			}
-
-			E_arrow[0].setPosition(box.getPosition().x, box.getPosition().y - 200 * scale);
-			E_arrow[1].setPosition(box.getPosition().x + 200 * scale, box.getPosition().y);
-			E_arrow[2].setPosition(box.getPosition().x, box.getPosition().y + 200 * scale);
-			E_arrow[3].setPosition(box.getPosition().x - 200 * scale, box.getPosition().y);
-
-			E_arrow[0].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[1].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[2].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[3].box.setScale(scale * 0.8, scale * 0.8);
-
-			E_edit_color.box.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y + 40 * scale);
-			E_edit_color.bg_box.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y + 40 * scale);
-			E_edit_color.box.setScale(0.5 * scale, 0.5 * scale);
-			E_edit_color.bg_box.setScale(0.45 * scale, 0.45 * scale);
-			E_edit_color.bg_box.setColor(text.getFillColor());
-
-			setTextColor();
-			E_edit_color.bg_box.setColor(text.getFillColor());
-
-			if (E_edit_color.if_click()) {
-
-				if (target == a) {
-					target = crystal; return;
-				}
-				if (target == b) {
-					target = lmode; return;
-				}
-				if (target == c) {
-					target = barmode; return;
-				}
-				if (target == barmode) {
-					target = dmode; return;
-				}
-			}
-
-			E_edit_number.box.setPosition(box.getPosition());
-			E_edit_number.box.move(-40 * scale, 40 * scale);
-			E_edit_number.box.setScale(scale * 0.5, scale * 0.5);
-			E_edit_number.bg_box.setScale(scale * 0.5, scale * 0.5);
-
-			if (E_edit_number.if_click()) {
-
-				if (Mouse::isButtonPressed(Mouse::Left)) {
-					group++; onclick = true;
-					last_group = group;
-				}
-				if (Mouse::isButtonPressed(Mouse::Right)) {
-					if (group > 0) {
-						group--; onclick = true;
-						last_group = group;
-					}
-				}
-
-			}
-
-			text.setPosition(E_edit_number.box.getPosition());
-			text.setString(to_string(group));
-			text.move(-25 * UI_scale, -30 * UI_scale);
-
-			window.draw(text);
-
-		}
-		else {
-
-			E_edit_block.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y - 40 * scale);
-			E_edit_block.box.setScale(scale * 0.4, scale * 0.4);
-
-			if (E_edit_block.if_click()) {
-				option_mode = !option_mode;
-			}
-
-			if (!onclick && Mouse::isButtonPressed(Mouse::Left) && cursor.getGlobalBounds().intersects(box.getGlobalBounds())) {
-				group++; onclick = true; last_group = group;
-			}
-			if (!onclick && Mouse::isButtonPressed(Mouse::Right) && cursor.getGlobalBounds().intersects(box.getGlobalBounds())) {
-				group = 0; onclick = true; last_group = group;
-			}
-
-			E_arrow[0].setPosition(box.getPosition().x, box.getPosition().y - 128 * scale);
-			E_arrow[1].setPosition(box.getPosition().x + 128 * scale, box.getPosition().y);
-			E_arrow[2].setPosition(box.getPosition().x, box.getPosition().y + 128 * scale);
-			E_arrow[3].setPosition(box.getPosition().x - 128 * scale, box.getPosition().y);
-
-			E_arrow[0].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[1].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[2].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[3].box.setScale(scale * 0.8, scale * 0.8);
-		}
-	}
-
-	void editor_exist() {
-
-		update_scrolling();
-		window.draw(box);
-
-		text.setPosition((x - scrollx + 20) * scale, (y - scrolly + 5) * scale);
-		text.setCharacterSize(40 * scale);
-		window.draw(text);
-	}
 };
 
 struct Door : public TargetGroupController {
 
 	bool reversed;
-	Text text = ::text;
-
-	void setTextColor() {
-
-		if (target == a) {
-			text.setFillColor(Color::White); return;
-		}
-		if (target == b) {
-			text.setFillColor(Color::Black); return;
-		}
-		if (target == c) {
-			text.setFillColor(Color::Red); return;
-		}
-		if (target == barmode) {
-			text.setFillColor(Color::Magenta); return;
-		}
-	}
 
 	Door(int _x, int _y, int _id, int rotation_, bool* target_, int _group, bool reversed_)  {
 
@@ -1959,134 +1385,9 @@ struct Door : public TargetGroupController {
 		save << "]" << endl;
 	}
 
-	void editing() {
-
-		//edit();
-		if (editor_mode != 4) { return; }
-
-		text.setString(to_string(group));
-
-		E_rotate_block.box.setPosition(box.getPosition()); E_rotate_block.box.move(80 * scale, -80 * scale);
-		E_rotate_block2.box.setPosition(box.getPosition()); E_rotate_block2.box.move(-80 * scale, -80 * scale);
-
-		E_rotate_block.box.setScale(scale, scale);
-		//E_rotate_block.bg_box.setScale(scale * 0.5, scale * 0.5);
-		E_rotate_block2.box.setScale(scale, scale);
-		//E_rotate_block2.bg_box.setScale(scale * 0.5, scale * 0.5);
-
-		if (option_mode) {
-
-			E_edit_block.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y - 40 * scale);
-			E_edit_block.box.setScale(scale * 0.4, scale * 0.4);
-
-			if (E_edit_block.if_click()) {
-				option_mode = !option_mode;
-			}
-
-			E_arrow[0].setPosition(box.getPosition().x, box.getPosition().y - 200 * scale);
-			E_arrow[1].setPosition(box.getPosition().x + 200 * scale, box.getPosition().y);
-			E_arrow[2].setPosition(box.getPosition().x, box.getPosition().y + 200 * scale);
-			E_arrow[3].setPosition(box.getPosition().x - 200 * scale, box.getPosition().y);
-
-			E_arrow[0].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[1].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[2].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[3].box.setScale(scale * 0.8, scale * 0.8);
-
-			E_edit_color.box.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y + 40 * scale);
-			E_edit_color.bg_box.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y + 40 * scale);
-			E_edit_color.box.setScale(0.5 * scale, 0.5 * scale);
-			E_edit_color.bg_box.setScale(0.45 * scale, 0.45 * scale);
-			E_edit_color.bg_box.setColor(text.getFillColor());
-
-			setTextColor();
-			E_edit_color.bg_box.setColor(text.getFillColor());
-
-			if (E_edit_color.if_click()) {
-
-				if (target == a) {
-					target = crystal; return;
-				}
-				if (target == b) {
-					target = lmode; return;
-				}
-				if (target == c) {
-					target = barmode; return;
-				}
-				if (target == barmode) {
-					target = dmode; return;
-				}
-			}
-
-			E_edit_number.box.setPosition(box.getPosition());
-			E_edit_number.box.move(-40 * scale, 40 * scale);
-			E_edit_number.box.setScale(scale * 0.5, scale * 0.5);
-			E_edit_number.bg_box.setScale(scale * 0.5, scale * 0.5);
-
-			if (E_edit_number.if_click()) {
-
-				if (Mouse::isButtonPressed(Mouse::Left)) {
-					group++; onclick = true;
-					last_group = group;
-				}
-				if (Mouse::isButtonPressed(Mouse::Right)) {
-					if (group > 0) {
-						group--; onclick = true;
-						last_group = group;
-					}
-				}
-
-			}
-
-			text.setPosition(E_edit_number.box.getPosition());
-			text.setString(to_string(group));
-			text.move(-25 * UI_scale, -30 * UI_scale);
-
-			window.draw(text);
-
-		}
-		else {
-
-			E_edit_block.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y - 40 * scale);
-			E_edit_block.box.setScale(scale * 0.4, scale * 0.4);
-
-			if (E_edit_block.if_click()) {
-				option_mode = !option_mode;
-			}
-
-			if (!onclick && Mouse::isButtonPressed(Mouse::Left) && cursor.getGlobalBounds().intersects(box.getGlobalBounds())) {
-				group++; onclick = true; last_group = group;
-			}
-			if (!onclick && Mouse::isButtonPressed(Mouse::Right) && cursor.getGlobalBounds().intersects(box.getGlobalBounds())) {
-				group = 0; onclick = true; last_group = group;
-			}
-
-			E_arrow[0].setPosition(box.getPosition().x, box.getPosition().y - 128 * scale);
-			E_arrow[1].setPosition(box.getPosition().x + 128 * scale, box.getPosition().y);
-			E_arrow[2].setPosition(box.getPosition().x, box.getPosition().y + 128 * scale);
-			E_arrow[3].setPosition(box.getPosition().x - 128 * scale, box.getPosition().y);
-
-			E_arrow[0].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[1].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[2].box.setScale(scale * 0.8, scale * 0.8);
-			E_arrow[3].box.setScale(scale * 0.8, scale * 0.8);
-		}
-	}
-
-	void editor_exist() {
-
-		update_scrolling();
-		window.draw(box);
-
-		text.setPosition((x - scrollx + 20) * scale, (y - scrolly + 5) * scale);
-		text.setCharacterSize(40 * scale);
-		window.draw(text);
-	}
-
 	bool getReverse() {
 		return reversed;
 	}
-
 };
 
 //Electricity
@@ -2098,15 +1399,14 @@ struct Electric : public AbstractBlock {
 	int charge = 0, type = 0, group;
 
 	Electric(int _x, int _y, int rotation, int _type, int _group)  {
-
 		// TODO: bg.setTexture(BGel);
 		x = _x; y = _y; init_AABB();
 		layer = 1;
 		box.setRotation(rotation);
 		type = _type;
 		group = _group;
-
 	}
+
 	Electric() { 
 		// TODO: 
 		//box.setTexture(void_el); 
