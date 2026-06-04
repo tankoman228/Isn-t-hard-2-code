@@ -62,26 +62,17 @@ void Switcher::cycle() {
 }
 
 void Switcher::save(ofstream& save) {
-	save << "[ ";
-	save << id << ' ';
-	save << x << ' ';
-	save << y << ' ';
-	save << rotation << ' ';
+	save << "[ " << id << ' ' << x << ' ' << y << ' ' << rotation << ' ';
 
-	if (target == a) {
+	if (target == a)
 		save << "dmode" << ' ';
-	}
-	if (target == b) {
+	else if (target == b)
 		save << "crystal" << ' ';
-	}
-	if (target == c) {
+	else if (target == c)
 		save << "lmode" << ' ';
-	}
-	if (target == barmode) {
+	else if (target == barmode)
 		save << "barmode" << ' ';
-	}
-	save << group << ' ';
-	save << int(irreversible) << ' ';
-	save << "]" << endl;
+
+	save << group << ' ' << int(irreversible) << ' ' << "]" << endl;
 }
 

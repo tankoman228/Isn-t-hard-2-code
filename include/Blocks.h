@@ -92,7 +92,7 @@ struct TargetGroupController : public AbstractBlock {
 
 struct Switcher : public TargetGroupController {
 
-	bool irreversible, available = true; 
+	bool irreversible = false, available = true; 
 
 	Switcher(int _x, int _y, int _id, int rotation_, bool* target_, int group_, bool irreversible_);
 	
@@ -104,602 +104,60 @@ struct Switcher : public TargetGroupController {
 
 struct Detector : public TargetGroupController {
 
-	void player_detector_program() {
+	Detector(int _x, int _y, int _id, int rotation_, bool* target_, int group_, bool reversed_);
 
-		block.setPosition((x - scrollx) * scale, (y - scrolly) * scale);
-
-		switch (int(box.getRotation())) {
-		case 0: 
-
-			for (int k = 0; k < 3; k++) {
-				block.move(scale * 128, 0);
-				if (playerS.getGlobalBounds().intersects(block.getGlobalBounds())) {
-					target[group] = reversed; break;
-				}
-			}
-
-			break;
-
-		case 90:
-			
-			for (int k = 0; k < 3; k++) {
-				block.move(0, scale * 128);
-				if (playerS.getGlobalBounds().intersects(block.getGlobalBounds())) {
-					target[group] = reversed; break;
-				}
-			}
-
-			break;
-
-		case 180:
-
-			for (int k = 0; k < 3; k++) {
-				block.move(-scale * 128, 0);
-				if (playerS.getGlobalBounds().intersects(block.getGlobalBounds())) {
-					target[group] = reversed; break;
-				}
-			}
-
-			break;
-
-		case 270:
-
-			for (int k = 0; k < 3; k++) {
-				block.move(0, -scale * 128);
-				if (playerS.getGlobalBounds().intersects(block.getGlobalBounds())) {
-					target[group] = reversed; break;
-				}
-			}
-
-			break;
-		}
-
-	}
-
-	Detector(int _x, int _y, int _id, int rotation_, bool* target_, int group_, bool reversed_) {
-
-		basic_init(_x, _y, rotation_, _id);
-		x = _x; y = _y; id = _id; group = group_; layer = 0; init_AABB(); rotation = rotation_;
-		box.setRotation(rotation);
-		target = target_;
-		reversed = reversed_;
-
-		text.setString(to_string(group));
-
-		box.setTexture(*MapBasicTextures[id]);
-
-		box.setTextureRect(IntRect(0, 0, 128, 128));
-		box.setRotation(rotation);
-		setTextColor();
-	}
-
-	void cycle() {
-
-		if_collide();
-		/*program();*/
-		player_detector_program();
-
-	}
-
-	void save(ofstream& save) {
-		save << "[ ";
-		save << id << ' ';
-		save << x << ' ';
-		save << y << ' ';
-		save << rotation << ' ';
-
-		if (target == a) {
-			save << "dmode" << ' ';
-		}
-		if (target == b) {
-			save << "crystal" << ' ';
-		}
-		if (target == c) {
-			save << "lmode" << ' ';
-		}
-		if (target == barmode) {
-			save << "barmode" << ' ';
-		}
-		save << group << ' ';
-
-		save << int(reversed) << ' ';
-
-		save << "]" << endl;
-	}
+	void cycle();
+	void save(ofstream& save);
 };
 
 struct Questions : public AbstractBlock {
 
-	void update() {
-
-		//box.setTextureRect(IntRect(0, 0, 128, 128)); box.setTexture(smth3);
-		if (id != 29) {
-			id = 4;
-			box.setTexture(*MapBasicTextures[id]);
-		}
-		init_AABB();
-	}
-
 	int look;
 	Text txt = Text(::text);
 
-	Questions(int _x, int _y, int _id, int rotation_, int _look) {
+	Questions(int _x, int _y, int _id, int rotation_, int _look);
 
-		basic_init(_x, _y, rotation_, _id);
-		x = _x; y = _y; id = _id; look = _look; rotation = rotation_; layer = 0;
-		init_AABB();
-
-		box.setTexture(*MapBasicTextures[id]);
-
-		box.setTextureRect(IntRect(look * 128, 0, 128, 128));
-		box.setRotation(rotation);
-
-		if (id == 3) { coins_required++; }
-		if (id == 29) {
-			box.setTextureRect(IntRect(0, 0, 128, 128));
-		}
-
-		switch (id) {
-			case 3: txt.setString("Coin"); txt.setFillColor(Color::White); break;
-			case 6: txt.setString("Boom"); txt.setFillColor(Color::Red); break;
-			case 18: txt.setString("Movable");  txt.setFillColor(Color::White); break;
-			case 19: txt.setString("Set all"); txt.setFillColor(Color::White); break;
-			case 20: txt.setString("Unset all"); txt.setFillColor(Color::White); break;
-			case 29: txt.setString("Pusher");  txt.setFillColor(Color::Cyan); break;
-		}
-
-	}
-
-	void cycle() {
-
-		// TODO: что за хрень, которая ещё и дублируется?!
-		if (look == -1 && id == 29) {
-
-			float dx = (x - px);
-			float dy  = (y - py);
-
-			if (abs(dx) > abs(dy)) {
-				p.sx -= sign(dx) * 1;
-			}
-			else {
-				p.sy -= sign(dy) * 1;
-			}
-
-			if (tick % 130 == 0) {
-				look = 0; box.setTextureRect(IntRect(0, 0, 128, 128));
-			}
-		}
-
-		if (if_collide()) {
-
-			if ((dir % 2 == 1) && colint > 20) {
-
-				switch (id) {
-
-				case 3: sound_c.play(); id = 4; coins_gathered++; smoke_spawn("coin", x, y); break;
-				case 6: sound_b.play(); smoke_spawn("smoke", x, y); x = -99999; y = -99999; break;
-				case 18: open.play(); spawn_movable(x,y,look); smoke_spawn("mech", x, y, look); x = -99999; y = -99999; break;
-				case 19: 
-					open.play(); 
-					smoke_spawn("mech", x, y, look); 
-					
-					for (int k = 0; k < 999; k++) {
-						dmode[k] = true;
-						barmode[k] = true;
-						lmode[k] = true;
-						crystal[k] = true;
-					}
-
-					break;
-				case 20:
-					open.play();
-					smoke_spawn("mech", x, y, look);
-
-					for (int k = 0; k < 999; k++) {
-						dmode[k] = false;
-						barmode[k] = false;
-						lmode[k] = false;
-						crystal[k] = false;
-					}
-
-					break;
-
-				case 29:
-
-					float dx = (x - px);
-					float dy = (y - py);
-
-					float s = dy * dy + dx * dx;
-
-					p.sx -= dx / s * 300;
-					p.sy -= dy / s * 300;
-
-					look = -1;
-
-					box.setTextureRect(IntRect(128, 0, 128, 128));
-
-					break;
-				}
-
-				update();
-
-			}
-
-		}
-
-	}
-
-	void editor_exist() {
-
-		render();
-
-		txt.setCharacterSize(UI_scale * scale * 40);
-		txt.setPosition((x - scrollx - UI_scale * 50) * scale, (y - scrolly - UI_scale * 30) * scale);
-
-		window.draw(txt);
-	}
-
-};
-
-struct Movable_spawn : public AbstractBlock {
-
-	bool exist = true; int look; 
-
-	Movable_spawn(int _x, int _y, int _look) {
-
-		basic_init(_x, _y, 0, 5);
-		look = _look; layer = 0; init_AABB();
-		box.setTexture(*MapBasicTextures[id]);
-		box.setTextureRect(IntRect(128 * look, 0, 128, 128));
-	}
-
-	void cycle() {
-		if (exist) {
-			exist = false;
-			spawn_movable(x, y, look);
-			id = -1;
-		}
-	}
+	void cycle();
+	void update();
+	void editor_exist();
 };
 
 struct Special : public AbstractBlock {
 
 	int look;
-	Special(int _x, int _y, int _id, int rotation_, int _look) {
+	Special(int _x, int _y, int _id, int rotation_, int _look);
 
-		basic_init(_x, _y, rotation_, _id);
-		look = _look; layer = 0;
-		init_AABB();
-
-		box.setTexture(*MapBasicTextures[id]);
-
-		box.setTextureRect(IntRect(look * 128, 0, 128, 128));
-		box.setRotation(rotation);
-
-	}
-
-	void cycle() {
-
-		switch (id) {
-		case 16:
-			break;
-		case 17:
-			if_collide();
-			break;
-
-		case 31:
-
-			if (intersection(*this,p)) {
-				achievement(lvlnum, look);
-				x = -1000000;
-				y = -1000000;
-				init_AABB();
-			}
-
-			break;
-
-		}
-
-	}
-	void render() {
-
-		update_scrolling();
-
-		float helper_s2, helper_s[2];
-
-		switch (id) {
-		case 16:
-
-			helper_s[0] = (x - px);
-			helper_s2 = helper_s[0] * helper_s[0];
-			helper_s[1] = (y - py);
-			helper_s2 += helper_s[1] * helper_s[1];
-
-			// TODO: box.setTexture(gravs);
-			if (look == 0) { box.rotate(-2 * tick % 360); }
-			else { box.rotate(2 * tick % 360); }
-			window.draw(box);
-
-			// TODO: box.setTexture(grav);
-			if (look == 0) { box.rotate(2 * tick % 360); }
-			else { box.rotate(-2 * tick % 360); }
-
-			if (!look) {
-				p.sx += helper_s[0] / helper_s2 * 100;
-				p.sy += helper_s[1] / helper_s2 * 100;
-			}
-			else {
-				p.sx -= helper_s[0] / helper_s2 * 80;
-				p.sy -= helper_s[1] / helper_s2 * 80;
-			}
-			if_collide();
-			break;
-		case 17:
-			helper_s[0] = (x - px);
-			helper_s2 = helper_s[0] * helper_s[0];
-			helper_s[1] = (y - py);
-			helper_s2 += helper_s[1] * helper_s[1];
-
-			helper_s2 = sqrt(helper_s2);
-			if (helper_s2 < 384) {
-				box.setColor(Color(255, 255, 255, 280 - (helper_s2 / 1.5)));
-				if (helper_s2 < 100) {
-					box.setColor(Color(255, 255, 255, 280 - (helper_s2 / 3)));
-				}
-			}
-			else { box.setColor(Color(255, 255, 255, 0)); }
-			break;
-		}
-		if ((id != 31) /*|| mode == "editor" TODO: отрендерить в редакторе*/) {
-			window.draw(box); 
-		}
-	}
-
-	void editing() {
-
-		//edit();
-		if (editor_mode != 4) { return; }
-
-		E_arrow[0].setPosition(box.getPosition().x, box.getPosition().y - 200 * scale);
-		E_arrow[1].setPosition(box.getPosition().x + 200 * scale, box.getPosition().y);
-		E_arrow[2].setPosition(box.getPosition().x, box.getPosition().y + 200 * scale);
-		E_arrow[3].setPosition(box.getPosition().x - 200 * scale, box.getPosition().y);
-
-		E_arrow[0].box.setScale(scale * 0.8, scale * 0.8);
-		E_arrow[1].box.setScale(scale * 0.8, scale * 0.8);
-		E_arrow[2].box.setScale(scale * 0.8, scale * 0.8);
-		E_arrow[3].box.setScale(scale * 0.8, scale * 0.8);
-
-		E_edit_color.box.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y + 40 * scale);
-		E_edit_color.bg_box.setPosition(box.getPosition().x + 40 * scale, box.getPosition().y + 40 * scale);
-		E_edit_color.box.setScale(0.5 * scale, 0.5 * scale);
-		E_edit_color.bg_box.setScale(0.45 * scale, 0.45 * scale);
-		E_edit_color.bg_box.setColor(text.getFillColor());
-
-		E_rotate_block.box.setPosition(box.getPosition()); E_rotate_block.box.move(80 * scale, -80 * scale);
-		E_rotate_block2.box.setPosition(box.getPosition()); E_rotate_block2.box.move(-80 * scale, -80 * scale);
-
-		E_rotate_block.box.setScale(scale, scale);
-		//E_rotate_block.bg_box.setScale(scale * 0.5, scale * 0.5);
-		E_rotate_block2.box.setScale(scale, scale);
-		//E_rotate_block2.bg_box.setScale(scale * 0.5, scale * 0.5);
-
-		if (cursor.getGlobalBounds().intersects(box.getGlobalBounds())) {
-			if (Mouse::isButtonPressed(Mouse::Left) && !onclick) {
-				look++; onclick = true;
-				
-			}
-			if (Mouse::isButtonPressed(Mouse::Right) && !onclick) {
-				look = 0; onclick = true;
-			}
-			if (id == 16) {
-				box.setTextureRect(IntRect(128 * look, 0, 128, 128));
-			}
-		}
-
-		text.setPosition(box.getPosition());
-
-		if (id == 31) { text.setString("A" + to_string(look)); }
-		else { text.setString(" "); }
-
-		window.draw(text);
-
-	}
-
-	void save(ofstream& save) {
-		save << "[ ";
-		save << id << ' ';
-		save << x << ' ';
-		save << y << ' ';
-		save << rotation << ' ';
-		save << look << ' ';
-		save << "]" << endl;
-	}
-
+	void cycle();
+	void render();
+	void editing();
+	void save(ofstream& save);
 };
 
 struct View_det : public TargetGroupController {
 
-	View_det(int _x, int _y, int _id, int rotation_, bool* target_, int group_)   {
+	View_det(int _x, int _y, int _id, int rotation_, bool* target_, int group_);
 
-		basic_init(_x, _y, rotation_, _id);
-		group = group_; init_AABB(); layer = 0;
-		box.setRotation(rotation); text.setString(to_string(group));
-		target = target_;
-
-		box.setTextureRect(IntRect(0, 0, 128, 128));
-		box.setTexture(*MapBasicTextures[id]);
-		box.setRotation(rotation);
-
-		setTextColor();
-	}
-
-	void cycle() {
-		if_collide();
-	}
-
-	void render() {
-
-		box.setTextureRect(IntRect(0, 0, 128, 128));
-
-		cursor.setPosition(playerS.getPosition());
-		cursor.setRotation(playerS.getRotation());
-		cursor.setOrigin(0.2, 8);
-		cursor.setScale(150 * scale, 27 * scale);
-
-		if (cursor.getGlobalBounds().intersects(box.getGlobalBounds())) {
-			target[group] = true;
-
-		}
-		else { target[group] = false; box.setTextureRect(IntRect(128, 0, 128, 128)); }
-
-		update_scrolling();
-		window.draw(box);
-
-		cursor.setPosition(Mouse::getPosition().x - window.getPosition().x, (Mouse::getPosition().y) - window.getPosition().y);
-		cursor.setScale(1, 1); cursor.setOrigin(4, 4);
-		cursor.setScale(1, 1);
-
-	}
-
-	void save(ofstream& save) {
-		save << "[ ";
-		save << id << ' ';
-		save << x << ' ';
-		save << y << ' ';
-		save << rotation << ' ';
-
-		if (target == a) {
-			save << "dmode" << ' ';
-		}
-		if (target == b) {
-			save << "crystal" << ' ';
-		}
-		if (target == c) {
-			save << "lmode" << ' ';
-		}
-		if (target == barmode) {
-			save << "barmode" << ' ';
-		}
-		save << group << ' ';
-		save << "]" << endl;
-	}
+	void cycle();
+	void render();
 };
 
 struct Speed_det : public TargetGroupController {
 
-	Speed_det(int _x, int _y, int _id, int rotation_, bool* target_, int group_) {
+	Speed_det(int _x, int _y, int _id, int rotation_, bool* target_, int group_);
 
-		basic_init(_x, _y, rotation_, _id); 
-		group = group_; 
-		init_AABB(); 
-		layer = 0;
-		box.setRotation(rotation); text.setString(to_string(group));
-		target = target_;
-
-		box.setTextureRect(IntRect(0, 0, 128, 128));
-		box.setTexture(*MapBasicTextures[id]);
-		box.setRotation(rotation);
-
-		setTextColor();
-	}
-
-	void cycle() {
-		if_collide();
-	}
-
-	void render() {
-
-		update_scrolling();
-
-		float helper = abs(p.sx) + abs(p.sy);
-		// TODO: box.setTexture(speed_det);
-
-		if (helper > 0.85) { target[group] = true; }
-		if (helper < 0.5 && (tick % 50) == 1) { target[group] = false; }
-
-		box.setTextureRect(IntRect(128, 0, 128, 128));
-		box.setColor(Color(255, 255, 255, 190 + helper * 30));
-
-		box.setRotation(helper * 2.5 + tick % 360 / 2);
-		window.draw(box);
-
-		box.setRotation(0);
-		box.setColor(Color(255, 255, 255, 255));
-
-		box.setTextureRect(IntRect(0, 0, 128, 128));
-
-		window.draw(box);
-	}
-
-	void save(ofstream& save) {
-		save << "[ ";
-		save << id << ' ';
-		save << x << ' ';
-		save << y << ' ';
-		save << rotation << ' ';
-
-		if (target == a) {
-			save << "dmode" << ' ';
-		}
-		if (target == b) {
-			save << "crystal" << ' ';
-		}
-		if (target == c) {
-			save << "lmode" << ' ';
-		}
-		if (target == barmode) {
-			save << "barmode" << ' ';
-		}
-		save << group << ' ';
-		save << "]" << endl;
-	}
-
-	void editor_exist() {
-
-		update_scrolling();
-		window.draw(box);
-
-		text.setPosition((x - scrollx + 20) * scale, (y - scrolly + 5) * scale);
-		text.setCharacterSize(40 * scale);
-		window.draw(text);
-	}
+	void cycle();
+	void render();
+	void editor_exist();
 };
 
 //Floor
 
 struct Basic_floor : public AbstractBlock {
 
-	Basic_floor(int _x, int _y, int _id, int rotation_, int look) {
+	Basic_floor(int _x, int _y, int _id, int rotation_, int look);
 
-		basic_init(_x, _y, rotation_, _id); init_AABB(); layer = 1;
-
-		box.setTexture(*MapFloorTextures[id]);
-
-		box.setTextureRect(IntRect(look * 128, 0, 128, 128));
-		box.setRotation(rotation);
-
-	}
-
-	void cycle() {
-
-	}
-
-	void edit() {
-
-		if (!onclick && editor_mode == 4 && box.getGlobalBounds().intersects(cursor.getGlobalBounds())) {
-			if (Mouse::isButtonPressed(Mouse::Left)) {
-				box.setTextureRect(IntRect(box.getTextureRect().left + 128, 0, 128, 128));
-				onclick = true; return;
-			}
-			if (Mouse::isButtonPressed(Mouse::Right)) {
-				if (box.getTextureRect().left > 0) { box.setTextureRect(IntRect(box.getTextureRect().left - 128, 0, 128, 128)); }
-				onclick = true; return;
-			}
-		}
-
-	}
-
+	void cycle();
+	void edit();
 };
 
 struct Special_floor : public AbstractBlock {
@@ -1286,108 +744,11 @@ struct Floor_button : public TargetGroupController {
 struct Door : public TargetGroupController {
 
 	bool reversed;
+	Door(int _x, int _y, int _id, int rotation_, bool* target_, int _group, bool reversed_);
 
-	Door(int _x, int _y, int _id, int rotation_, bool* target_, int _group, bool reversed_)  {
-
-		basic_init(_x, _y, rotation_, _id);
-		target = target_; group = _group; layer = 1;
-		/*magnet = -0.15;*/
-
-		box.setTexture(*MapFloorTextures[id]);
-		box.setTextureRect(IntRect(0, 0, 128, 128));
-
-		switch (id) {
-			case 2:  reversed = false; box.setTextureRect(IntRect(0, 0, 128, 128)); break;
-			case 3:  reversed = true; box.setTextureRect(IntRect(128, 0, 128, 128)); break;
-			case 15: reversed = true; box.setTextureRect(IntRect(0, 0, 128, 128)); break;
-			case 16: reversed = false; box.setTextureRect(IntRect(128, 0, 128, 128)); break;
-			case 23: reversed = false; box.setTextureRect(IntRect(0, 0, 128, 128)); break;
-			case 24: reversed = true; box.setTextureRect(IntRect(128, 0, 128, 128)); break;
-			case 38: reversed = false; box.setTextureRect(IntRect(0, 0, 128, 128)); break;
-			case 39: reversed = true; box.setTextureRect(IntRect(128, 0, 128, 128)); break;
-			case 40: reversed = false; box.setTextureRect(IntRect(0, 0, 128, 128)); break;
-			case 41: reversed = true; box.setTextureRect(IntRect(128, 0, 128, 128)); break;
-		}
-
-		reversed = reversed_;
-
-		box.setRotation(rotation);
-		setTextColor();
-		text.setString(to_string(group));
-
-	}
-
-	void cycle() {
-		if (target[group]) {
-			if (reversed) {
-				box.setTextureRect(IntRect(0, 0, 128, 128));
-			}
-			else {
-				box.setTextureRect(IntRect(128, 0, 128, 128));
-				if_collide();
-
-				for (int k = 0; k < movables.size(); k++) {
-					if (collide(*this, *movables[k], 0.5)) { // TODO: dt
-						/*if (abs(movables[k]->x - x) < 3 || abs(movables[k]->y - y) < 3) {
-							smoke_spawn("smoke", x, y);
-							sound_b.play();
-							movables[k]->x = -999999;
-							return;
-						}*/
-					}
-				}
-
-			}
-		}
-		else {
-			if (reversed) {
-				box.setTextureRect(IntRect(128, 0, 128, 128));
-				if_collide();
-
-				for (int k = 0; k < movables.size(); k++) {
-					if (collide(*this, *movables[k], 0.5)) { // TODO: dt
-						//if (abs(movables[k]->x - x) < 3 || abs(movables[k]->y - y) < 3) {
-						//	smoke_spawn("smoke", x, y);
-						//	sound_b.play();
-						//	movables[k]->x = -999999;
-						//	return;
-						//}
-					}
-				}
-			}
-			else {
-				box.setTextureRect(IntRect(0, 0, 128, 128));
-			}
-		}
-	}
-
-	void save(ofstream& save) {
-		save << "[ ";
-		save << id << ' ';
-		save << x << ' ';
-		save << y << ' ';
-		save << rotation << ' ';
-
-		if (target == a) {
-			save << "dmode" << ' ';
-		}
-		if (target == b) {
-			save << "crystal" << ' ';
-		}
-		if (target == c) {
-			save << "lmode" << ' ';
-		}
-		if (target == barmode) {
-			save << "barmode" << ' ';
-		}
-		save << group << ' ';
-		save << int(reversed) << ' ';
-		save << "]" << endl;
-	}
-
-	bool getReverse() {
-		return reversed;
-	}
+	void cycle();
+	void save(ofstream& save);
+	bool getReverse();
 };
 
 //Electricity

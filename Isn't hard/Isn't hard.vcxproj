@@ -159,11 +159,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cpp\Blocks\AbstractBlock.cpp" />
+    <ClCompile Include="cpp\Blocks\Layer0\Detector.cpp" />
     <ClCompile Include="cpp\Blocks\ElectricProcess.cpp" />
+    <ClCompile Include="cpp\Blocks\Layer0\Questions.cpp" />
+    <ClCompile Include="cpp\Blocks\Layer0\Special.cpp" />
+    <ClCompile Include="cpp\Blocks\Layer0\Speed_det.cpp" />
+    <ClCompile Include="cpp\Blocks\Layer1\Basic_floor.cpp" />
+    <ClCompile Include="cpp\Blocks\Layer1\Door.cpp" />
     <ClCompile Include="cpp\Blocks\TargetGroupController.cpp" />
-    <ClCompile Include="cpp\Blocks\Movable.cpp" />
-    <ClCompile Include="cpp\Blocks\Switcher.cpp" />
-    <ClCompile Include="cpp\Blocks\Wall.cpp" />
+    <ClCompile Include="cpp\Blocks\Layer0\Movable.cpp" />
+    <ClCompile Include="cpp\Blocks\Layer0\Switcher.cpp" />
+    <ClCompile Include="cpp\Blocks\Layer0\View_det.cpp" />
+    <ClCompile Include="cpp\Blocks\Layer0\Wall.cpp" />
     <ClCompile Include="cpp\EditorFeatures\EditorBuilding.cpp" />
     <ClCompile Include="cpp\Engine\Physics.cpp" />
     <ClCompile Include="cpp\Engine\Physics_processing.cpp" />

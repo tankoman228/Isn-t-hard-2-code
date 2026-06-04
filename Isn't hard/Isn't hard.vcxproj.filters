@@ -72,19 +72,40 @@
     <ClCompile Include="cpp\System\FileLib.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\Blocks\Movable.cpp">
+    <ClCompile Include="cpp\Blocks\Layer0\Movable.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="cpp\Blocks\AbstractBlock.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\Blocks\Wall.cpp">
+    <ClCompile Include="cpp\Blocks\Layer0\Wall.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\Blocks\Switcher.cpp">
+    <ClCompile Include="cpp\Blocks\Layer0\Switcher.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="cpp\Blocks\TargetGroupController.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\Blocks\Layer0\Detector.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\Blocks\Layer0\Questions.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\Blocks\Layer0\Special.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\Blocks\Layer0\View_det.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\Blocks\Layer0\Speed_det.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\Blocks\Layer1\Door.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\Blocks\Layer1\Basic_floor.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
