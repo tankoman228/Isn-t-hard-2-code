@@ -1,4 +1,4 @@
-#include <Blocks.h>
+#include <Blocks.hpp>
 
 Special::Special(int _x, int _y, int _id, int rotation_, int _look) {
 

@@ -160,17 +160,34 @@
   <ItemGroup>
     <ClCompile Include="cpp\Blocks\AbstractBlock.cpp" />
     <ClCompile Include="cpp\Blocks\Layer0\Detector.cpp" />
-    <ClCompile Include="cpp\Blocks\ElectricProcess.cpp" />
+    <ClCompile Include="cpp\Blocks\LayerElectric\Ac.cpp" />
+    <ClCompile Include="cpp\Blocks\LayerElectric\ElectricProcess.cpp" />
     <ClCompile Include="cpp\Blocks\Layer0\Questions.cpp" />
     <ClCompile Include="cpp\Blocks\Layer0\Special.cpp" />
     <ClCompile Include="cpp\Blocks\Layer0\Speed_det.cpp" />
     <ClCompile Include="cpp\Blocks\Layer1\Basic_floor.cpp" />
     <ClCompile Include="cpp\Blocks\Layer1\Door.cpp" />
+    <ClCompile Include="cpp\Blocks\Layer1\Floor_button.cpp" />
+    <ClCompile Include="cpp\Blocks\Layer1\Portal.cpp" />
+    <ClCompile Include="cpp\Blocks\Layer1\Special_floor.cpp" />
+    <ClCompile Include="cpp\Blocks\LayerElectric\Electric.cpp" />
+    <ClCompile Include="cpp\Blocks\LayerElectric\ElectricSwitcher.cpp" />
+    <ClCompile Include="cpp\Blocks\LayerElectric\El_button.cpp" />
+    <ClCompile Include="cpp\Blocks\LayerElectric\El_Detector.cpp" />
+    <ClCompile Include="cpp\Blocks\LayerElectric\Generator.cpp" />
+    <ClCompile Include="cpp\Blocks\LayerElectric\Switcher2.cpp" />
+    <ClCompile Include="cpp\Blocks\LayerElectric\Wire.cpp" />
     <ClCompile Include="cpp\Blocks\TargetGroupController.cpp" />
     <ClCompile Include="cpp\Blocks\Layer0\Movable.cpp" />
     <ClCompile Include="cpp\Blocks\Layer0\Switcher.cpp" />
     <ClCompile Include="cpp\Blocks\Layer0\View_det.cpp" />
     <ClCompile Include="cpp\Blocks\Layer0\Wall.cpp" />
+    <ClCompile Include="cpp\Blocks\Text_Block.cpp" />
+    <ClCompile Include="cpp\Blocks\Triggers\Blind_trigger.cpp" />
+    <ClCompile Include="cpp\Blocks\Triggers\Camera_trigger.cpp" />
+    <ClCompile Include="cpp\Blocks\Triggers\Player_size_trigger.cpp" />
+    <ClCompile Include="cpp\Blocks\Triggers\Portal_trigger.cpp" />
+    <ClCompile Include="cpp\Blocks\Triggers\Trigger.cpp" />
     <ClCompile Include="cpp\EditorFeatures\EditorBuilding.cpp" />
     <ClCompile Include="cpp\Engine\Physics.cpp" />
     <ClCompile Include="cpp\Engine\Physics_processing.cpp" />
@@ -193,7 +210,7 @@
     <ClCompile Include="cpp\System\FileLib.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Blocks.h" />
+    <ClInclude Include="include\Blocks.hpp" />
     <ClInclude Include="include\Context_menu.h" />
     <ClInclude Include="include\Editor_building.h" />
     <ClInclude Include="include\System\FileLib.hpp" />

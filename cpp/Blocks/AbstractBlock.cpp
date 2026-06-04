@@ -1,4 +1,4 @@
-#include <Blocks.h>
+#include <Blocks.hpp>
 
 void AbstractBlock::do_some_magic() {
 	box.setColor(Color(90, 255, 90, 255));

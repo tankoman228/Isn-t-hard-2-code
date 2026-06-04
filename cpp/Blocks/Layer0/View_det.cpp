@@ -1,4 +1,4 @@
-#include <Blocks.h>
+#include <Blocks.hpp>
 
 View_det::View_det(int _x, int _y, int _id, int rotation_, bool* target_, int group_) {
 

@@ -1,4 +1,4 @@
-#include <Blocks.h>
+#include <Blocks.hpp>
 
 Door::Door(int _x, int _y, int _id, int rotation_, bool* target_, int _group, bool reversed_) {
 

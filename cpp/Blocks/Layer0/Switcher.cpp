@@ -1,4 +1,4 @@
-#include <Blocks.h>
+#include <Blocks.hpp>
 
 Switcher::Switcher(int _x, int _y, int _id, int rotation_, bool* target_, int group_, bool irreversible_) {
 

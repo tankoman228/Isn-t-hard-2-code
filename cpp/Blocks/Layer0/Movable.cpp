@@ -1,4 +1,4 @@
-#include <Blocks.h>
+#include <Blocks.hpp>
 
 Movable::Movable(int _x, int _y, Texture& t, IntRect r) {
 
